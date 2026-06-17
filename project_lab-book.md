@@ -112,3 +112,40 @@ Next steps:
 - Stage the project files.
 - Commit the initial repository state.
 - Create or connect a private GitHub repo once credentials/tooling are available.
+
+### Entry 5 - Initial commit created
+
+Date: 2026-06-17
+
+What happened:
+
+Codex staged the clean project tree and created the first local git commit on branch `main`.
+
+Commit:
+
+```text
+2c2b960 Initial challenge setup
+```
+
+Decision:
+
+Use a one-shot commit identity for the initial commit:
+
+```text
+user.name=Codex
+user.email=codex@example.invalid
+```
+
+Reasoning:
+
+WSL did not have a global git identity configured. Using a one-shot identity allowed the initial project snapshot to be recorded without changing the user's global git configuration.
+
+Problems or observations:
+
+GitHub CLI (`gh`) is not installed in WSL, so Codex could not create the private GitHub repository directly at this point.
+
+Next steps:
+
+- Either install/authenticate `gh` in WSL and run `gh repo create ... --private`.
+- Or create an empty private GitHub repository manually and add it as the `origin` remote.
+- Push branch `main` once the remote exists.

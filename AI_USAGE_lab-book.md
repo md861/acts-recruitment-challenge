@@ -143,7 +143,21 @@ Verification:
 
 Pending: files are being created now. Private GitHub repo creation depends on local Git/GitHub CLI availability and network/authentication.
 
+Follow-up:
+
+Codex created `AI_USAGE_lab-book.md` and `project_lab-book.md`, initialized a local git repository, staged the clean source tree, and created the initial commit. GitHub CLI was not available in WSL, so creating the private GitHub repository could not be completed from the available tooling in this step.
+
+What changed manually / by Codex:
+
+- Added this running AI usage lab book.
+- Added `project_lab-book.md`.
+- Added `*Zone.Identifier*` to `.gitignore` so Windows metadata streams are not committed.
+- Initialized git and committed the initial repository state.
+
+Verification:
+
+Codex confirmed `git version 2.34.1` was available in WSL, confirmed the folder was not previously a git repository, then created commit `2c2b960` with message `Initial challenge setup`.
+
 ## Open Questions
 
-- None at the moment. Future entries should ask the user for clarification where human intent, rationale, or manual decision-making is unclear.
-
+- Which GitHub publishing route should be used next: install/authenticate GitHub CLI in WSL, or have the user create an empty private repository and provide the remote URL?
