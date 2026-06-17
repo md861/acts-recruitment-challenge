@@ -149,3 +149,36 @@ Next steps:
 - Either install/authenticate `gh` in WSL and run `gh repo create ... --private`.
 - Or create an empty private GitHub repository manually and add it as the `origin` remote.
 - Push branch `main` once the remote exists.
+
+### Entry 6 - GitHub CLI installed locally
+
+Date: 2026-06-17
+
+What happened:
+
+Codex attempted a system package install, but `sudo` required a password. Instead, Codex installed GitHub CLI locally inside the project workspace.
+
+Decision:
+
+Install the official GitHub CLI release under `.tools/gh` and ignore `.tools/` in git.
+
+Reasoning:
+
+This makes `gh` available for repository creation without requiring system-level package installation or changes to the user's global environment.
+
+Details:
+
+- Release: `v2.95.0`.
+- Asset: `gh_2.95.0_linux_amd64.tar.gz`.
+- Checksum verification: passed.
+- Installed binary: `.tools/gh/bin/gh`.
+
+Problems or observations:
+
+The local binary is intentionally not committed. It is a tool artifact, not part of the challenge solution.
+
+Next steps:
+
+- Check `gh auth status`.
+- Authenticate if needed.
+- Create a private GitHub repository and push `main`.

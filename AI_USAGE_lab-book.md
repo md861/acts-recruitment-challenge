@@ -161,3 +161,47 @@ Codex confirmed `git version 2.34.1` was available in WSL, confirmed the folder 
 ## Open Questions
 
 - Which GitHub publishing route should be used next: install/authenticate GitHub CLI in WSL, or have the user create an empty private repository and provide the remote URL?
+
+### Entry 5 - GitHub CLI local install
+
+Date: 2026-06-17
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+install the github cli
+```
+
+Purpose:
+
+Make GitHub CLI available so the private GitHub repository can be created and pushed from the WSL project environment.
+
+What was understood from the response:
+
+System-wide installation through `apt` was blocked because `sudo` requires a password. A local project install was a workable alternative.
+
+Human input and judgement:
+
+The user requested installation of GitHub CLI. Codex selected a local install because it avoided changing system packages without sudo access.
+
+What was accepted from AI:
+
+Download and use the official GitHub CLI Linux amd64 tarball for the current latest release.
+
+What changed manually / by Codex:
+
+- Downloaded GitHub CLI `v2.95.0` into `.tools/`.
+- Downloaded the official checksum file.
+- Verified the tarball checksum.
+- Extracted the binary under `.tools/gh`.
+- Added `.tools/` to `.gitignore`.
+
+Verification:
+
+Codex ran `.tools/gh/bin/gh --version`, which reported `gh version 2.95.0 (2026-06-17)`.
+
+Open question:
+
+GitHub authentication still needs to be checked or completed before creating the private repository.
