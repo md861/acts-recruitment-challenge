@@ -8,4 +8,6 @@
 ## Files Modified
 
 - `.gitignore` - Ignored Windows `Zone.Identifier` metadata and local `.tools/` install artifacts.
-
+- `scripts/*.sh` - Restored executable permissions so project scripts run in WSL.
+- `project_lab-book.md` - Recorded working protocols, dependency setup, verification, and deferred audit risk.
+- `AI_USAGE_lab-book.md` - Recorded dependency setup and Vite/esbuild audit trade-off prompts.

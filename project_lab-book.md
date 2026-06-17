@@ -16,7 +16,7 @@ The candidate instructions ask for one focused, role-relevant improvement, with 
 
 ### Entry 1 - Initial orientation
 
-Date: 2026-06-17
+Date/time: 2026-06-17, time not recorded (Europe/London)
 
 What happened:
 
@@ -36,7 +36,7 @@ The workspace contains Windows `Zone.Identifier` metadata entries. These are not
 
 ### Entry 2 - Repository summary
 
-Date: 2026-06-17
+Date/time: 2026-06-17, time not recorded (Europe/London)
 
 What happened:
 
@@ -60,7 +60,7 @@ The project is intentionally simple, so a good submission should probably be nar
 
 ### Entry 3 - GitHub and lab-book setup
 
-Date: 2026-06-17
+Date/time: 2026-06-17, time not recorded (Europe/London)
 
 What happened:
 
@@ -89,7 +89,7 @@ Next steps:
 
 ### Entry 4 - Local git repository initialized
 
-Date: 2026-06-17
+Date/time: 2026-06-17, time not recorded (Europe/London)
 
 What happened:
 
@@ -115,7 +115,7 @@ Next steps:
 
 ### Entry 5 - Initial commit created
 
-Date: 2026-06-17
+Date/time: 2026-06-17, time not recorded (Europe/London)
 
 What happened:
 
@@ -152,7 +152,7 @@ Next steps:
 
 ### Entry 6 - GitHub CLI installed locally
 
-Date: 2026-06-17
+Date/time: 2026-06-17, time not recorded (Europe/London)
 
 What happened:
 
@@ -185,7 +185,7 @@ Next steps:
 
 ### Entry 7 - Compact changes summary added
 
-Date: 2026-06-17
+Date/time: 2026-06-17, time not recorded (Europe/London)
 
 What happened:
 
@@ -201,3 +201,162 @@ Add `Changes.md` at the repository root with two short sections:
 Reasoning:
 
 This gives a quick audit trail for setup changes without needing to read the longer lab books.
+
+### Entry 8 - Working protocols for this project
+
+Date/time: 2026-06-17, time not recorded (Europe/London)
+
+What happened:
+
+The user clarified how commits and pushes should be handled, and asked for learned project protocols to be captured for future agents.
+
+Standing protocols:
+
+- Treat `project_lab-book.md` as the default lab book when the user says "lab book", unless they explicitly name another file.
+- Do not commit or push changes unless the user explicitly asks, the prompt is clearly an end-of-day wrap-up, or the prompt is clearly a handover-to-new-agent request.
+- Keep `AI_USAGE_lab-book.md` as a running record of AI prompts, purpose, human judgement, accepted output, and verification.
+- Keep `project_lab-book.md` as a readable project history covering decisions, changes, problems, and next steps.
+- Ask the user questions when a lab-book entry needs human rationale or intent that Codex cannot infer confidently.
+- Keep `Changes.md` extremely succinct, with the two-list format requested by the user: files created and files modified.
+- Keep `.tools/` out of git; it contains local tooling such as the downloaded GitHub CLI binary, not challenge source.
+- Ignore Windows `Zone.Identifier` metadata files; they are not part of the source or submission.
+
+Decision:
+
+Future agents should follow these protocols before making repository-history changes or updating project records.
+
+Verification:
+
+This entry was added locally only. Per the new protocol, it has not been committed or pushed.
+
+### Entry 9 - Dependency check
+
+Date/time: 2026-06-17, time not recorded (Europe/London)
+
+What happened:
+
+The user asked Codex to check whether the dependencies required to run and test the project are installed.
+
+Findings:
+
+- Python is available in WSL: `Python 3.10.12`.
+- Go is not available in WSL: `go: command not found`.
+- Native Node.js is not available in WSL: `node: command not found`.
+- `npm` is available on PATH, but it resolves to the Windows installation at `/mnt/c/Program Files/nodejs/npm`, not a native WSL install.
+- `frontend-react/package-lock.json` exists.
+- `frontend-react/node_modules` is not installed.
+
+Decision:
+
+Do not attempt dependency installation yet. Report the current state first.
+
+Reasoning:
+
+The project README expects Python 3.10+, Go 1.21+, Node.js 18+, and npm 9+. The current environment does not satisfy the Go or native Node.js requirements, so `./scripts/test.sh` and `./scripts/start.sh` are not expected to work cleanly yet.
+
+Next steps:
+
+- Install Go inside WSL.
+- Install native Node.js and npm inside WSL.
+- Run `./scripts/test.sh` after dependencies are installed.
+
+### Entry 10 - Dependencies fixed and tests verified
+
+Date/time: 2026-06-17, time not recorded (Europe/London)
+
+What happened:
+
+The user asked Codex to fix the missing dependencies required to run and test the project.
+
+Actions taken:
+
+- Installed Go locally under `.tools/go`.
+- Installed Node.js locally under `.tools/node`.
+- Reused the existing `.tools/` convention, which is ignored by git.
+- Verified both downloaded archives with SHA256 checksums before extraction.
+- Fixed executable permissions on `scripts/*.sh`.
+- Ran the project test script with a clean PATH pointing at the local Go and Node toolchains.
+
+Installed versions:
+
+- Go: `go1.26.4 linux/amd64`.
+- Node.js: `v24.16.0`.
+- npm: `11.13.0`.
+- Python: `3.10.12` was already present.
+
+Verification:
+
+`./scripts/test.sh` passed with the local toolchain.
+
+Observed output:
+
+- Python tests passed: 2 tests.
+- Go tests passed.
+- Frontend TypeScript check passed.
+- `npm install` installed 67 packages.
+- `npm audit` reported 2 baseline vulnerabilities: 1 moderate and 1 high.
+
+Problems or observations:
+
+The project scripts initially failed with `Permission denied` because the shell scripts were not executable. `chmod +x scripts/*.sh` fixed this.
+
+Next steps:
+
+- Decide later whether to address the baseline npm audit findings as part of the chosen challenge track.
+- Continue using the local toolchain by prepending `.tools/go/bin` and `.tools/node/bin` to `PATH`.
+
+### Entry 11 - Vite/esbuild audit finding deferred
+
+Date/time: 2026-06-17, time not recorded (Europe/London)
+
+What happened:
+
+After dependencies were installed, `npm audit` reported 2 frontend dependency vulnerabilities through Vite's esbuild dependency. The user asked what the issue was, how long a controlled Vite upgrade would take, and whether deferring it was a reasonable trade-off.
+
+Finding:
+
+- Affected package path: `vite -> esbuild <= 0.24.2`.
+- Advisory: `GHSA-67mh-4wv8-2f99`.
+- Summary: esbuild's development server behavior can allow a malicious website visited in the same browser to read responses from a local dev server because of permissive CORS behavior.
+- Scope: development-server exposure, not the built static frontend by itself.
+- Automated fix: `npm audit fix --force` would install `vite@8.0.16`, which is a breaking upgrade from the current Vite 5 setup.
+
+Decision:
+
+Defer the Vite/esbuild vulnerability fix for now and continue with the main project work.
+
+Reasoning:
+
+The issue does not block running or testing the project, the full project checks currently pass, and a controlled Vite upgrade could distract from the role-focused challenge improvement. The fix should be revisited if time allows, or if frontend/platform security becomes part of the chosen track.
+
+Estimate recorded:
+
+A controlled Vite upgrade is estimated at 30-60 minutes: update Vite/plugin versions, refresh `package-lock.json`, run frontend checks, run full project checks, and smoke-test the UI.
+
+Next steps:
+
+- Keep the audit finding visible as a known deferred hygiene/security item.
+- Do not run `npm audit fix --force` blindly.
+- Revisit only after the main challenge direction is chosen or if time remains.
+
+### Entry 12 - Lab-book timestamp format
+
+Date/time: 2026-06-17 23:38 BST (Europe/London)
+
+What happened:
+
+The user asked whether lab-book entries can record the time as well as the date, and clarified that the time should be registered next to the date for each entry.
+
+Decision:
+
+Use `Date/time:` for project lab-book entries going forward.
+
+Protocol:
+
+- Future `project_lab-book.md` entries should include the actual entry time next to the date.
+- Use the local timezone explicitly: `Europe/London`.
+- For previous entries where the exact time was not recorded, mark the time honestly as `time not recorded`.
+
+Reasoning:
+
+This improves traceability without inventing precision for earlier work.

@@ -229,3 +229,117 @@ Creation of `Changes.md` with two sections: files created and files modified.
 Verification:
 
 Pending commit.
+
+### Entry 7 - Dependency check and clearance
+
+Date: 2026-06-17
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+ok good. now check if we have all the dependencies required to run/test the given project
+```
+
+Purpose:
+
+Check whether the local WSL environment satisfied the project README requirements for running and testing the baseline system.
+
+What was understood from the response:
+
+The environment had Python, but Go and native WSL Node.js were missing. `npm` existed only via the Windows Node installation, and `frontend-react/node_modules` was not installed.
+
+Human input and judgement:
+
+The user then asked Codex to fix the dependencies.
+
+Prompt / request:
+
+```text
+please fix the dependencies
+```
+
+Purpose:
+
+Make the project runnable and testable in the current WSL workspace.
+
+What was accepted from AI:
+
+Codex installed local, project-scoped toolchains under `.tools/` instead of using system package installation, because `sudo` required a password.
+
+What changed manually / by Codex:
+
+- Installed Go `1.26.4` under `.tools/go`.
+- Installed Node.js `v24.16.0` and npm `11.13.0` under `.tools/node`.
+- Verified downloaded archives with SHA256 checksums before extraction.
+- Fixed executable permissions on `scripts/*.sh`.
+- Ran `./scripts/test.sh` with local Go and Node on `PATH`.
+
+Verification:
+
+`./scripts/test.sh` passed. Python tests, Go tests, and frontend TypeScript checks all completed successfully. `npm install` reported 2 baseline vulnerabilities, 1 moderate and 1 high, but the project checks passed.
+
+What AI was uncertain about or could not do:
+
+Codex did not address the npm audit findings yet because that may or may not fit the chosen challenge track.
+
+### Entry 8 - Vite/esbuild audit trade-off
+
+Date: 2026-06-17
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+what is this issue about. provide a summary please
+```
+
+Purpose:
+
+Understand the npm audit finding before deciding whether to fix it immediately.
+
+What was understood from the response:
+
+The audit finding concerns Vite's dependency on a vulnerable esbuild version. The vulnerability affects local development server exposure through permissive CORS behavior and could allow a malicious web page to read responses from a local dev server.
+
+Prompt / request:
+
+```text
+what is the estimate for running a controlled vite upgrade?
+```
+
+Purpose:
+
+Estimate whether fixing the issue now would be a good use of challenge time.
+
+What was accepted from AI:
+
+A controlled Vite upgrade was estimated at 30-60 minutes, including dependency updates, lockfile refresh, frontend typecheck, full project checks, and UI smoke testing.
+
+Prompt / request:
+
+```text
+since this issue would not obtrude our progress with the project, we would continue for now. If we take too much time in the project then we would come back to this vulnerability. does this sound as a reasonable trade-off?
+```
+
+Purpose:
+
+Validate a decision to defer the audit fix and focus on the main challenge work.
+
+Human input and judgement:
+
+The user decided to continue with the project and revisit the vulnerability only if time allows.
+
+What was accepted from AI:
+
+Codex agreed that deferring was reasonable because the issue does not block tests or core simulation work, and the automated fix may require a breaking Vite upgrade.
+
+Verification:
+
+No code changes were made for this vulnerability. The finding remains a documented deferred item.
+
+What AI was uncertain about or could not do:
+
+Codex did not perform a Vite migration or smoke-test an upgraded frontend because the user chose to defer it.
