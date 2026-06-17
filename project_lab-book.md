@@ -385,3 +385,35 @@ Handover protocol:
 Reasoning:
 
 The project lab book is comprehensive, but a future agent also needs a short operational summary to get oriented quickly without rereading the full history first.
+
+### Entry 14 - Handover performed
+
+Date/time: 2026-06-18 00:20 BST (Europe/London)
+
+What happened:
+
+The user asked Codex to perform the handover routine.
+
+Actions taken:
+
+- Read `HANDOVER.md` and the required context files listed there.
+- Checked the current branch, remote, working tree status, and latest commit.
+- Updated `HANDOVER.md` with the current remote, latest commit, current task status, and suggested next action.
+- Recorded this handover in `project_lab-book.md`.
+- Updated `AI_USAGE_lab-book.md` for the handover prompt.
+- Kept `Changes.md` succinct while noting that the handover and lab-book files have been updated.
+
+Current state:
+
+- Branch: `main`.
+- Remote: `https://github.com/md861/acts-recruitment-challenge.git`.
+- Latest commit before this handover update: `2345836 Add agent handover notes`.
+- Working tree was clean before the handover documentation edits.
+
+Next steps:
+
+- Commit and push the handover update, because this prompt is a handover-to-new-agent request.
+
+Verification:
+
+`./scripts/test.sh` passed with local Go and Node on `PATH`.

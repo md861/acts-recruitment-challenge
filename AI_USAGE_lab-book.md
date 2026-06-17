@@ -343,3 +343,35 @@ No code changes were made for this vulnerability. The finding remains a document
 What AI was uncertain about or could not do:
 
 Codex did not perform a Vite migration or smoke-test an upgraded frontend because the user chose to defer it.
+
+### Entry 9 - Handover routine
+
+Date: 2026-06-18
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+perform handover
+```
+
+Purpose:
+
+Prepare the repository for another agent to continue from the current state.
+
+What was understood from the response:
+
+This is a handover-to-new-agent request, so the standing project protocol allows a commit and push after updating the handover records.
+
+Human input and judgement:
+
+The user explicitly requested the handover routine.
+
+What was accepted from AI:
+
+Codex updated the handover file and running logs to capture the current branch, remote, latest commit, verification state, deferred audit issue, and suggested next action.
+
+Verification:
+
+Codex checked `git status`, latest commit, branch, remote, and reran the baseline project checks before committing.
