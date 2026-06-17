@@ -360,3 +360,28 @@ Protocol:
 Reasoning:
 
 This improves traceability without inventing precision for earlier work.
+
+### Entry 13 - Agent handover file and routine
+
+Date/time: 2026-06-18 00:00 BST (Europe/London)
+
+What happened:
+
+The user asked for a separate succinct handover Markdown file that another AI agent can use and maintain to continue from the current state.
+
+Decision:
+
+Create `HANDOVER.md` at the repository root.
+
+Handover protocol:
+
+- `HANDOVER.md` should be updated as part of any "prepare for handover" routine.
+- Keep it concise and agent-facing.
+- Include current repo state, must-read files, local toolchain notes, verification status, known deferred risks, and next suggested action.
+- Add a timestamped entry to `project_lab-book.md` whenever the handover file or routine is updated.
+- Update `Changes.md` when the handover file is created or materially changed.
+- Respect the existing commit/push protocol: only commit and push when explicitly asked, at end of day, or for a handover-to-new-agent prompt.
+
+Reasoning:
+
+The project lab book is comprehensive, but a future agent also needs a short operational summary to get oriented quickly without rereading the full history first.
