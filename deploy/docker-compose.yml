@@ -1,0 +1,33 @@
+services:
+  model:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.model
+    environment:
+      MODEL_HOST: "0.0.0.0"
+      SIM_WIDTH: "20"
+      SIM_HEIGHT: "14"
+      SIM_AGENT_COUNT: "18"
+    ports:
+      - "8001:8001"
+
+  api:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.api
+    environment:
+      API_ADDR: "0.0.0.0:18080"
+      MODEL_BASE_URL: "http://model:8001"
+    ports:
+      - "18080:18080"
+    depends_on:
+      - model
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - api

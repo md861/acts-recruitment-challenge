@@ -1,0 +1,11 @@
+FROM golang:1.22 AS build
+
+WORKDIR /src
+COPY api-go/go.mod ./
+COPY api-go/ ./
+RUN go build -o /out/acts-api .
+
+FROM debian:bookworm-slim
+COPY --from=build /out/acts-api /usr/local/bin/acts-api
+EXPOSE 18080
+CMD ["acts-api"]
