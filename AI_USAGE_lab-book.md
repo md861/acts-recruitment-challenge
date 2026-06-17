@@ -205,3 +205,27 @@ Codex ran `.tools/gh/bin/gh --version`, which reported `gh version 2.95.0 (2026-
 Open question:
 
 GitHub authentication still needs to be checked or completed before creating the private repository.
+
+### Entry 6 - Changes summary file
+
+Date: 2026-06-17
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+please add another md file Changes.md, extremely succinct, that gives a list of all the changes made, essentially two lists - 1) files created 2) files modified, with a very brief description about each content of the list.
+```
+
+Purpose:
+
+Create a compact project change summary that is easier to scan than the running lab books.
+
+What was accepted from AI:
+
+Creation of `Changes.md` with two sections: files created and files modified.
+
+Verification:
+
+Pending commit.

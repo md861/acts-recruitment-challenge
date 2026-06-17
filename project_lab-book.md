@@ -182,3 +182,22 @@ Next steps:
 - Check `gh auth status`.
 - Authenticate if needed.
 - Create a private GitHub repository and push `main`.
+
+### Entry 7 - Compact changes summary added
+
+Date: 2026-06-17
+
+What happened:
+
+The user requested an extremely succinct `Changes.md` file listing created and modified files.
+
+Decision:
+
+Add `Changes.md` at the repository root with two short sections:
+
+- Files created.
+- Files modified.
+
+Reasoning:
+
+This gives a quick audit trail for setup changes without needing to read the longer lab books.
