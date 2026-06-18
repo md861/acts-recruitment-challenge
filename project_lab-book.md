@@ -518,3 +518,54 @@ Record the terrain-map convention in `MODEL_MODULARIZATION_BLUEPRINT.md` and tra
 Reasoning:
 
 The terrain image and legend are now part of the intended model input contract, so future implementation should parse the image into symbolic cell properties rather than hard-coding the current four restricted cells.
+
+### Entry 19 - Terrain map handler made first implementation step
+
+Date/time: 2026-06-18 13:54 BST (Europe/London)
+
+What happened:
+
+The user asked to make the terrain map handler the first next implementation step and to update the earlier modularisation breakdown accordingly.
+
+Decision:
+
+Revise `MODEL_MODULARIZATION_BLUEPRINT.md` so implementation starts with:
+
+- selecting and parsing a PNG terrain map;
+- treating white cells as normal cells;
+- initializing symbolic terrain cells from map colors;
+- testing that initialization matches map specifications;
+- integrating terrain-map metrics such as breach detection and time spent per cell type per agent id;
+- adding a later frontend visualization slice with color-coded stripe markings and a legend.
+
+Reasoning:
+
+The terrain map defines the model environment, so implementing it first gives later agent behaviour, movement policy, random walk, and metrics work a concrete shared input.
+
+### Entry 20 - Handover refreshed for terrain-map-handler implementation
+
+Date/time: 2026-06-18 13:59 BST (Europe/London)
+
+What happened:
+
+The user asked for the handover docs to be updated so any future agent can pick up from the current state, and then explicitly asked to commit and push afterward.
+
+Decision:
+
+Refresh `HANDOVER.md` to point future agents at the chosen Track A scope and the new first implementation step: the terrain map handler.
+
+Current state for future agents:
+
+- Track A modelling work is selected.
+- The terrain-map-handler-first plan is captured in `MODEL_MODULARIZATION_BLUEPRINT.md`.
+- `Terrain maps/Terrain1.png` is tracked and documented as the current terrain input asset.
+- No implementation code has been changed yet.
+- The next coding step is to implement and test the terrain map handler.
+
+Verification:
+
+`./scripts/test.sh` passed with local Go and Node on `PATH`.
+
+Next steps:
+
+- Commit and push the documentation updates, as explicitly requested.

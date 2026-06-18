@@ -25,3 +25,9 @@
 - `AI_USAGE_lab-book.md` - Recorded the terrain-map legend prompt and asset-tracking request.
 - `project_lab-book.md` - Recorded the terrain-map input convention and implementation implications.
 - `Changes.md` - Added the tracked terrain map asset and terrain legend documentation updates.
+- `MODEL_MODULARIZATION_BLUEPRINT.md` - Reordered the implementation plan so the terrain map handler is the first next step and added frontend visualization scope.
+- `AI_USAGE_lab-book.md` - Recorded the terrain-map-handler-first planning prompt.
+- `project_lab-book.md` - Recorded the decision to start implementation with terrain map handling.
+- `HANDOVER.md` - Refreshed current state, read-first files, and next action for future agents.
+- `AI_USAGE_lab-book.md` - Recorded the handover refresh and commit/push request.
+- `project_lab-book.md` - Recorded the handover refresh for terrain-map-handler implementation.

@@ -1,19 +1,20 @@
 # Agent Handover
 
-Last updated: 2026-06-18 00:20 BST (Europe/London)
+Last updated: 2026-06-18 13:59 BST (Europe/London)
 
 ## Current State
 
 - Repo: `acts-recruitment-challenge`
 - Branch: `main`
 - Remote: `https://github.com/md861/acts-recruitment-challenge.git`
-- Latest commit before this handover update: `2345836 Add agent handover notes`
+- Latest commit before this handover update: `6acb2c0 Document terrain map legend`
 - Working protocol: do not commit or push unless the user explicitly asks, it is end-of-day, or it is a handover-to-new-agent prompt.
-- Current task status: no implementation track has been chosen yet; baseline setup and documentation are in place.
+- Current task status: Track A modelling work has been chosen. No implementation code has been changed yet. The next implementation step is the terrain map handler.
 
 ## Read First
 
 - `CANDIDATE_INSTRUCTIONS.md`
+- `MODEL_MODULARIZATION_BLUEPRINT.md`
 - `project_lab-book.md`
 - `AI_USAGE_lab-book.md`
 - `Changes.md`
@@ -41,7 +42,9 @@ Most recent baseline checks passed with:
 PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh
 ```
 
-Last recorded pass: 2026-06-18 00:20 BST during this handover update.
+Last recorded pass: 2026-06-18 13:59 BST during this handover update.
+
+No implementation code has changed yet. Current changes in this handover update are documentation/planning only.
 
 ## Known Deferred Item
 
@@ -51,8 +54,17 @@ Last recorded pass: 2026-06-18 00:20 BST during this handover update.
 
 ## Suggested Next Action
 
-- Choose one challenge track with the user, then make a narrow, testable improvement.
-- Good likely directions are Track A model behaviour/configuration tests or Track B API/frontend resilience, depending on the user's preferred role focus.
+Implement the terrain map handler as the first Track A slice. Follow the updated order in `MODEL_MODULARIZATION_BLUEPRINT.md`:
+
+1. Add symbolic terrain cell vocabulary and map configuration.
+2. Load/select `Terrain maps/Terrain1.png`.
+3. Parse white, black, red, orange, green, blue, and pink cells into terrain definitions.
+4. Add unit tests that verify initialization matches the PNG legend.
+5. Integrate parsed terrain metadata into the model snapshot without breaking the current API/frontend contract.
+6. Add initial metrics hooks, especially breach detection and time spent in each cell type per agent id.
+7. Add a 100-tick terrain-map integration test after the parser and terrain API are stable.
+
+Frontend follow-on: render terrain cells with the same color coding, stripe-line markings for special cells, and a compact legend explaining each color/pattern.
 
 ## Handover Routine
 

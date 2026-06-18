@@ -510,3 +510,69 @@ Codex documented the legend in `MODEL_MODULARIZATION_BLUEPRINT.md`, recorded the
 Verification:
 
 Codex confirmed `Terrain maps/Terrain1.png` is a PNG image before committing.
+
+### Entry 14 - Terrain map handler promoted to first implementation step
+
+Date: 2026-06-18
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+Ok great. Make this implementation of the map handler as the first next step. and then update the breakdown that you created before we talked about this map handler
+```
+
+Purpose:
+
+Update the project blueprint so terrain-map handling is the first implementation slice, reflecting the newly clarified PNG map input and frontend visualization requirements.
+
+What was understood from the response:
+
+The user wants the terrain map handler, map initialization tests, simulation metrics, and later frontend terrain visualization to lead the implementation plan.
+
+Human input and judgement:
+
+The user chose the terrain map handler as the first next step before the broader agent, movement, and random-walk refactor work.
+
+What was accepted from AI:
+
+Codex updated `MODEL_MODULARIZATION_BLUEPRINT.md` to reorder the implementation tasks and suggested implementation order around terrain map handling first.
+
+### Entry 15 - Handover refresh for future agents
+
+Date: 2026-06-18
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+good. update the handover docs so that any agent can pick it up from here
+```
+
+Follow-up prompt:
+
+```text
+commit and push after
+```
+
+Purpose:
+
+Prepare the project for another AI agent to continue from the current planning state, with the terrain map handler clearly identified as the next implementation step.
+
+What was understood from the response:
+
+The user wants `HANDOVER.md` refreshed and wants the resulting documentation changes committed and pushed.
+
+Human input and judgement:
+
+The user explicitly authorized commit and push for this handover update.
+
+What was accepted from AI:
+
+Codex updated the handover instructions to reference `MODEL_MODULARIZATION_BLUEPRINT.md`, the selected Track A modelling scope, and the terrain-map-handler-first implementation sequence.
+
+Verification:
+
+Codex ran `./scripts/test.sh` with the local Go and Node toolchains on `PATH`; the command completed successfully.
