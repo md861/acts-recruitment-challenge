@@ -53,7 +53,7 @@ Nine test modules covering all new modules plus expanded model integration:
 
 - [**`MODEL_MODULARIZATION_BLUEPRINT.md`**](MODEL_MODULARIZATION_BLUEPRINT.md) — Full implementation blueprint for Track A.
 - [**`Changes.md`**](Changes.md) — Audit of all files created and modified by this project.
-- [**`docs/doxygen/Doxyfile`**](docs/doxygen/Doxyfile) — Doxygen configuration for Python model source documentation.
+- [**`docs/doxygen/Doxyfile`**](docs/doxygen/Doxyfile) — Doxygen configuration for Python model source documentation. The pre-built HTML output is available at [**`docs/doxygen/build/html/index.html`**](docs/doxygen/build/html/index.html) and can be opened directly without a local Doxygen install.
 - [**`.gitignore`**](.gitignore) — Extended to ignore Windows Zone.Identifier metadata, local `.tools/` toolchain, generated `artifacts/`, and Doxygen build output.
 - [**`scripts/start.sh`**](scripts/start.sh) — Defaults `SIM_TERRAIN_MAP_PATH` to `Terrain maps/Terrain1.png`, generates terrain GIF and analysis report before starting services.
 
@@ -106,7 +106,7 @@ python3 scripts/render-terrain-gif.py
 python3 scripts/render-analysis-plots.py
 ```
 
-Rebuild Doxygen source documentation (requires system Doxygen):
+The pre-built Doxygen documentation is available at [`docs/doxygen/build/html/index.html`](docs/doxygen/build/html/index.html). To rebuild locally (requires system Doxygen):
 
 ```bash
 doxygen docs/doxygen/Doxyfile
