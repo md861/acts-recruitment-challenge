@@ -10,11 +10,19 @@ This lab book records how AI assistance is used during the ACTS recruitment chal
 - Record human input, judgement, corrections, and decisions.
 - Record verification steps and any places where AI assistance was uncertain or unhelpful.
 
+## Maintenance Protocol
+
+- New entries should be appended in chronological order.
+- New entries should use `Date/time:` with timezone where available.
+- If an exact time was not recorded, use `Date/time: YYYY-MM-DD, time not recorded (Europe/London)`.
+- Keep entry numbers unique and increasing.
+- If a previous entry is corrected or reordered, add a maintenance entry explaining the correction.
+
 ## Running Log
 
 ### Entry 1 - Workspace orientation
 
-Date: 2026-06-17
+Date/time: 2026-06-17, time not recorded (Europe/London)
 
 Tool used: Codex
 
@@ -28,7 +36,7 @@ Purpose:
 
 Confirm that Codex could see the expected working directory before inspecting or changing the project.
 
-What was understood from the response:
+What was understood / accepted:
 
 The active working directory was confirmed as `\\wsl.localhost\Ubuntu-22.04\home\mynk\Skyral_Tasks`.
 
@@ -36,17 +44,13 @@ Human input and judgement:
 
 The user confirmed that this was the intended location.
 
-What was accepted from AI:
-
-Only the environment confirmation.
-
 Verification:
 
 Codex ran `Get-Location` and reported the path.
 
 ### Entry 2 - Repository contents summary
 
-Date: 2026-06-17
+Date/time: 2026-06-17, time not recorded (Europe/London)
 
 Tool used: Codex
 
@@ -60,17 +64,13 @@ Purpose:
 
 Understand the repository structure, challenge instructions, service layout, and likely improvement areas before beginning implementation work.
 
-What was understood from the response:
+What was understood / accepted:
 
-The project is a deliberately small ACTS take-home challenge containing a Python population model, Go integration API, React frontend, Docker Compose files, and starter Kubernetes notes. It asks the candidate to choose one role-specific track and make a focused, tested improvement.
+The project is a deliberately small ACTS take-home challenge containing a Python population model, Go integration API, React frontend, Docker Compose files, and starter Kubernetes notes.
 
 Human input and judgement:
 
 The user asked for a summary rather than changes, so no project files were modified.
-
-What was accepted from AI:
-
-The architectural summary and identification of likely tracks: modelling, integration/fullstack, or platform.
 
 Verification:
 
@@ -78,7 +78,7 @@ Codex read the challenge instructions, README, architecture notes, key Python/Go
 
 ### Entry 3 - Candidate instructions confirmation
 
-Date: 2026-06-17
+Date/time: 2026-06-17, time not recorded (Europe/London)
 
 Tool used: Codex
 
@@ -92,17 +92,9 @@ Purpose:
 
 Confirm that the candidate instructions had actually been read before project setup began.
 
-What was understood from the response:
+What was understood / accepted:
 
 Both the root `CANDIDATE_INSTRUCTIONS.md` and the project copy at `acts-recruitment-challenge/CANDIDATE_INSTRUCTIONS.md` had been read and appeared to match.
-
-Human input and judgement:
-
-The user accepted this confirmation and moved on to project setup.
-
-What was accepted from AI:
-
-The confirmation that the instructions were read.
 
 Verification:
 
@@ -110,7 +102,7 @@ Codex had already read both files with `Get-Content -Raw`.
 
 ### Entry 4 - Lab-book and private GitHub repo request
 
-Date: 2026-06-17
+Date/time: 2026-06-17, time not recorded (Europe/London)
 
 Tool used: Codex
 
@@ -127,44 +119,21 @@ Purpose:
 
 Create durable records for AI usage and project development history, and initialize a private GitHub repository for the work.
 
-What was understood from the response:
+What was understood / accepted:
 
-The lab books should be living documents. `AI_USAGE_lab-book.md` should record AI prompts and how the output was used. `project_lab-book.md` should record development history, decisions, changes, and problems encountered.
+Codex created `AI_USAGE_lab-book.md` and `project_lab-book.md`, initialized a local git repository, staged the clean source tree, and created the initial commit. GitHub CLI was not available in WSL at this point.
 
 Human input and judgement:
 
-The user specified the filenames and the kind of information to capture. Codex chose a chronological format to keep the records readable and transparent.
-
-What was accepted from AI:
-
-Creation of the two lab-book files and an initial record of the work so far.
+The user specified the filenames and the kind of information to capture. Codex chose a chronological format.
 
 Verification:
 
-Pending: files are being created now. Private GitHub repo creation depends on local Git/GitHub CLI availability and network/authentication.
-
-Follow-up:
-
-Codex created `AI_USAGE_lab-book.md` and `project_lab-book.md`, initialized a local git repository, staged the clean source tree, and created the initial commit. GitHub CLI was not available in WSL, so creating the private GitHub repository could not be completed from the available tooling in this step.
-
-What changed manually / by Codex:
-
-- Added this running AI usage lab book.
-- Added `project_lab-book.md`.
-- Added `*Zone.Identifier*` to `.gitignore` so Windows metadata streams are not committed.
-- Initialized git and committed the initial repository state.
-
-Verification:
-
-Codex confirmed `git version 2.34.1` was available in WSL, confirmed the folder was not previously a git repository, then created commit `2c2b960` with message `Initial challenge setup`.
-
-## Open Questions
-
-- Which GitHub publishing route should be used next: install/authenticate GitHub CLI in WSL, or have the user create an empty private repository and provide the remote URL?
+Codex confirmed `git version 2.34.1`, confirmed the folder was not already a git repository, and created commit `2c2b960 Initial challenge setup`.
 
 ### Entry 5 - GitHub CLI local install
 
-Date: 2026-06-17
+Date/time: 2026-06-17, time not recorded (Europe/London)
 
 Tool used: Codex
 
@@ -176,39 +145,19 @@ install the github cli
 
 Purpose:
 
-Make GitHub CLI available so the private GitHub repository can be created and pushed from the WSL project environment.
+Make GitHub CLI available so the private GitHub repository could be created and pushed from the WSL project environment.
 
-What was understood from the response:
+What was understood / accepted:
 
-System-wide installation through `apt` was blocked because `sudo` requires a password. A local project install was a workable alternative.
-
-Human input and judgement:
-
-The user requested installation of GitHub CLI. Codex selected a local install because it avoided changing system packages without sudo access.
-
-What was accepted from AI:
-
-Download and use the official GitHub CLI Linux amd64 tarball for the current latest release.
-
-What changed manually / by Codex:
-
-- Downloaded GitHub CLI `v2.95.0` into `.tools/`.
-- Downloaded the official checksum file.
-- Verified the tarball checksum.
-- Extracted the binary under `.tools/gh`.
-- Added `.tools/` to `.gitignore`.
+System-wide installation through `apt` was blocked because `sudo` required a password. Codex installed GitHub CLI locally under ignored `.tools/`.
 
 Verification:
 
 Codex ran `.tools/gh/bin/gh --version`, which reported `gh version 2.95.0 (2026-06-17)`.
 
-Open question:
-
-GitHub authentication still needs to be checked or completed before creating the private repository.
-
 ### Entry 6 - Changes summary file
 
-Date: 2026-06-17
+Date/time: 2026-06-17, time not recorded (Europe/London)
 
 Tool used: Codex
 
@@ -222,17 +171,13 @@ Purpose:
 
 Create a compact project change summary that is easier to scan than the running lab books.
 
-What was accepted from AI:
+What was understood / accepted:
 
-Creation of `Changes.md` with two sections: files created and files modified.
+Codex created `Changes.md` with two sections: files created and files modified.
 
-Verification:
+### Entry 7 - Dependency check and local tooling
 
-Pending commit.
-
-### Entry 7 - Dependency check and clearance
-
-Date: 2026-06-17
+Date/time: 2026-06-17, time not recorded (Europe/London)
 
 Tool used: Codex
 
@@ -242,19 +187,7 @@ Prompt / request:
 ok good. now check if we have all the dependencies required to run/test the given project
 ```
 
-Purpose:
-
-Check whether the local WSL environment satisfied the project README requirements for running and testing the baseline system.
-
-What was understood from the response:
-
-The environment had Python, but Go and native WSL Node.js were missing. `npm` existed only via the Windows Node installation, and `frontend-react/node_modules` was not installed.
-
-Human input and judgement:
-
-The user then asked Codex to fix the dependencies.
-
-Prompt / request:
+Follow-up prompt:
 
 ```text
 please fix the dependencies
@@ -262,31 +195,19 @@ please fix the dependencies
 
 Purpose:
 
-Make the project runnable and testable in the current WSL workspace.
+Check whether the WSL environment could run and test the baseline project, then fix missing dependencies.
 
-What was accepted from AI:
+What was understood / accepted:
 
-Codex installed local, project-scoped toolchains under `.tools/` instead of using system package installation, because `sudo` required a password.
-
-What changed manually / by Codex:
-
-- Installed Go `1.26.4` under `.tools/go`.
-- Installed Node.js `v24.16.0` and npm `11.13.0` under `.tools/node`.
-- Verified downloaded archives with SHA256 checksums before extraction.
-- Fixed executable permissions on `scripts/*.sh`.
-- Ran `./scripts/test.sh` with local Go and Node on `PATH`.
+The environment had Python, but Go and native WSL Node.js were missing. Codex installed local, project-scoped Go and Node toolchains under `.tools/` rather than using system packages.
 
 Verification:
 
-`./scripts/test.sh` passed. Python tests, Go tests, and frontend TypeScript checks all completed successfully. `npm install` reported 2 baseline vulnerabilities, 1 moderate and 1 high, but the project checks passed.
-
-What AI was uncertain about or could not do:
-
-Codex did not address the npm audit findings yet because that may or may not fit the chosen challenge track.
+`./scripts/test.sh` passed with local Go and Node on `PATH`. `npm install` reported baseline Vite/esbuild audit findings, which were not fixed in this step.
 
 ### Entry 8 - Vite/esbuild audit trade-off
 
-Date: 2026-06-17
+Date/time: 2026-06-17, time not recorded (Europe/London)
 
 Tool used: Codex
 
@@ -296,29 +217,11 @@ Prompt / request:
 what is this issue about. provide a summary please
 ```
 
-Purpose:
-
-Understand the npm audit finding before deciding whether to fix it immediately.
-
-What was understood from the response:
-
-The audit finding concerns Vite's dependency on a vulnerable esbuild version. The vulnerability affects local development server exposure through permissive CORS behavior and could allow a malicious web page to read responses from a local dev server.
-
-Prompt / request:
+Follow-up prompts:
 
 ```text
 what is the estimate for running a controlled vite upgrade?
 ```
-
-Purpose:
-
-Estimate whether fixing the issue now would be a good use of challenge time.
-
-What was accepted from AI:
-
-A controlled Vite upgrade was estimated at 30-60 minutes, including dependency updates, lockfile refresh, frontend typecheck, full project checks, and UI smoke testing.
-
-Prompt / request:
 
 ```text
 since this issue would not obtrude our progress with the project, we would continue for now. If we take too much time in the project then we would come back to this vulnerability. does this sound as a reasonable trade-off?
@@ -326,27 +229,23 @@ since this issue would not obtrude our progress with the project, we would conti
 
 Purpose:
 
-Validate a decision to defer the audit fix and focus on the main challenge work.
+Understand the npm audit finding before deciding whether to fix it immediately.
 
 Human input and judgement:
 
-The user decided to continue with the project and revisit the vulnerability only if time allows.
+The user decided to defer the Vite/esbuild vulnerability because it did not block the main challenge work.
 
 What was accepted from AI:
 
-Codex agreed that deferring was reasonable because the issue does not block tests or core simulation work, and the automated fix may require a breaking Vite upgrade.
+Codex agreed that deferring was reasonable and estimated a controlled Vite upgrade at 30-60 minutes.
 
 Verification:
 
 No code changes were made for this vulnerability. The finding remains a documented deferred item.
 
-What AI was uncertain about or could not do:
+### Entry 9 - Initial handover routine
 
-Codex did not perform a Vite migration or smoke-test an upgraded frontend because the user chose to defer it.
-
-### Entry 9 - Handover routine
-
-Date: 2026-06-18
+Date/time: 2026-06-18, time not recorded (Europe/London)
 
 Tool used: Codex
 
@@ -360,25 +259,17 @@ Purpose:
 
 Prepare the repository for another agent to continue from the current state.
 
-What was understood from the response:
+What was understood / accepted:
 
-This is a handover-to-new-agent request, so the standing project protocol allows a commit and push after updating the handover records.
-
-Human input and judgement:
-
-The user explicitly requested the handover routine.
-
-What was accepted from AI:
-
-Codex updated the handover file and running logs to capture the current branch, remote, latest commit, verification state, deferred audit issue, and suggested next action.
+Codex updated the handover file and running logs with branch, remote, latest commit, verification state, deferred audit issue, and suggested next action.
 
 Verification:
 
-Codex checked `git status`, latest commit, branch, remote, and reran the baseline project checks before committing.
+Codex checked `git status`, latest commit, branch, remote, and reran the baseline checks before committing.
 
 ### Entry 10 - Model modularisation scoping
 
-Date: 2026-06-18
+Date/time: 2026-06-18, time not recorded (Europe/London)
 
 Tool used: Codex
 
@@ -393,19 +284,11 @@ read the above requirements and tell me if you can manage this. Along with and e
 
 Purpose:
 
-Assess whether a Track A modelling refactor is manageable and estimate the time required before starting implementation.
+Assess whether a Track A modelling refactor was manageable and estimate the time required before starting implementation.
 
-What was understood from the response:
+What was understood / accepted:
 
-The user wants a modular Python model architecture that separates agent creation/behaviour, movement selection, random walk policies, terrain/cell rules, and simulation metrics, while making future unit and integration tests easier to write.
-
-Human input and judgement:
-
-The user provided the desired module boundaries and asked for feasibility and timing rather than immediate code changes.
-
-What was accepted from AI:
-
-Pending: Codex is inspecting the current model and tests before providing an estimate.
+Codex identified the requested module boundaries: agent creation/behaviour, movement selection, random walk policies, terrain/cell rules, and simulation metrics.
 
 Verification:
 
@@ -413,7 +296,7 @@ Codex read the current Python model modules and existing Python tests before ans
 
 ### Entry 11 - Full modularisation scope selected
 
-Date: 2026-06-18
+Date/time: 2026-06-18, time not recorded (Europe/London)
 
 Tool used: Codex
 
@@ -425,11 +308,7 @@ ok good. let us go forward with the full version of every idea listed. Give me a
 
 Purpose:
 
-Confirm that the modelling track should proceed with the full requested modularisation scope, and ask Codex to break the work into clear tasks before implementation.
-
-What was understood from the response:
-
-The user wants to proceed with the broader Track A implementation: separated modules for agents, movement, random walks, terrain, and metrics, plus tests that exercise those boundaries.
+Confirm that the modelling track should proceed with the full requested modularisation scope and ask Codex to break the work into clear tasks.
 
 Human input and judgement:
 
@@ -437,11 +316,11 @@ The user chose the larger implementation scope after reviewing the estimate.
 
 What was accepted from AI:
 
-Pending: Codex will provide an enumerated implementation breakdown before source changes begin.
+Codex provided an implementation breakdown covering agents, movement, random walk, terrain, metrics, orchestration, configuration, snapshots, tests, and frontend terrain visualization.
 
 ### Entry 12 - Blueprint document request
 
-Date: 2026-06-18
+Date/time: 2026-06-18, time not recorded (Europe/London)
 
 Tool used: Codex
 
@@ -453,27 +332,15 @@ ok good, can you save this as the main blueprint for what we want to implement i
 
 Purpose:
 
-Turn the modularisation breakdown into a tracked project blueprint and publish it to the GitHub repository.
+Turn the modularisation breakdown into a tracked project blueprint and publish it to GitHub.
 
-What was understood from the response:
+What was understood / accepted:
 
-The user wants a durable Markdown file that future AI agents can treat as the implementation reference for the Track A modelling refactor.
-
-Human input and judgement:
-
-The user explicitly asked for the file to be tracked, committed, and pushed.
-
-What was accepted from AI:
-
-Codex created `MODEL_MODULARIZATION_BLUEPRINT.md` from the agreed task breakdown and updated the bookkeeping docs.
-
-Verification:
-
-Pending: commit and push will be checked with `git status` and `git log`.
+Codex created `MODEL_MODULARIZATION_BLUEPRINT.md`, updated the bookkeeping docs, committed, and pushed.
 
 ### Entry 13 - Terrain map legend and asset tracking
 
-Date: 2026-06-18
+Date/time: 2026-06-18, time not recorded (Europe/London)
 
 Tool used: Codex
 
@@ -495,25 +362,17 @@ Purpose:
 
 Record the terrain-map asset folder and its color legend as part of the modelling blueprint, then publish the tracked PNG and documentation changes.
 
-What was understood from the response:
+What was understood / accepted:
 
-The user wants `Terrain maps/` to be a tracked project input folder containing PNG terrain layouts. The terrain module should eventually parse the PNG color legend into cell semantics.
-
-Human input and judgement:
-
-The user supplied the cell-type legend and explicitly asked for commit and push.
-
-What was accepted from AI:
-
-Codex documented the legend in `MODEL_MODULARIZATION_BLUEPRINT.md`, recorded the decision in bookkeeping docs, and prepared to track `Terrain maps/Terrain1.png`.
+Codex documented the legend in `MODEL_MODULARIZATION_BLUEPRINT.md`, recorded the decision in bookkeeping docs, and tracked `Terrain maps/Terrain1.png`.
 
 Verification:
 
-Codex confirmed `Terrain maps/Terrain1.png` is a PNG image before committing.
+Codex confirmed `Terrain maps/Terrain1.png` was a PNG image before committing.
 
 ### Entry 14 - Terrain map handler promoted to first implementation step
 
-Date: 2026-06-18
+Date/time: 2026-06-18, time not recorded (Europe/London)
 
 Tool used: Codex
 
@@ -525,23 +384,15 @@ Ok great. Make this implementation of the map handler as the first next step. an
 
 Purpose:
 
-Update the project blueprint so terrain-map handling is the first implementation slice, reflecting the newly clarified PNG map input and frontend visualization requirements.
+Update the project blueprint so terrain-map handling became the first implementation slice.
 
-What was understood from the response:
+What was understood / accepted:
 
-The user wants the terrain map handler, map initialization tests, simulation metrics, and later frontend terrain visualization to lead the implementation plan.
-
-Human input and judgement:
-
-The user chose the terrain map handler as the first next step before the broader agent, movement, and random-walk refactor work.
-
-What was accepted from AI:
-
-Codex updated `MODEL_MODULARIZATION_BLUEPRINT.md` to reorder the implementation tasks and suggested implementation order around terrain map handling first.
+Codex reordered the blueprint around PNG terrain handling, map initialization tests, terrain metrics, and later frontend visualization.
 
 ### Entry 15 - Handover refresh for future agents
 
-Date: 2026-06-18
+Date/time: 2026-06-18, time not recorded (Europe/London)
 
 Tool used: Codex
 
@@ -559,220 +410,91 @@ commit and push after
 
 Purpose:
 
-Prepare the project for another AI agent to continue from the current planning state, with the terrain map handler clearly identified as the next implementation step.
+Prepare the project for another AI agent to continue from the current planning state.
 
-What was understood from the response:
+What was understood / accepted:
 
-The user wants `HANDOVER.md` refreshed and wants the resulting documentation changes committed and pushed.
-
-Human input and judgement:
-
-The user explicitly authorized commit and push for this handover update.
-
-What was accepted from AI:
-
-Codex updated the handover instructions to reference `MODEL_MODULARIZATION_BLUEPRINT.md`, the selected Track A modelling scope, and the terrain-map-handler-first implementation sequence.
+Codex updated `HANDOVER.md` to reference the blueprint, selected Track A modelling scope, and terrain-map-handler-first sequence, then committed and pushed.
 
 Verification:
 
-Codex ran `./scripts/test.sh` with the local Go and Node toolchains on `PATH`; the command completed successfully.
+`./scripts/test.sh` passed with local Go and Node on `PATH`.
 
-### Entry 19 - Agent behaviour profile implementation
+### Entry 16 - README roadmap and handover preparation
 
-Date: 2026-06-18
+Date/time: 2026-06-18, time not recorded (Europe/London)
 
 Tool used: Codex
 
 Prompt / request:
 
 ```text
-let's get on with step 6 then
+can we create a roadmap using these blueprints (including the next step breakdowns) with a completed, active, next state for them and maintain them in the readme for our github please? commit and push once done and then prep for handover
 ```
 
 Purpose:
 
-Continue the Track A modelling roadmap by implementing agent behaviour profiles after the agent creation and placement refactor.
+Make the project roadmap visible from the GitHub README and refresh handover state.
 
-What was understood from the response:
+What was understood / accepted:
 
-Step 6 means moving role-specific behaviour out of `PopulationModel` and into a dedicated, testable module while preserving deterministic seeded movement and the current API/frontend snapshot contract.
-
-Human input and judgement:
-
-The user selected the next roadmap step. Codex chose a minimal module boundary and kept the existing movement choices compatible with previous behaviour.
-
-What was accepted from AI:
-
-Codex added `population_model/behaviour.py`, wired `PopulationModel._next_movement` through default behaviour profiles, and added focused behaviour tests.
+Codex added a `Roadmap` section to `README.md`, based on `MODEL_MODULARIZATION_BLUEPRINT.md`, and refreshed handover docs.
 
 Verification:
 
-`PYTHONPATH=model-python python3 -m unittest discover -s model-python/tests` passed with 18 tests.
+`./scripts/test.sh` passed with local Go and Node on `PATH`.
 
-### Entry 19 - Terrain map implementation and visualization
+### Entry 17 - Changes.md classification clarification
 
-Date: 2026-06-18
+Date/time: 2026-06-18, time not recorded (Europe/London)
 
 Tool used: Codex
 
 Prompt / request:
 
 ```text
-great. lets start with the first next step
+also, i can see that the changes.md should not have mentions of files that were created in the files modified list. Please can you make sure that we only include the files in the modified list if they were already present in the base code that we had not created ourselves but were modified? Do i make sense to you?
 ```
-
-Follow-up requests included completing the remaining terrain-handler slice, producing a 100-tick GIF, keeping `artifacts/` untracked, adding black/brown terrain semantics, defaulting `start.sh` to `Terrain1.png`, fixing GIF issues, and then committing/pushing with handover preparation.
 
 Purpose:
 
-Implement the terrain map handler and use it across the model, API, frontend visualization, and generated GIF artifact workflow.
-
-What was understood from the response:
-
-The user wanted `Terrain1.png` to define terrain-backed cells, terrain metadata and metrics to appear in snapshots, the frontend to visualize the map, generated artifacts to stay local by default, and the GIF to include a visible legend and stripe/pattern terrain markings.
+Clarify how `Changes.md` should classify files in its created and modified sections.
 
 Human input and judgement:
 
-The user reviewed the first GIF and identified which visualization issues to fix immediately and which one to defer.
+The user identified the classification issue and clarified the desired rule.
 
 What was accepted from AI:
 
-Codex implemented the terrain handler, metrics integration, API/frontend pass-through, frontend terrain rendering, GIF renderer, black/brown terrain semantics, artifact ignore protocol, and Terrain1 startup default.
+Codex cleaned `Changes.md` to remove created files from the modified-files section and recorded the rule in the lab books.
 
-Verification:
+### Entry 18 - Handover after Changes.md cleanup
 
-- Visual check of the regenerated GIF showed the legend panel, patterned cells, and agents inside the main simulation block.
-- Python unit tests passed with `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests`.
-- Full checks passed with `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh`.
-
-### Entry 20 - README unfixed issues list
-
-Date: 2026-06-18
+Date/time: 2026-06-18, time not recorded (Europe/London)
 
 Tool used: Codex
 
 Prompt / request:
 
 ```text
-ok for now keep it as an unfixed issue. I would like to maintain a list of these unfixed issues in the readme for github please? commit and push and prepare for handover
+good. prepare for handover. commit and push
 ```
 
 Purpose:
 
-Record the browser visualizer parity gap as a known unfixed issue in the GitHub README and prepare handover.
+Refresh the handover state after cleaning `Changes.md`, then commit and push documentation updates.
 
-What was understood from the response:
+What was understood / accepted:
 
-The user wants the web visualizer/GIF mismatch documented rather than fixed immediately.
-
-Human input and judgement:
-
-The user chose to defer the browser rendering parity fix.
-
-What was accepted from AI:
-
-Codex added an `Unfixed Issues` section to `README.md` and refreshed handover/bookkeeping docs.
+Codex updated `HANDOVER.md` with the latest state and the clarified `Changes.md` classification rule.
 
 Verification:
 
-- Python unit tests passed with `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests`.
-- Full checks passed with `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh`.
-
-### Entry 23 - Agent factory commit and handover request
-
-Date: 2026-06-18
-
-Tool used: Codex
-
-Prompt / request:
-
-```text
-ok good. commit and push and prep for handover.
-```
-
-Purpose:
-
-Commit and push the agent creation/placement refactor and refresh handover state.
-
-What was understood from the response:
-
-The user approved committing the local agent factory work and wanted a handover-ready state afterward.
-
-What was accepted from AI:
-
-Codex reran the Python and full project checks, updated handover/bookkeeping docs, and prepared the commit.
-
-Verification:
-
-- Python unit tests passed with `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests`.
-- Full checks passed with `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh`.
-
-### Entry 21 - Bookkeeping stale-state protocol and next-step check
-
-Date: 2026-06-18
-
-Tool used: Codex
-
-Prompt / request:
-
-```text
-ok great. 
-1) make sure before we commit and push, or do a handover prep, we update relevant book-keeping docs, check for stale states in them. Add this as an entry under the dev protocol in handover doc. 
-2) read the blueprint and tell me what is next.
-```
-
-Purpose:
-
-Add a development protocol for bookkeeping freshness and identify the next implementation step from the blueprint.
-
-What was understood from the response:
-
-The user wants future agents to check bookkeeping docs for stale state before commit/push or handover, and wants the current next development step based on the blueprint.
-
-Human input and judgement:
-
-The user identified a recurring process risk around stale documentation.
-
-What was accepted from AI:
-
-Codex updated `HANDOVER.md` with the bookkeeping stale-state protocol and reread the blueprint/README roadmap before answering.
-
-### Entry 22 - Agent creation and placement refactor
-
-Date: 2026-06-18
-
-Tool used: Codex
-
-Prompt / request:
-
-```text
-ok great. commit and push. and then get on with the next steps. keep working until step 5 in your list that is "Add unit tests for deterministic creation and terrain-aware placement.". prompt before moving to step 6. thanks
-```
-
-Purpose:
-
-Commit and push the bookkeeping protocol, then implement the next blueprint slice through unit tests for deterministic agent creation and terrain-aware placement.
-
-What was understood from the response:
-
-The user wanted agent creation and placement modularized, with tests, and wanted Codex to stop before implementing behaviour profiles.
-
-Human input and judgement:
-
-The user explicitly set the stopping point before step 6.
-
-What was accepted from AI:
-
-Codex added `AgentFactory`, moved creation/placement out of `PopulationModel`, added terrain-aware placement tests, and updated bookkeeping docs.
-
-Verification:
-
-- Python unit tests passed with `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests`.
-- Full checks passed with `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh`.
+`./scripts/test.sh` passed with local Go and Node on `PATH`.
 
 ### Entry 19 - Terrain map handler implementation
 
-Date: 2026-06-18
+Date/time: 2026-06-18, time not recorded (Europe/London)
 
 Tool used: Codex
 
@@ -786,26 +508,43 @@ Purpose:
 
 Begin the active roadmap item: implementing the terrain map handler.
 
-What was understood from the response:
+What was understood / accepted:
 
-The user wanted the first implementation slice from the roadmap: terrain cell vocabulary, terrain map configuration, PNG map loading/parsing, color-to-cell mapping, and focused unit tests for `Terrain maps/Terrain1.png`.
-
-Human input and judgement:
-
-The user approved moving from planning into implementation.
-
-What was accepted from AI:
-
-Codex added the terrain handler, terrain configuration fields, and unit tests. The implementation uses only the Python standard library to avoid adding dependencies to the challenge setup.
+Codex added terrain cell vocabulary, terrain configuration fields, PNG map loading/parsing, color-to-cell mapping, and focused tests for `Terrain maps/Terrain1.png`.
 
 Verification:
 
-- Python unit tests passed with `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests`.
-- Full checks passed with `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh`.
+- `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests` passed.
+- `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh` passed.
+
+### Entry 20 - Terrain map integration and metrics
+
+Date/time: 2026-06-18, time not recorded (Europe/London)
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+ok. lets get on with the remaining tasks for this slice
+```
+
+Purpose:
+
+Complete the remaining terrain-map-handler tasks: model snapshot metadata, integration tests, metrics hooks, and 100-tick terrain-map simulation coverage.
+
+What was understood / accepted:
+
+Codex integrated the terrain map into `PopulationModel`, added terrain-aware metrics, exposed additive snapshot metadata, and added deterministic model integration coverage.
+
+Verification:
+
+- `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests` passed.
+- `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh` passed.
 
 ### Entry 21 - Terrain visualization and GIF request
 
-Date: 2026-06-18
+Date/time: 2026-06-18, time not recorded (Europe/London)
 
 Tool used: Codex
 
@@ -817,30 +556,22 @@ ok great. can we use the new map handler to create the cells as suggested by ter
 
 Purpose:
 
-Use the terrain map handler as the source of terrain cell definitions, connect terrain metadata through the API/frontend visualization path, and produce a GIF of the first 100 simulation ticks.
+Use the terrain map handler as the source of terrain cell definitions, connect terrain metadata through API/frontend visualization, and produce a first-100-ticks GIF.
 
-What was understood from the response:
+What was understood / accepted:
 
-The user wants the PNG-backed terrain cells to drive the simulation and wants a visual artifact showing the first 100 ticks.
-
-Human input and judgement:
-
-The user requested a concrete visual output after the terrain handler and metrics slice was implemented.
-
-What was accepted from AI:
-
-Codex updated the model, API contract, and frontend terrain visualizer, then added a reproducible Python GIF renderer using the same terrain map handler and model state. The environment did not expose browser automation, ffmpeg, or ImageMagick, so the GIF generation uses a project script rather than a browser capture pipeline.
+Codex updated the model, API contract, frontend terrain visualizer, and added a reproducible Python GIF renderer. Browser automation, ffmpeg, and ImageMagick were not available, so the GIF was generated through a project script rather than browser capture.
 
 Verification:
 
 - Generated `artifacts/terrain1_first_100_ticks.gif`.
-- `file` reports the artifact as a GIF89a image, 640 x 443.
+- `file` reported the artifact as GIF89a, 640 x 443.
 - The GIF decoded successfully through the local image viewer.
-- Full checks passed with `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh`.
+- `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh` passed.
 
 ### Entry 22 - Artifact protocol and terrain boundary update
 
-Date: 2026-06-18
+Date/time: 2026-06-18, time not recorded (Europe/London)
 
 Tool used: Codex
 
@@ -858,15 +589,11 @@ Can we do that for now?
 
 Purpose:
 
-Keep generated artifacts out of Git by default, record known GIF issues, and update the terrain handler semantics for black and brown cells.
-
-What was understood from the response:
-
-The user wants `artifacts/` ignored unless explicitly requested, wants the GIF defects captured for later, and wants the terrain map parser to treat black as the outer simulation enclosure and brown as density-zero reflective boundary cells.
+Keep generated artifacts out of Git by default, record known GIF issues, and update terrain semantics for black and brown cells.
 
 Human input and judgement:
 
-The user reviewed the generated GIF and identified usability issues to defer. The user also clarified new terrain semantics before continuing with implementation.
+The user reviewed the generated GIF, identified usability issues, and clarified new terrain semantics.
 
 What was accepted from AI:
 
@@ -874,130 +601,227 @@ Codex added `artifacts/` to `.gitignore`, documented the protocol and known GIF 
 
 Verification:
 
-- Python unit tests passed with `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests`.
-- Full checks passed with `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh`.
+- `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests` passed.
+- `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh` passed.
 
-### Entry 20 - Terrain map integration and metrics
+### Entry 23 - README unfixed issues list
 
-Date: 2026-06-18
+Date/time: 2026-06-18, time not recorded (Europe/London)
 
 Tool used: Codex
 
 Prompt / request:
 
 ```text
-ok. lets get on with the remaining tasks for this slice
+ok for now keep it as an unfixed issue. I would like to maintain a list of these unfixed issues in the readme for github please? commit and push and prepare for handover
 ```
 
 Purpose:
 
-Complete the remaining terrain-map-handler tasks: model snapshot metadata, initial integration tests, metrics hooks, and 100-tick terrain-map simulation coverage.
+Record the browser visualizer parity gap as a known unfixed issue in the GitHub README and prepare handover.
 
-What was understood from the response:
+What was understood / accepted:
 
-The user wanted to continue past the parser/unit-test stage and finish the terrain handler slice through model integration and metrics.
-
-Human input and judgement:
-
-The user chose to continue implementation without pausing for another planning step.
-
-What was accepted from AI:
-
-Codex integrated the terrain map into `PopulationModel`, added terrain-aware metrics, exposed additive Python snapshot metadata, and added a deterministic 100-tick model integration test.
+Codex added an `Unfixed Issues` section to `README.md` and refreshed handover/bookkeeping docs.
 
 Verification:
 
-- Python unit tests passed with `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests`.
-- Full checks passed with `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh`.
+- `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests` passed.
+- `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh` passed.
 
-### Entry 16 - README roadmap and handover preparation
+### Entry 24 - Bookkeeping stale-state protocol and next-step check
 
-Date: 2026-06-18
+Date/time: 2026-06-18, time not recorded (Europe/London)
 
 Tool used: Codex
 
 Prompt / request:
 
 ```text
-can we create a roadmap using these blueprints (including the next step breakdowns) with a completed, active, next state for them and maintain them in the readme for our github please? commit and push once done and then prep for handover
+ok great. 
+1) make sure before we commit and push, or do a handover prep, we update relevant book-keeping docs, check for stale states in them. Add this as an entry under the dev protocol in handover doc. 
+2) read the blueprint and tell me what is next.
 ```
 
 Purpose:
 
-Make the project roadmap visible from the GitHub README and then refresh the handover state for future agents.
-
-What was understood from the response:
-
-The user wants a README roadmap that summarizes completed work, the active terrain map handler step, and next planned implementation slices.
+Add a development protocol for bookkeeping freshness and identify the next implementation step from the blueprint.
 
 Human input and judgement:
 
-The user explicitly requested commit and push after the README roadmap update, followed by handover preparation.
+The user identified a recurring process risk around stale documentation.
 
 What was accepted from AI:
 
-Codex added a `Roadmap` section to `README.md`, based on `MODEL_MODULARIZATION_BLUEPRINT.md` and the terrain map handler breakdown.
+Codex updated `HANDOVER.md` with the bookkeeping stale-state protocol and reread the blueprint/README roadmap before answering.
+
+### Entry 25 - Agent creation and placement refactor
+
+Date/time: 2026-06-18 15:15 BST (Europe/London)
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+ok great. commit and push. and then get on with the next steps. keep working until step 5 in your list that is "Add unit tests for deterministic creation and terrain-aware placement.". prompt before moving to step 6. thanks
+```
+
+Purpose:
+
+Commit and push the bookkeeping protocol, then implement the next blueprint slice through unit tests for deterministic agent creation and terrain-aware placement.
+
+What was understood / accepted:
+
+Codex added `AgentFactory`, moved creation/placement out of `PopulationModel`, added terrain-aware placement tests, and updated bookkeeping docs.
+
+Human input and judgement:
+
+The user explicitly set the stopping point before step 6.
 
 Verification:
 
-Codex ran `./scripts/test.sh` with the local Go and Node toolchains on `PATH`; the command completed successfully. Documentation commit and push will be checked with git status and log.
+- `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests` passed.
+- `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh` passed.
 
-### Entry 17 - Changes.md classification clarification
+### Entry 26 - Agent factory commit and handover request
 
-Date: 2026-06-18
-
-Tool used: Codex
-
-Prompt / request:
-
-```text
-also, i can see that the changes.md should not have mentions of files that were created in the files modified list. Please can you make sure that we only include the files in the modified list if they were already present in the base code that we had not created ourselves but were modified? Do i make sense to you?
-```
-
-Purpose:
-
-Clarify how `Changes.md` should classify files in its created and modified sections.
-
-What was understood from the response:
-
-The user wants `Changes.md` to remain a succinct audit of project-created files versus pre-existing base files modified during the work. Files created by this project should not be repeated under `Files Modified`.
-
-Human input and judgement:
-
-The user identified the classification issue and clarified the desired rule.
-
-What was accepted from AI:
-
-Codex cleaned `Changes.md` to remove created files from the modified-files section and recorded the rule in the lab books.
-
-### Entry 18 - Handover after Changes.md cleanup
-
-Date: 2026-06-18
+Date/time: 2026-06-18 15:16 BST (Europe/London)
 
 Tool used: Codex
 
 Prompt / request:
 
 ```text
-good. prepare for handover. commit and push
+ok good. commit and push and prep for handover.
 ```
 
 Purpose:
 
-Refresh the handover state after cleaning `Changes.md`, then commit and push the documentation updates.
+Commit and push the agent creation/placement refactor and refresh handover state.
 
-What was understood from the response:
+What was understood / accepted:
 
-The user explicitly requested a handover preparation routine and authorized commit and push.
-
-Human input and judgement:
-
-The user confirmed the `Changes.md` cleanup and asked for the handover to be prepared.
-
-What was accepted from AI:
-
-Codex updated `HANDOVER.md` to include the latest state and the clarified `Changes.md` classification rule.
+Codex reran checks, updated handover/bookkeeping docs, committed `bef3fee Refactor agent creation and placement`, and pushed it.
 
 Verification:
 
-Codex ran `./scripts/test.sh` with the local Go and Node toolchains on `PATH`; the command completed successfully.
+- `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests` passed.
+- `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh` passed.
+
+### Entry 27 - Last implemented and roadmap checks
+
+Date/time: 2026-06-18, time not recorded (Europe/London)
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+check what was last implemented
+```
+
+Follow-up prompt:
+
+```text
+what's next on our roadmap
+```
+
+Purpose:
+
+Confirm the most recent implementation and identify the next roadmap item before starting new work.
+
+What was understood / accepted:
+
+Codex checked git history, working tree state, `HANDOVER.md`, and the README roadmap. The latest committed implementation was agent creation/placement, and the next roadmap step was agent behaviour profiles.
+
+Verification:
+
+Codex inspected `git log`, `git status`, `HANDOVER.md`, `Changes.md`, and the relevant model/test files.
+
+### Entry 28 - Agent behaviour profile implementation
+
+Date/time: 2026-06-18 20:04 BST (Europe/London)
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+let's get on with step 6 then
+```
+
+Purpose:
+
+Continue the Track A modelling roadmap by implementing agent behaviour profiles after the agent creation and placement refactor.
+
+What was understood / accepted:
+
+Codex added `population_model/behaviour.py`, wired `PopulationModel._next_movement` through default behaviour profiles, and added focused behaviour tests.
+
+Human input and judgement:
+
+The user selected the next roadmap step. Codex chose a minimal module boundary and kept the existing movement choices compatible with previous behaviour.
+
+Verification:
+
+- `PYTHONPATH=model-python python3 -m unittest discover -s model-python/tests` passed with 18 tests.
+- `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh` passed.
+
+### Entry 29 - Agent behaviour profiles commit and push
+
+Date/time: 2026-06-18 20:08 BST (Europe/London)
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+commit and push
+```
+
+Purpose:
+
+Commit and push the completed step 6 behaviour-profile slice.
+
+What was understood / accepted:
+
+Codex staged only the behaviour-profile code, tests, and bookkeeping docs, excluded the unrelated untracked `Terrain maps/Terrain1_00.png`, committed `55798e2 Add agent behaviour profiles`, and pushed `main`.
+
+Verification:
+
+`git status --short` showed only the pre-existing untracked `Terrain maps/Terrain1_00.png` after the push.
+
+### Entry 30 - AI usage log ordering and timestamp repair
+
+Date/time: 2026-06-18 20:14 BST (Europe/London)
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+Why do we not see the last few important prompts (for the last two steps I believe step 5 and step 6) in the AI_USAGE labbook?
+```
+
+Follow-up prompt:
+
+```text
+yes fix the order please. and perhaps include a timestamp in this lab book as well when you are inserting the entries to help future maintainance and transparancy
+```
+
+Purpose:
+
+Repair the AI usage lab book after duplicated/out-of-order entry numbers made recent prompts hard to find.
+
+What was understood / accepted:
+
+Codex reordered the AI usage entries into chronological sequence, made entry numbers unique, added this maintenance protocol, and switched entries to `Date/time:` fields. Exact timestamps were added where available from commits, handover records, or the current shell clock; older entries with no recorded time were marked as time not recorded.
+
+Human input and judgement:
+
+The user identified the transparency issue and requested a maintainable timestamp convention.
+
+Verification:
+
+Codex checked the entry list with `grep -n '^### Entry' AI_USAGE_lab-book.md`, reviewed the step 5 and step 6 entries in place, and checked the documentation-only diff/status.

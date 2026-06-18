@@ -949,3 +949,23 @@ Next steps:
 
 - Add a movement strategy module that filters candidate moves against terrain and returns movement decisions with status/reason metadata.
 - Add configurable random walk policies after the movement strategy module is in place.
+
+### Entry 23 - AI usage lab book chronology repaired
+
+Date/time: 2026-06-18 20:17 BST (Europe/London)
+
+What happened:
+
+The user noticed that the recent step 5 and step 6 prompts were difficult to find in `AI_USAGE_lab-book.md`.
+
+Decision:
+
+Reorder `AI_USAGE_lab-book.md` into a clean chronological sequence with unique entry numbers and add a maintenance protocol requiring `Date/time:` fields with timezone where possible.
+
+Reasoning:
+
+The prompts were present, but duplicated/out-of-order entry numbers made the log less transparent. A timestamp convention should make future maintenance easier and reduce ambiguity during handover or review.
+
+Verification:
+
+Codex checked the reordered entry list and confirmed that step 5, step 6, the step 6 commit/push, and the chronology repair entries are now easy to find.
