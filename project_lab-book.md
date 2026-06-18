@@ -418,6 +418,57 @@ Verification:
 
 `./scripts/test.sh` passed with local Go and Node on `PATH`.
 
+### Entry 22 - Changes.md two-list rule clarified
+
+Date/time: 2026-06-18 14:05 BST (Europe/London)
+
+What happened:
+
+The user noticed that `Changes.md` listed files created during this project again under the modified-files section.
+
+Decision:
+
+Keep `Changes.md` as a compact two-list audit:
+
+- `Files Created` should include files created by this work.
+- `Files Modified` should include only files that already existed in the base project and were then modified.
+
+Action taken:
+
+Cleaned `Changes.md` so created project bookkeeping files remain only under `Files Created`, while `Files Modified` now lists only base-project files that were changed.
+
+Reasoning:
+
+This keeps the file aligned with the user's original intent: a succinct created-vs-modified summary rather than a chronological event log.
+
+### Entry 23 - Handover prepared after Changes.md cleanup
+
+Date/time: 2026-06-18 14:06 BST (Europe/London)
+
+What happened:
+
+The user asked to prepare for handover and explicitly asked to commit and push.
+
+Decision:
+
+Refresh `HANDOVER.md` with the latest commit state and the clarified `Changes.md` rule.
+
+Current state:
+
+- No implementation code has changed yet.
+- Track A modelling work remains selected.
+- The next implementation step is still the terrain map handler.
+- `Changes.md` now follows the two-list rule: files created by this project are not repeated under files modified.
+
+Next steps:
+
+- Run the baseline checks.
+- Commit and push the documentation cleanup and handover refresh.
+
+Verification:
+
+`./scripts/test.sh` passed with local Go and Node on `PATH`.
+
 ### Entry 15 - Model modularisation request scoped
 
 Date/time: 2026-06-18 13:22 BST (Europe/London)

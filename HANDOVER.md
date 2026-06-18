@@ -1,13 +1,13 @@
 # Agent Handover
 
-Last updated: 2026-06-18 14:01 BST (Europe/London)
+Last updated: 2026-06-18 14:06 BST (Europe/London)
 
 ## Current State
 
 - Repo: `acts-recruitment-challenge`
 - Branch: `main`
 - Remote: `https://github.com/md861/acts-recruitment-challenge.git`
-- Latest commit before this handover update: `50519b8 Refresh terrain map handler handover`
+- Latest commit before this handover update: `0dba9b8 Add README implementation roadmap`
 - Working protocol: do not commit or push unless the user explicitly asks, it is end-of-day, or it is a handover-to-new-agent prompt.
 - Current task status: Track A modelling work has been chosen. No implementation code has been changed yet. The next implementation step is the terrain map handler.
 
@@ -43,9 +43,9 @@ Most recent baseline checks passed with:
 PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh
 ```
 
-Last recorded pass: 2026-06-18 14:01 BST during this handover update.
+Last recorded pass: 2026-06-18 14:06 BST during this handover update.
 
-No implementation code has changed yet. Current changes in this handover update are documentation/planning only, including a GitHub-visible roadmap in `README.md`.
+No implementation code has changed yet. Current changes in this handover update are documentation/planning only, including a `Changes.md` cleanup.
 
 ## Known Deferred Item
 
@@ -76,4 +76,5 @@ When asked to prepare for handover:
 - Update this file with current branch, commit, verification status, known risks, and next suggested action.
 - Add a timestamped entry to `project_lab-book.md`.
 - Update `Changes.md` if files were created or modified.
+- Keep `Changes.md` as a two-list audit: `Files Created` contains files created by this project, while `Files Modified` contains only files that existed in the base project and were later modified.
 - Commit and push only if the prompt is explicitly a handover-to-new-agent request or the user asks.

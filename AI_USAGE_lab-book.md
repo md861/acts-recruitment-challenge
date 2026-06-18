@@ -608,3 +608,63 @@ Codex added a `Roadmap` section to `README.md`, based on `MODEL_MODULARIZATION_B
 Verification:
 
 Codex ran `./scripts/test.sh` with the local Go and Node toolchains on `PATH`; the command completed successfully. Documentation commit and push will be checked with git status and log.
+
+### Entry 17 - Changes.md classification clarification
+
+Date: 2026-06-18
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+also, i can see that the changes.md should not have mentions of files that were created in the files modified list. Please can you make sure that we only include the files in the modified list if they were already present in the base code that we had not created ourselves but were modified? Do i make sense to you?
+```
+
+Purpose:
+
+Clarify how `Changes.md` should classify files in its created and modified sections.
+
+What was understood from the response:
+
+The user wants `Changes.md` to remain a succinct audit of project-created files versus pre-existing base files modified during the work. Files created by this project should not be repeated under `Files Modified`.
+
+Human input and judgement:
+
+The user identified the classification issue and clarified the desired rule.
+
+What was accepted from AI:
+
+Codex cleaned `Changes.md` to remove created files from the modified-files section and recorded the rule in the lab books.
+
+### Entry 18 - Handover after Changes.md cleanup
+
+Date: 2026-06-18
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+good. prepare for handover. commit and push
+```
+
+Purpose:
+
+Refresh the handover state after cleaning `Changes.md`, then commit and push the documentation updates.
+
+What was understood from the response:
+
+The user explicitly requested a handover preparation routine and authorized commit and push.
+
+Human input and judgement:
+
+The user confirmed the `Changes.md` cleanup and asked for the handover to be prepared.
+
+What was accepted from AI:
+
+Codex updated `HANDOVER.md` to include the latest state and the clarified `Changes.md` classification rule.
+
+Verification:
+
+Codex ran `./scripts/test.sh` with the local Go and Node toolchains on `PATH`; the command completed successfully.
