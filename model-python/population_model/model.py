@@ -2,6 +2,7 @@ import random
 from collections import Counter
 from datetime import datetime, timezone
 
+from population_model.agents import AgentFactory
 from population_model.config import ModelConfig
 from population_model.metrics import TerrainMetrics
 from population_model.state import Agent, Heading, Position
@@ -89,53 +90,13 @@ class PopulationModel:
         }
 
     def _create_agents(self) -> list[Agent]:
-        roles = ["civilian", "staff", "patrol"]
-        agents: list[Agent] = []
-        occupied: set[tuple[int, int]] = set()
-        restricted = set(self._restricted_cells())
-
-        for index in range(self.config.agent_count):
-            role = roles[index % len(roles)]
-            position = self._random_free_position(occupied, restricted)
-            occupied.add((position.x, position.y))
-            agents.append(
-                Agent(
-                    id=f"agent-{index + 1:03d}",
-                    role=role,
-                    status="waiting",
-                    position=position,
-                    heading=Heading(dx=0, dy=0),
-                )
-            )
-
-        return agents
-
-    def _random_free_position(
-        self, occupied: set[tuple[int, int]], restricted: set[tuple[int, int]]
-    ) -> Position:
-        for _ in range(200):
-            position = Position(
-                x=self._rng.randrange(self.width),
-                y=self._rng.randrange(self.height),
-            )
-            key = (position.x, position.y)
-            if (
-                key not in occupied
-                and key not in restricted
-                and self._is_start_cell_available(position)
-            ):
-                return position
-        for y in range(self.height):
-            for x in range(self.width):
-                position = Position(x=x, y=y)
-                key = (position.x, position.y)
-                if (
-                    key not in occupied
-                    and key not in restricted
-                    and self._is_start_cell_available(position)
-                ):
-                    return position
-        return Position(x=0, y=0)
+        return AgentFactory(
+            config=self.config,
+            terrain=self.terrain,
+            width=self.width,
+            height=self.height,
+            restricted_cells=set(self._restricted_cells()),
+        ).create_agents(self._rng)
 
     def _next_movement(self, role: str) -> tuple[int, int]:
         if role == "patrol":
@@ -179,12 +140,6 @@ class PopulationModel:
                 self.metrics.record_gate_congestion()
             return allowed
         return True
-
-    def _is_start_cell_available(self, position: Position) -> bool:
-        cell_type = self._terrain_cell_type(position.x, position.y)
-        if self._uses_terrain_enclosure() and not self.terrain.is_inside_simulation_area(position.x, position.y):
-            return False
-        return cell_type not in (CellType.BOUNDARY, CellType.DENSITY_ZERO)
 
     def _terrain_cell_type(self, x: int, y: int) -> CellType:
         if x >= self.terrain.width or y >= self.terrain.height:

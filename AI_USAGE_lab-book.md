@@ -646,6 +646,35 @@ Verification:
 - Python unit tests passed with `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests`.
 - Full checks passed with `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh`.
 
+### Entry 23 - Agent factory commit and handover request
+
+Date: 2026-06-18
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+ok good. commit and push and prep for handover.
+```
+
+Purpose:
+
+Commit and push the agent creation/placement refactor and refresh handover state.
+
+What was understood from the response:
+
+The user approved committing the local agent factory work and wanted a handover-ready state afterward.
+
+What was accepted from AI:
+
+Codex reran the Python and full project checks, updated handover/bookkeeping docs, and prepared the commit.
+
+Verification:
+
+- Python unit tests passed with `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests`.
+- Full checks passed with `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh`.
+
 ### Entry 21 - Bookkeeping stale-state protocol and next-step check
 
 Date: 2026-06-18
@@ -675,6 +704,39 @@ The user identified a recurring process risk around stale documentation.
 What was accepted from AI:
 
 Codex updated `HANDOVER.md` with the bookkeeping stale-state protocol and reread the blueprint/README roadmap before answering.
+
+### Entry 22 - Agent creation and placement refactor
+
+Date: 2026-06-18
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+ok great. commit and push. and then get on with the next steps. keep working until step 5 in your list that is "Add unit tests for deterministic creation and terrain-aware placement.". prompt before moving to step 6. thanks
+```
+
+Purpose:
+
+Commit and push the bookkeeping protocol, then implement the next blueprint slice through unit tests for deterministic agent creation and terrain-aware placement.
+
+What was understood from the response:
+
+The user wanted agent creation and placement modularized, with tests, and wanted Codex to stop before implementing behaviour profiles.
+
+Human input and judgement:
+
+The user explicitly set the stopping point before step 6.
+
+What was accepted from AI:
+
+Codex added `AgentFactory`, moved creation/placement out of `PopulationModel`, added terrain-aware placement tests, and updated bookkeeping docs.
+
+Verification:
+
+- Python unit tests passed with `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests`.
+- Full checks passed with `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh`.
 
 ### Entry 19 - Terrain map handler implementation
 

@@ -504,6 +504,50 @@ Current next step from the blueprint:
 
 Continue broader Track A modularization by refactoring agent creation/placement and agent behaviour out of `population_model/model.py`.
 
+### Entry 25 - Agent creation and terrain-aware placement refactored
+
+Date/time: 2026-06-18 15:12 BST (Europe/London)
+
+What happened:
+
+The user asked to continue with the next blueprint steps through unit tests for deterministic creation and terrain-aware placement, and to prompt before moving on to behaviour profiles.
+
+Implementation:
+
+- Added `model-python/population_model/agents.py`.
+- Introduced `AgentFactory` for deterministic agent creation, role assignment, and initial placement.
+- Moved agent creation and placement out of `PopulationModel`.
+- Kept initial placement terrain-aware: agents are not initialized outside the black terrain enclosure or on boundary/density-zero cells.
+- Added `model-python/tests/test_agents.py`.
+- Added unit tests for deterministic creation, role assignment, terrain-aware placement, and legacy restricted-cell avoidance.
+- Updated the README roadmap and `Changes.md`.
+
+Verification:
+
+- Python unit tests passed: `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests`.
+- Full checks passed: `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh`.
+
+Next step:
+
+Prompt the user before starting step 6: agent behaviour profiles.
+
+### Entry 26 - Handover prepared for agent factory commit
+
+Date/time: 2026-06-18 15:15 BST (Europe/London)
+
+What happened:
+
+The user asked to commit and push the agent creation/placement refactor and prepare for handover.
+
+Decision:
+
+Refresh the handover state, rerun checks, and commit the agent factory slice.
+
+Verification:
+
+- Python unit tests passed: `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests`.
+- Full checks passed: `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh`.
+
 ### Entry 24 - Terrain map handler first slice implemented
 
 Date/time: 2026-06-18 14:12 BST (Europe/London)

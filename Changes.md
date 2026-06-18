@@ -9,7 +9,9 @@
 - `Terrain maps/Terrain1.png` - Example PNG terrain map input asset for future terrain parsing.
 - `model-python/population_model/terrain.py` - Terrain map handler, PNG parser, cell vocabulary, black/brown boundary semantics, validation, and terrain query APIs.
 - `model-python/population_model/metrics.py` - Terrain-aware simulation metrics accumulator.
+- `model-python/population_model/agents.py` - Deterministic agent creation and terrain-aware placement factory.
 - `model-python/tests/test_terrain.py` - Unit tests for terrain map loading, cell initialization, brown density-zero cells, outside-boundary validation, and rule queries.
+- `model-python/tests/test_agents.py` - Unit tests for deterministic agent creation and terrain-aware placement.
 - `frontend-react/public/terrain/Terrain1.png` - Frontend-served copy of the terrain map image.
 - `scripts/render-terrain-gif.py` - Standard-library renderer for the first 100 terrain-backed simulation ticks with legend and patterned cell fills.
 

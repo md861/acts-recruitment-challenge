@@ -1,15 +1,15 @@
 # Agent Handover
 
-Last updated: 2026-06-18 15:04 BST (Europe/London)
+Last updated: 2026-06-18 15:15 BST (Europe/London)
 
 ## Current State
 
 - Repo: `acts-recruitment-challenge`
 - Branch: `main`
 - Remote: `https://github.com/md861/acts-recruitment-challenge.git`
-- Latest commit before this handover update: `3914336 Implement terrain map handler and visualization`
+- Latest commit before this handover update: `36f115a Document bookkeeping freshness protocol`
 - Working protocol: do not commit or push unless the user explicitly asks, it is end-of-day, or it is a handover-to-new-agent prompt.
-- Current task status: Track A modelling work has been chosen. The terrain map handler, model snapshot metadata, terrain metrics, terrain-map integration tests, frontend terrain map visualization path, Terrain1 startup default, and local 100-tick GIF renderer are implemented locally.
+- Current task status: Track A modelling work has been chosen. The terrain map handler/visualization work is committed. Agent creation and terrain-aware placement have been refactored, tested, and are being committed in this handover update.
 
 ## Read First
 
@@ -43,9 +43,9 @@ Most recent baseline checks passed with:
 PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh
 ```
 
-Last recorded pass: 2026-06-18 15:04 BST during this handover update.
+Last recorded pass: 2026-06-18 15:15 BST during this handover update.
 
-Current local changes are documentation-only: README unfixed issue list plus handover/lab-book updates. The `artifacts/` directory is intentionally ignored and should stay untracked unless the user explicitly asks to publish an artifact.
+Current local changes before this commit include `AgentFactory`, agent placement tests, and related bookkeeping updates. The `artifacts/` directory is intentionally ignored and should stay untracked unless the user explicitly asks to publish an artifact.
 
 Untracked note: `Terrain maps/Terrain1_00.png` is present locally and has not been tracked or modified by Codex.
 
@@ -59,12 +59,11 @@ Untracked note: `Terrain maps/Terrain1_00.png` is present locally and has not be
 
 Continue the broader Track A modularization after the terrain map handler slice:
 
-1. Refactor agent creation into a dedicated module.
-2. Add agent behaviour profiles.
-3. Add movement strategy selection.
-4. Add configurable random walk policies.
-5. Refine frontend terrain rendering with stripe-line markings for special cells and terrain metrics in the control panel.
-6. Make individual cell edges visible in the browser simulation view and generated GIF.
+1. Prompt the user before starting step 6: agent behaviour profiles.
+2. Add movement strategy selection.
+3. Add configurable random walk policies.
+4. Refine frontend terrain rendering with stripe-line markings for special cells and terrain metrics in the control panel.
+5. Make individual cell edges visible in the browser simulation view and generated GIF.
 
 Generated local artifact: `artifacts/terrain1_first_100_ticks.gif`.
 

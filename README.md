@@ -209,10 +209,16 @@ Track A modelling work has been selected for this repository. The detailed imple
    - `scripts/start.sh` defaults `SIM_TERRAIN_MAP_PATH` to `Terrain maps/Terrain1.png`.
    - The default can still be overridden by setting `SIM_TERRAIN_MAP_PATH`.
 
+10. Agent creation and terrain-aware placement refactored.
+   - Added a dedicated agent creation module.
+   - Moved deterministic role assignment and initial placement out of `PopulationModel`.
+   - Kept placement terrain-aware: agents are not initialized outside the black enclosure or on blocked boundary/density-zero cells.
+   - Added unit tests for deterministic creation and terrain-aware placement.
+
 ### Active
 
 1. Continue the broader modularization.
-   - Refactor agent creation and behaviour.
+   - Add agent behaviour profiles.
    - Add movement strategy selection.
    - Add configurable random walk policies.
    - Keep reset determinism and API/frontend compatibility intact.
