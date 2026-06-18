@@ -1331,3 +1331,31 @@ Verification:
 - `doxygen docs/doxygen/Doxyfile` completed successfully.
 - `docs/doxygen/build/html/index.html` exists.
 - Generated HTML size is about 4.3 MB.
+
+### Entry 47 - Handover preparation
+
+Date/time: 2026-06-18 23:07 BST (Europe/London)
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+prepare for handover. commit and push
+```
+
+Purpose:
+
+Refresh the handover state and push a final handover commit for the next agent.
+
+What was understood / accepted:
+
+Codex updated `HANDOVER.md` with the current timestamp, latest-work marker, verification split between full tests and Doxygen docs, and current untracked-file note.
+
+Human input and judgement:
+
+The user explicitly requested handover preparation plus commit and push.
+
+Verification:
+
+- `git status --short` was checked before handover edits.

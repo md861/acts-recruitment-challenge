@@ -1450,3 +1450,26 @@ Verification:
 - `doxygen docs/doxygen/Doxyfile` completed successfully.
 - `docs/doxygen/build/html/index.html` exists.
 - Generated HTML size is about 4.3 MB.
+
+### Entry 40 - Handover preparation
+
+Date/time: 2026-06-18 23:07 BST (Europe/London)
+
+What happened:
+
+The user requested handover preparation, commit, and push.
+
+Decision:
+
+Refresh `HANDOVER.md` so the next agent can resume from the latest pushed state without replaying stale Step 8/Step 15 context.
+
+Implementation:
+
+- Updated the handover timestamp.
+- Updated the latest-work marker for the upcoming handover commit.
+- Clarified the most recent full test pass and the later Doxygen documentation pass.
+- Confirmed the only remaining untracked file is the local `Terrain maps/Terrain1_00.png` copy.
+
+Verification:
+
+- `git status --short` was checked before the handover edit.

@@ -1,13 +1,13 @@
 # Agent Handover
 
-Last updated: 2026-06-18 22:57 BST (Europe/London)
+Last updated: 2026-06-18 23:07 BST (Europe/London)
 
 ## Current State
 
 - Repo: `acts-recruitment-challenge`
 - Branch: `main`
 - Remote: `https://github.com/md861/acts-recruitment-challenge.git`
-- Latest committed work after this push: `Compile Doxygen documentation` (use `git log -1 --oneline` for the exact hash).
+- Latest committed work after this push: `Refresh handover state` (use `git log -1 --oneline` for the exact hash).
 - Working protocol: do not commit or push unless the user explicitly asks, it is end-of-day, or it is a handover-to-new-agent prompt.
 - Current task status: Track A modelling work has been chosen. Main blueprint Steps 1-15 are implemented. Additional report-analysis artifacts have been added for terrain heatmaps, role metrics, congestion plots, exit curves, and deterministic replay evidence. Doxygen docs config exists under `docs/doxygen/`. Step 16, final documentation/bookkeeping, is the remaining main-blueprint item.
 
@@ -43,7 +43,9 @@ Most recent baseline checks passed with:
 PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh
 ```
 
-Last recorded pass: 2026-06-18 22:21 BST after adding simulation analysis plots and 500-tick artifact defaults.
+Last recorded full test pass: 2026-06-18 22:21 BST after adding simulation analysis plots and 500-tick artifact defaults.
+
+Last documentation pass: 2026-06-18 22:57 BST after compiling Doxygen documentation with system Doxygen 1.9.1.
 
 Additional Step 15 verification:
 
