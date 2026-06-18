@@ -1,19 +1,20 @@
 # Agent Handover
 
-Last updated: 2026-06-18 13:59 BST (Europe/London)
+Last updated: 2026-06-18 14:01 BST (Europe/London)
 
 ## Current State
 
 - Repo: `acts-recruitment-challenge`
 - Branch: `main`
 - Remote: `https://github.com/md861/acts-recruitment-challenge.git`
-- Latest commit before this handover update: `6acb2c0 Document terrain map legend`
+- Latest commit before this handover update: `50519b8 Refresh terrain map handler handover`
 - Working protocol: do not commit or push unless the user explicitly asks, it is end-of-day, or it is a handover-to-new-agent prompt.
 - Current task status: Track A modelling work has been chosen. No implementation code has been changed yet. The next implementation step is the terrain map handler.
 
 ## Read First
 
 - `CANDIDATE_INSTRUCTIONS.md`
+- `README.md`
 - `MODEL_MODULARIZATION_BLUEPRINT.md`
 - `project_lab-book.md`
 - `AI_USAGE_lab-book.md`
@@ -42,9 +43,9 @@ Most recent baseline checks passed with:
 PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh
 ```
 
-Last recorded pass: 2026-06-18 13:59 BST during this handover update.
+Last recorded pass: 2026-06-18 14:01 BST during this handover update.
 
-No implementation code has changed yet. Current changes in this handover update are documentation/planning only.
+No implementation code has changed yet. Current changes in this handover update are documentation/planning only, including a GitHub-visible roadmap in `README.md`.
 
 ## Known Deferred Item
 
@@ -65,6 +66,8 @@ Implement the terrain map handler as the first Track A slice. Follow the updated
 7. Add a 100-tick terrain-map integration test after the parser and terrain API are stable.
 
 Frontend follow-on: render terrain cells with the same color coding, stripe-line markings for special cells, and a compact legend explaining each color/pattern.
+
+The README now mirrors this at a higher level using Completed, Active, and Next roadmap states.
 
 ## Handover Routine
 

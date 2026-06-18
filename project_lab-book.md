@@ -569,3 +569,32 @@ Verification:
 Next steps:
 
 - Commit and push the documentation updates, as explicitly requested.
+
+### Entry 21 - README roadmap added and handover prepared
+
+Date/time: 2026-06-18 14:01 BST (Europe/London)
+
+What happened:
+
+The user asked for a roadmap based on the blueprints and next-step breakdowns, maintained in the GitHub README with completed, active, and next states. The user also asked to commit and push once done and then prepare for handover.
+
+Decision:
+
+Add a `Roadmap` section to `README.md` that points to `MODEL_MODULARIZATION_BLUEPRINT.md` and summarizes:
+
+- completed setup, bookkeeping, blueprint, and terrain-map documentation;
+- active terrain map handler implementation and tests;
+- next model integration, metrics, 100-tick terrain-map integration test, broader modularisation, and frontend visualization work.
+
+Reasoning:
+
+The README is the most visible GitHub entry point. Keeping the roadmap there makes the current project state legible to reviewers and future agents without requiring them to read the entire lab book first.
+
+Next steps:
+
+- Refresh `HANDOVER.md` so future agents read the README roadmap.
+- Commit and push the documentation updates.
+
+Verification:
+
+`./scripts/test.sh` passed with local Go and Node on `PATH`.

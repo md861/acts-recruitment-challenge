@@ -145,3 +145,70 @@ Create a zip of a completed candidate submission:
 ```bash
 ./scripts/package-submission.sh
 ```
+
+## Roadmap
+
+Track A modelling work has been selected for this repository. The detailed implementation reference is [MODEL_MODULARIZATION_BLUEPRINT.md](./MODEL_MODULARIZATION_BLUEPRINT.md); this section keeps the current roadmap visible from the GitHub README.
+
+### Completed
+
+1. Baseline project orientation and verification.
+   - The existing Python model, Go API, React frontend, scripts, and tests have been inspected.
+   - Local project-scoped Go and Node tooling is available under ignored `.tools/`.
+   - The baseline check script has passed with the local toolchain.
+
+2. Project bookkeeping and handover setup.
+   - `project_lab-book.md`, `AI_USAGE_lab-book.md`, `Changes.md`, and `HANDOVER.md` are maintained as running project records.
+   - Commit/push protocol is documented in the handover file.
+
+3. Track A blueprint created.
+   - `MODEL_MODULARIZATION_BLUEPRINT.md` captures the target modular architecture.
+   - The selected scope includes terrain handling, agent creation/behaviour, movement strategy selection, random walk policies, metrics, and frontend terrain visualization.
+
+4. Terrain map asset and legend documented.
+   - `Terrain maps/Terrain1.png` is tracked as the current terrain input asset.
+   - The terrain legend is documented: white normal, black hard boundary, red restricted, orange max-density gate, green exit/removal, blue Type 1 penalty, and pink Type 2 penalty.
+
+### Active
+
+1. Implement the terrain map handler.
+   - Add symbolic terrain cell vocabulary.
+   - Add configuration for selected terrain map, restricted ids, exit ids, gate capacity, and Type 1 penalty settings.
+   - Load/select `Terrain maps/Terrain1.png`.
+   - Parse white, black, red, orange, green, blue, and pink cells into terrain definitions.
+   - Treat white cells as normal cells with no special restrictions or penalties.
+   - Provide terrain query and summary APIs for simulation use.
+
+2. Add terrain map handler tests.
+   - Verify the selected map can be loaded.
+   - Verify parsed initialization matches the map legend.
+   - Verify normal, boundary, restricted, gate, exit, Type 1 penalty, and Type 2 penalty cells are initialized correctly.
+   - Verify traversability, capacity, exit, and penalty rules.
+
+### Next
+
+1. Integrate parsed terrain with the model snapshot.
+   - Preserve existing snapshot fields.
+   - Add terrain metadata in a backward-compatible way.
+
+2. Add terrain-aware metrics.
+   - Record breach detection/handling.
+   - Record blocked boundary attempts.
+   - Record time spent in each cell type per agent id.
+   - Record gate congestion, exit events, and penalty-cell traversals.
+
+3. Add a 100-tick terrain-map integration test.
+   - Initialize a terrain-map-backed model.
+   - Include all configured agent categories/ids.
+   - Exercise the map and verify metrics are populated.
+
+4. Continue the broader modularization.
+   - Refactor agent creation and behaviour.
+   - Add movement strategy selection.
+   - Add configurable random walk policies.
+   - Keep reset determinism and API/frontend compatibility intact.
+
+5. Add frontend terrain visualization.
+   - Render terrain cells from snapshot metadata.
+   - Use the terrain color coding with stripe-line markings for special cells.
+   - Show a compact legend explaining each color and stripe pattern.

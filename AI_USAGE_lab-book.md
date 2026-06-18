@@ -576,3 +576,35 @@ Codex updated the handover instructions to reference `MODEL_MODULARIZATION_BLUEP
 Verification:
 
 Codex ran `./scripts/test.sh` with the local Go and Node toolchains on `PATH`; the command completed successfully.
+
+### Entry 16 - README roadmap and handover preparation
+
+Date: 2026-06-18
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+can we create a roadmap using these blueprints (including the next step breakdowns) with a completed, active, next state for them and maintain them in the readme for our github please? commit and push once done and then prep for handover
+```
+
+Purpose:
+
+Make the project roadmap visible from the GitHub README and then refresh the handover state for future agents.
+
+What was understood from the response:
+
+The user wants a README roadmap that summarizes completed work, the active terrain map handler step, and next planned implementation slices.
+
+Human input and judgement:
+
+The user explicitly requested commit and push after the README roadmap update, followed by handover preparation.
+
+What was accepted from AI:
+
+Codex added a `Roadmap` section to `README.md`, based on `MODEL_MODULARIZATION_BLUEPRINT.md` and the terrain map handler breakdown.
+
+Verification:
+
+Codex ran `./scripts/test.sh` with the local Go and Node toolchains on `PATH`; the command completed successfully. Documentation commit and push will be checked with git status and log.

@@ -31,3 +31,6 @@
 - `HANDOVER.md` - Refreshed current state, read-first files, and next action for future agents.
 - `AI_USAGE_lab-book.md` - Recorded the handover refresh and commit/push request.
 - `project_lab-book.md` - Recorded the handover refresh for terrain-map-handler implementation.
+- `README.md` - Added a GitHub-visible roadmap with completed, active, and next states.
+- `AI_USAGE_lab-book.md` - Recorded the README roadmap and handover preparation request.
+- `project_lab-book.md` - Recorded the README roadmap decision and handover next steps.
