@@ -1424,3 +1424,29 @@ Verification:
 - `doxygen docs/doxygen/Doxyfile` was attempted and failed with `doxygen: command not found`.
 - `sudo -n true` reported that a password is required.
 - `git diff --check` passed.
+
+### Entry 39 - Doxygen documentation compiled after install
+
+Date/time: 2026-06-18 22:57 BST (Europe/London)
+
+What happened:
+
+The user installed Doxygen and asked Codex to retry the documentation limitation.
+
+Decision:
+
+Use the system Doxygen installation instead of a local binary.
+
+Implementation:
+
+- Confirmed `/usr/bin/doxygen` is available.
+- Confirmed Doxygen version `1.9.1`.
+- Rebuilt the documentation with `doxygen docs/doxygen/Doxyfile`.
+- Removed two config tags that produced Doxygen 1.9.1 warnings: `SHOW_HEADERFILE` and `COLS_IN_ALPHA_INDEX`.
+- Rebuilt again and confirmed generated HTML exists.
+
+Verification:
+
+- `doxygen docs/doxygen/Doxyfile` completed successfully.
+- `docs/doxygen/build/html/index.html` exists.
+- Generated HTML size is about 4.3 MB.

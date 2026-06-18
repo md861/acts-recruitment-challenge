@@ -1295,3 +1295,39 @@ Verification / limitation:
 - `doxygen docs/doxygen/Doxyfile` was attempted but failed because `doxygen` is not installed.
 - Installing Doxygen was blocked because passwordless `sudo` is unavailable in the WSL environment.
 - `git diff --check` passed.
+
+### Entry 46 - Doxygen compile retry
+
+Date/time: 2026-06-18 22:57 BST (Europe/London)
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+retry fixing the limitation
+```
+
+Follow-up user input:
+
+```text
+no wait, i think i have installed doxygen now. so no need for local binary
+```
+
+Purpose:
+
+Retry Doxygen documentation compilation using the newly installed system Doxygen binary.
+
+What was understood / accepted:
+
+Codex confirmed `/usr/bin/doxygen` version `1.9.1`, compiled the docs with the tracked config, removed two warning-producing config tags, and rebuilt successfully.
+
+Human input and judgement:
+
+The user clarified that Doxygen had been installed system-wide, so Codex stopped attempting a local `.tools` binary route.
+
+Verification:
+
+- `doxygen docs/doxygen/Doxyfile` completed successfully.
+- `docs/doxygen/build/html/index.html` exists.
+- Generated HTML size is about 4.3 MB.
