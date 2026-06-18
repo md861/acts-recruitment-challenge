@@ -69,6 +69,7 @@ export function App() {
             height={snapshot.simulation.height}
             agents={snapshot.agents}
             restrictedCells={snapshot.terrain.restricted_cells}
+            terrainMap={snapshot.terrain.map}
           />
         ) : (
           <div className="loadingState">Loading simulation...</div>
@@ -87,4 +88,3 @@ export function App() {
     </main>
   );
 }
-

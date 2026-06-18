@@ -167,48 +167,58 @@ Track A modelling work has been selected for this repository. The detailed imple
 
 4. Terrain map asset and legend documented.
    - `Terrain maps/Terrain1.png` is tracked as the current terrain input asset.
-   - The terrain legend is documented: white normal, black hard boundary, red restricted, orange max-density gate, green exit/removal, blue Type 1 penalty, and pink Type 2 penalty.
+   - The terrain legend is documented: white normal, black outer boundary, brown density-zero reflective boundary, red restricted, orange max-density gate, green exit/removal, blue Type 1 penalty, and pink Type 2 penalty.
 
-### Active
-
-1. Implement the terrain map handler.
+5. Core terrain map handler and unit tests implemented.
    - Add symbolic terrain cell vocabulary.
    - Add configuration for selected terrain map, restricted ids, exit ids, gate capacity, and Type 1 penalty settings.
    - Load/select `Terrain maps/Terrain1.png`.
    - Parse white, black, red, orange, green, blue, and pink cells into terrain definitions.
    - Treat white cells as normal cells with no special restrictions or penalties.
    - Provide terrain query and summary APIs for simulation use.
-
-2. Add terrain map handler tests.
    - Verify the selected map can be loaded.
    - Verify parsed initialization matches the map legend.
    - Verify normal, boundary, restricted, gate, exit, Type 1 penalty, and Type 2 penalty cells are initialized correctly.
    - Verify traversability, capacity, exit, and penalty rules.
 
-### Next
-
-1. Integrate parsed terrain with the model snapshot.
+6. Terrain map model integration and metrics implemented.
    - Preserve existing snapshot fields.
    - Add terrain metadata in a backward-compatible way.
-
-2. Add terrain-aware metrics.
    - Record breach detection/handling.
    - Record blocked boundary attempts.
    - Record time spent in each cell type per agent id.
    - Record gate congestion, exit events, and penalty-cell traversals.
-
-3. Add a 100-tick terrain-map integration test.
    - Initialize a terrain-map-backed model.
    - Include all configured agent categories/ids.
    - Exercise the map and verify metrics are populated.
 
-4. Continue the broader modularization.
+7. Frontend terrain visualization and GIF artifact added.
+   - Pass terrain metadata and metrics through the Go API contract.
+   - Render the terrain PNG as the frontend map background.
+   - Overlay agents on the terrain map.
+   - Show the terrain color legend in the frontend.
+   - Generate local ignored `artifacts/terrain1_first_100_ticks.gif` from the first 100 terrain-backed simulation ticks.
+   - Include a legend panel and stripe/pattern styling in the generated GIF.
+
+8. Terrain boundary semantics extended.
+   - Black cells define the outer simulation enclosure.
+   - Brown cells represent density-zero reflective boundaries.
+   - The terrain handler reports validation issues for special cell definitions outside the black outer boundary.
+
+9. Terrain1 startup default set.
+   - `scripts/start.sh` defaults `SIM_TERRAIN_MAP_PATH` to `Terrain maps/Terrain1.png`.
+   - The default can still be overridden by setting `SIM_TERRAIN_MAP_PATH`.
+
+### Active
+
+1. Continue the broader modularization.
    - Refactor agent creation and behaviour.
    - Add movement strategy selection.
    - Add configurable random walk policies.
    - Keep reset determinism and API/frontend compatibility intact.
 
-5. Add frontend terrain visualization.
-   - Render terrain cells from snapshot metadata.
-   - Use the terrain color coding with stripe-line markings for special cells.
-   - Show a compact legend explaining each color and stripe pattern.
+### Next
+
+1. Refine frontend terrain visualization.
+   - Make individual cell edges visible in the simulation view.
+   - Surface terrain metrics in the control panel.

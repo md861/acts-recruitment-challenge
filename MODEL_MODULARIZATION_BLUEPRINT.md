@@ -150,30 +150,36 @@ The current terrain map asset is:
 
 The terrain parser should use the following color legend:
 
-1. Black cells are hard boundaries.
-   - These cells can never contain agents, regardless of agent id.
-   - Treat them as reflective hard Dirichlet-style boundaries: agents should not enter them, and attempted movement into them should be blocked or reflected by the movement routine.
+1. Black cells define the outer simulation boundary.
+   - These cells define the enclosed simulation block.
+   - Agents must not be initialized outside the area enclosed by black cells.
+   - Black cells remain non-traversable, but they are primarily map enclosure markers rather than general-purpose internal obstacles.
 
-2. Red cells are restricted cells.
+2. Brown cells are density-zero reflective boundaries.
+   - These cells have cell density fixed at zero.
+   - No agents may enter them, regardless of agent id.
+   - Treat movement attempts into brown cells as blocked or reflected by the movement routine.
+
+3. Red cells are restricted cells.
    - Only specific agent ids may enter these cells.
    - The allowed ids must be configurable simulation parameters.
    - Unauthorized attempts should be represented as breach or trespass events.
 
-3. Orange cells are maximum-density cells.
+4. Orange cells are maximum-density cells.
    - These cells have a configurable maximum agent density or capacity.
    - For example scenarios, treat them as gates through which agents can pass only when capacity allows.
    - Attempts to enter over-capacity gate cells should be blocked, delayed, or counted as congestion depending on the movement policy.
 
-4. Green cells are removal or exit cells.
+5. Green cells are removal or exit cells.
    - Agents with configurable ids are taken out of the simulation when they enter these cells.
    - Example use: plane-terminal boarding gates where selected passengers leave the active lattice after boarding.
 
-5. Blue cells apply Type 1 traversal penalties.
+6. Blue cells apply Type 1 traversal penalties.
    - The penalty is configurable.
    - Example penalties include decreasing or increasing movement likelihood in a specific direction.
    - The terrain module should expose the penalty, while movement/random-walk policies decide how to apply it.
 
-6. Pink cells apply Type 2 traversal penalties.
+7. Pink cells apply Type 2 traversal penalties.
    - The penalty is preset rather than scenario-configurable.
    - The default behaviour is to decrease movement in all directions.
    - This should be modelled separately from Type 1 penalties so tests can verify both behaviours.
@@ -183,4 +189,5 @@ Implementation notes:
 - The terrain parser should map colors to symbolic cell types rather than scattering RGB checks throughout the model.
 - Color matching should tolerate exact palette colors first; any tolerance or anti-aliasing support should be explicit and tested.
 - Configuration should control agent-id permissions, capacities, and Type 1 penalty details.
+- The terrain handler should report validation issues if special cell definitions are detected outside the black outer boundary.
 - Metrics should record blocked boundary attempts, restricted-cell breaches, handled breaches, congestion at orange gate cells, exits through green cells, and penalty-cell traversals.

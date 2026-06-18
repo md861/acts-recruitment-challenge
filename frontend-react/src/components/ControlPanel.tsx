@@ -52,9 +52,15 @@ export function ControlPanel({
         <span><i className="swatch civilian" />Civilian</span>
         <span><i className="swatch staff" />Staff</span>
         <span><i className="swatch patrol" />Patrol</span>
+        <span><i className="swatch normalCell" />Normal</span>
+        <span><i className="swatch boundaryCell" />Boundary</span>
+        <span><i className="swatch densityZeroCell" />Density zero</span>
         <span><i className="swatch restricted" />Restricted</span>
+        <span><i className="swatch gateCell" />Gate</span>
+        <span><i className="swatch exitCell" />Exit</span>
+        <span><i className="swatch typeOneCell" />Type 1 penalty</span>
+        <span><i className="swatch typeTwoCell" />Type 2 penalty</span>
       </div>
     </aside>
   );
 }
-

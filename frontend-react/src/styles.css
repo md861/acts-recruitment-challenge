@@ -86,6 +86,39 @@ button:hover {
   background: #d8ded9;
 }
 
+.terrainViewport {
+  position: relative;
+  width: min(100%, 1100px);
+  max-height: calc(100vh - 130px);
+  border: 1px solid #bac3bb;
+  background: #d8ded9;
+  overflow: hidden;
+}
+
+.terrainImage {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: fill;
+  image-rendering: pixelated;
+}
+
+.agentOverlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.mapAgent {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 45%);
+  transform: translate(-50%, -50%);
+}
+
 .cell {
   min-width: 0;
   min-height: 0;
@@ -222,6 +255,65 @@ button:hover {
   background: #e8c3b9;
 }
 
+.swatch.normalCell {
+  background: #ffffff;
+  border: 1px solid #c6cec8;
+}
+
+.swatch.boundaryCell {
+  background: #000000;
+}
+
+.swatch.densityZeroCell {
+  background: repeating-linear-gradient(
+    135deg,
+    #b97a57,
+    #b97a57 3px,
+    #ead2c3 3px,
+    #ead2c3 6px
+  );
+}
+
+.swatch.gateCell {
+  background: repeating-linear-gradient(
+    135deg,
+    #ff7f27,
+    #ff7f27 3px,
+    #ffe0cc 3px,
+    #ffe0cc 6px
+  );
+}
+
+.swatch.exitCell {
+  background: repeating-linear-gradient(
+    135deg,
+    #22b14c,
+    #22b14c 3px,
+    #d9f4df 3px,
+    #d9f4df 6px
+  );
+}
+
+.swatch.typeOneCell {
+  background: repeating-linear-gradient(
+    135deg,
+    #3f48cc,
+    #3f48cc 3px,
+    #d8dbff 3px,
+    #d8dbff 6px
+  );
+}
+
+.swatch.typeTwoCell {
+  background: repeating-linear-gradient(
+    135deg,
+    #ffaec9,
+    #ffaec9 3px,
+    #ffe4ee 3px,
+    #ffe4ee 6px
+  );
+}
+
 .loadingState {
   min-height: 360px;
   display: grid;
@@ -239,4 +331,3 @@ button:hover {
     order: -1;
   }
 }
-

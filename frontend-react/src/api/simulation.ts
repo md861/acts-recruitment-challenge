@@ -16,6 +16,17 @@ export type Agent = {
   heading: Heading;
 };
 
+export type TerrainMap = {
+  source: string;
+  asset_path: string;
+  legend: Record<string, { r: number; g: number; b: number }>;
+  summary: {
+    width: number;
+    height: number;
+    counts_by_type: Record<string, number>;
+  };
+};
+
 export type Snapshot = {
   source: string;
   received_at: string;
@@ -27,10 +38,12 @@ export type Snapshot = {
     agent_count: number;
     seed: number;
     updated_at: string;
+    metrics?: Record<string, unknown>;
   };
   terrain: {
     restricted_cells: Position[];
     note: string;
+    map?: TerrainMap;
   };
   agents: Agent[];
   warnings: string[];

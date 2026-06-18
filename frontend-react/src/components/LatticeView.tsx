@@ -1,10 +1,11 @@
-import type { Agent, Position } from "../api/simulation";
+import type { Agent, Position, TerrainMap } from "../api/simulation";
 
 type Props = {
   width: number;
   height: number;
   agents: Agent[];
   restrictedCells: Position[];
+  terrainMap?: TerrainMap;
 };
 
 const roleClass: Record<string, string> = {
@@ -13,7 +14,37 @@ const roleClass: Record<string, string> = {
   patrol: "agentPatrol"
 };
 
-export function LatticeView({ width, height, agents, restrictedCells }: Props) {
+export function LatticeView({ width, height, agents, restrictedCells, terrainMap }: Props) {
+  if (terrainMap) {
+    return (
+      <div
+        className="terrainViewport"
+        style={{ aspectRatio: `${width} / ${height}` }}
+        aria-label="Terrain map simulation"
+      >
+        <img
+          className="terrainImage"
+          src={terrainMap.asset_path}
+          alt="Terrain map"
+          draggable={false}
+        />
+        <div className="agentOverlay" aria-hidden="true">
+          {agents.map((agent) => (
+            <span
+              className={`mapAgent ${roleClass[agent.role] ?? "agentDefault"}`}
+              key={agent.id}
+              title={`${agent.id} ${agent.role}`}
+              style={{
+                left: `${(agent.position.x / Math.max(1, width - 1)) * 100}%`,
+                top: `${(agent.position.y / Math.max(1, height - 1)) * 100}%`
+              }}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   const restricted = new Set(restrictedCells.map((cell) => `${cell.x}:${cell.y}`));
   const agentsByCell = new Map<string, Agent[]>();
 
@@ -58,4 +89,3 @@ export function LatticeView({ width, height, agents, restrictedCells }: Props) {
     </div>
   );
 }
-

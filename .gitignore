@@ -18,3 +18,4 @@ yarn-error.log*
 coverage.out
 *Zone.Identifier*
 .tools/
+artifacts/

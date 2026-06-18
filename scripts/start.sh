@@ -142,7 +142,7 @@ check_port_free "React frontend" 5173
 echo "Starting Python model..."
 (
   cd "$ROOT_DIR/model-python"
-  exec python3 main.py >"$RUN_DIR/model.log" 2>&1
+  exec env SIM_TERRAIN_MAP_PATH="${SIM_TERRAIN_MAP_PATH:-Terrain maps/Terrain1.png}" python3 main.py >"$RUN_DIR/model.log" 2>&1
 ) &
 echo $! > "$RUN_DIR/model.pid"
 wait_for_url "Python model" "http://127.0.0.1:8001/health"

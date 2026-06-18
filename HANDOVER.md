@@ -1,15 +1,15 @@
 # Agent Handover
 
-Last updated: 2026-06-18 14:06 BST (Europe/London)
+Last updated: 2026-06-18 14:57 BST (Europe/London)
 
 ## Current State
 
 - Repo: `acts-recruitment-challenge`
 - Branch: `main`
 - Remote: `https://github.com/md861/acts-recruitment-challenge.git`
-- Latest commit before this handover update: `0dba9b8 Add README implementation roadmap`
+- Latest commit before this handover update: `79f9024 Prepare handover after changes cleanup`
 - Working protocol: do not commit or push unless the user explicitly asks, it is end-of-day, or it is a handover-to-new-agent prompt.
-- Current task status: Track A modelling work has been chosen. No implementation code has been changed yet. The next implementation step is the terrain map handler.
+- Current task status: Track A modelling work has been chosen. The terrain map handler, model snapshot metadata, terrain metrics, terrain-map integration tests, frontend terrain map visualization path, Terrain1 startup default, and local 100-tick GIF renderer are implemented locally.
 
 ## Read First
 
@@ -43,9 +43,11 @@ Most recent baseline checks passed with:
 PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh
 ```
 
-Last recorded pass: 2026-06-18 14:06 BST during this handover update.
+Last recorded pass: 2026-06-18 14:57 BST during this handover update.
 
-No implementation code has changed yet. Current changes in this handover update are documentation/planning only, including a `Changes.md` cleanup.
+Current local changes include implementation code, frontend visualization updates, a local generated GIF artifact, and documentation updates for the terrain map handler/visualization slice. The `artifacts/` directory is intentionally ignored and should stay untracked unless the user explicitly asks to publish an artifact.
+
+Untracked note: `Terrain maps/Terrain1_00.png` is present locally and has not been tracked or modified by Codex.
 
 ## Known Deferred Item
 
@@ -55,19 +57,33 @@ No implementation code has changed yet. Current changes in this handover update 
 
 ## Suggested Next Action
 
-Implement the terrain map handler as the first Track A slice. Follow the updated order in `MODEL_MODULARIZATION_BLUEPRINT.md`:
+Continue the broader Track A modularization after the terrain map handler slice:
 
-1. Add symbolic terrain cell vocabulary and map configuration.
-2. Load/select `Terrain maps/Terrain1.png`.
-3. Parse white, black, red, orange, green, blue, and pink cells into terrain definitions.
-4. Add unit tests that verify initialization matches the PNG legend.
-5. Integrate parsed terrain metadata into the model snapshot without breaking the current API/frontend contract.
-6. Add initial metrics hooks, especially breach detection and time spent in each cell type per agent id.
-7. Add a 100-tick terrain-map integration test after the parser and terrain API are stable.
+1. Refactor agent creation into a dedicated module.
+2. Add agent behaviour profiles.
+3. Add movement strategy selection.
+4. Add configurable random walk policies.
+5. Refine frontend terrain rendering with stripe-line markings for special cells and terrain metrics in the control panel.
+6. Make individual cell edges visible in the browser simulation view and generated GIF.
 
-Frontend follow-on: render terrain cells with the same color coding, stripe-line markings for special cells, and a compact legend explaining each color/pattern.
+Generated local artifact: `artifacts/terrain1_first_100_ticks.gif`.
+
+Known GIF/visualization issues to revisit:
+
+- Individual cell edges are not yet visible in the browser simulation view or generated GIF.
+
+Latest terrain semantics:
+
+- Black cells define the outer simulation enclosure.
+- Brown cells are density-zero reflective boundaries that reject all agents.
+- The terrain handler reports validation issues for special cell definitions outside the black outer boundary.
 
 The README now mirrors this at a higher level using Completed, Active, and Next roadmap states.
+
+Runtime note:
+
+- `scripts/start.sh` defaults `SIM_TERRAIN_MAP_PATH` to `Terrain maps/Terrain1.png`.
+- Generated artifacts remain local and ignored by git.
 
 ## Handover Routine
 
@@ -77,4 +93,5 @@ When asked to prepare for handover:
 - Add a timestamped entry to `project_lab-book.md`.
 - Update `Changes.md` if files were created or modified.
 - Keep `Changes.md` as a two-list audit: `Files Created` contains files created by this project, while `Files Modified` contains only files that existed in the base project and were later modified.
+- Keep `artifacts/` untracked unless the user explicitly asks to publish generated artifacts.
 - Commit and push only if the prompt is explicitly a handover-to-new-agent request or the user asks.

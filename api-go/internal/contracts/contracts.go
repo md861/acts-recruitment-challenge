@@ -26,11 +26,13 @@ type Simulation struct {
 	AgentCount int    `json:"agent_count"`
 	Seed       int    `json:"seed"`
 	UpdatedAt  string `json:"updated_at"`
+	Metrics    any    `json:"metrics,omitempty"`
 }
 
 type Terrain struct {
 	RestrictedCells []Position `json:"restricted_cells"`
 	Note            string     `json:"note"`
+	Map             any        `json:"map,omitempty"`
 }
 
 type ModelSnapshot struct {

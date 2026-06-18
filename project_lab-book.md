@@ -418,6 +418,182 @@ Verification:
 
 `./scripts/test.sh` passed with local Go and Node on `PATH`.
 
+### Entry 22 - Terrain map implementation, visualization, and handover
+
+Date/time: 2026-06-18 14:57 BST (Europe/London)
+
+What happened:
+
+The user asked to start the terrain map handler, complete the remaining terrain-handler slice, produce a 100-tick GIF, update terrain semantics, keep generated artifacts untracked by default, set `Terrain1.png` as the default map for `scripts/start.sh`, fix the GIF issues, then commit/push and prepare handover.
+
+Implementation:
+
+- Added `model-python/population_model/terrain.py` for PNG terrain parsing, cell vocabulary, map validation, query APIs, and black/brown boundary semantics.
+- Added `model-python/population_model/metrics.py` for terrain-aware metrics.
+- Updated `ModelConfig` with terrain map, permission, gate, exit, and penalty settings.
+- Integrated terrain metadata and terrain-aware metrics into the Python model snapshot.
+- Updated the Go API contract to pass through additive terrain map metadata and metrics.
+- Updated the React frontend to render the terrain image with agent overlays and an expanded terrain legend.
+- Added a frontend-served copy of `Terrain1.png`.
+- Added `scripts/render-terrain-gif.py` and generated a local ignored `artifacts/terrain1_first_100_ticks.gif`.
+- Added `artifacts/` to `.gitignore`.
+- Updated `scripts/start.sh` so it defaults to `Terrain maps/Terrain1.png`, while still allowing `SIM_TERRAIN_MAP_PATH` overrides.
+- Updated the GIF renderer to include a legend panel and stripe/pattern fills for special cell categories.
+- Recorded visible cell edges as a future visualization issue.
+
+Verification:
+
+- Visually checked the regenerated GIF: legend, patterned cells, and agents inside the main simulation block are visible.
+- Python unit tests passed: `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests`.
+- Full checks passed: `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh`.
+
+Known follow-up:
+
+- Individual cell edges are not yet visible in the browser simulation view or generated GIF.
+- `Terrain maps/Terrain1_00.png` exists locally as an untracked file and was left untouched.
+
+Next steps:
+
+- Commit and push the implementation and documentation updates.
+- Continue broader modularization: agent creation/behaviour, movement strategy selection, and configurable random walk policies.
+
+### Entry 24 - Terrain map handler first slice implemented
+
+Date/time: 2026-06-18 14:12 BST (Europe/London)
+
+What happened:
+
+The user asked to start the first next step: implementing the terrain map handler.
+
+Implementation:
+
+- Added `model-python/population_model/terrain.py`.
+- Added symbolic terrain cell types for normal, boundary, restricted, gate, exit, Type 1 penalty, and Type 2 penalty cells.
+- Added a standard-library PNG loader/parser for non-interlaced 8-bit RGB/RGBA PNG terrain maps.
+- Added exact palette mapping for `Terrain maps/Terrain1.png`.
+- Added terrain query APIs for cell lookup, traversability, exit checks, penalties, summary, and serialization.
+- Extended `ModelConfig` with terrain map path, restricted ids, exit ids, gate max density, and Type 1 penalty settings.
+- Added `model-python/tests/test_terrain.py` covering map selection, real cell counts from `Terrain1.png`, representative cell initialization, traversability/capacity/exit/penalty rules, and serialization for future snapshots.
+- Updated the README roadmap so the core terrain map handler is now completed and model integration/metrics are active.
+
+Verification:
+
+- Python unit tests passed: `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests`.
+- Full checks passed: `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh`.
+
+Next steps:
+
+- Integrate parsed terrain metadata into the model snapshot without breaking the existing API/frontend contract.
+- Add terrain-aware metrics, including breach detection and time spent in each cell type per agent id.
+
+### Entry 25 - Terrain map snapshot integration and metrics implemented
+
+Date/time: 2026-06-18 14:20 BST (Europe/London)
+
+What happened:
+
+The user asked to continue with the remaining tasks for the terrain map handler slice.
+
+Implementation:
+
+- Added `model-python/population_model/metrics.py`.
+- Integrated `TerrainMap` loading into `PopulationModel`.
+- Added `simulation.metrics` to the Python model snapshot.
+- Added `terrain.map` metadata to the Python model snapshot while preserving existing terrain fields.
+- Added terrain-aware movement checks for hard boundary cells, unauthorized restricted cells, and over-capacity gate cells.
+- Added metrics for restricted breaches detected/handled, boundary blocks, gate congestion, exit events, penalty-cell traversals, and time spent in each cell type per agent id.
+- Added model-level tests for terrain metadata in snapshots.
+- Added a deterministic 100-tick terrain-map-backed integration test that exercises breach, boundary, gate, exit, penalty, and normal cell metrics.
+- Updated the README roadmap so terrain handler integration and metrics are marked completed.
+
+Verification:
+
+- Python unit tests passed: `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests`.
+- Full checks passed: `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh`.
+
+Next steps:
+
+- Continue broader modularization: agent creation/behaviour, movement strategy selection, and configurable random walk policies.
+- Later, update the Go API contract and React frontend to pass through and visualize terrain metadata.
+
+### Entry 26 - Terrain map visualization and GIF generated
+
+Date/time: 2026-06-18 14:30 BST (Europe/London)
+
+What happened:
+
+The user asked whether the new map handler could create cells from `Terrain1.png` and produce a GIF of the first 100 simulation ticks rendered by the visualization frontend.
+
+Implementation:
+
+- Updated the Python model to use terrain-map dimensions for default terrain-backed runs.
+- Added `asset_path` to terrain map snapshot metadata.
+- Updated the Go API contract to pass through additive terrain map metadata and metrics.
+- Added a Vite-served frontend terrain asset at `frontend-react/public/terrain/Terrain1.png`.
+- Updated frontend snapshot types for terrain metadata and optional metrics.
+- Updated `LatticeView` to render the terrain PNG efficiently with agent overlays.
+- Expanded the frontend legend for normal, boundary, restricted, gate, exit, Type 1 penalty, and Type 2 penalty cells.
+- Added `scripts/render-terrain-gif.py`, a standard-library renderer that uses the model and terrain handler to produce the first 100 ticks.
+- Generated `artifacts/terrain1_first_100_ticks.gif`.
+
+Notes:
+
+The environment did not expose a browser automation, ffmpeg, or ImageMagick tool. The GIF is therefore generated by a reproducible Python renderer using the same terrain map handler and simulation state, while the React frontend now has the corresponding terrain-map visualization path.
+
+Verification:
+
+- `file artifacts/terrain1_first_100_ticks.gif` reports a GIF89a image, 640 x 443.
+- The GIF decoded successfully through the local image viewer.
+- Full checks passed: `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh`.
+
+Next steps:
+
+- Refine the frontend terrain rendering with stripe-line markings for special cells.
+- Surface terrain metrics in the frontend control panel.
+- Continue broader modelling modularization.
+
+### Entry 27 - Artifact protocol and terrain boundary semantics updated
+
+Date/time: 2026-06-18 14:41 BST (Europe/London)
+
+What happened:
+
+The user reviewed the generated GIF and clarified two things:
+
+- Generated artifacts should not be tracked in GitHub by default because they may become large and numerous.
+- The terrain map handler should distinguish black outer-boundary cells from brown density-zero reflective boundary cells.
+
+Known GIF issues recorded:
+
+- The GIF does not include the legend, although the browser UI does.
+- Cell categories are hard to distinguish in the GIF.
+- Special-cell shading should use line/stripe patterns rather than solid fills.
+- Agents should initialize inside the main black-bounded simulation block.
+
+Implementation:
+
+- Added `artifacts/` to `.gitignore`.
+- Recorded the artifact protocol in `HANDOVER.md`.
+- Added brown terrain cells as `density_zero`.
+- Treated brown cells as reflective/non-traversable for all agents.
+- Treated black cells as defining the enclosed simulation area.
+- Added map validation issues for special cell definitions outside the black outer boundary.
+- Added tests for brown density-zero cells and outside-boundary validation issues.
+
+Verification:
+
+- Python unit tests passed: `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests`.
+- Full checks passed: `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh`.
+
+Observation:
+
+`Terrain maps/Terrain1_00.png` is present locally as an untracked file. It was left untouched.
+
+Next steps:
+
+- Keep the current generated GIF local unless the user explicitly asks to publish it.
+- Later refine the GIF/frontend visualization to include a legend, striped cell patterns, and clearer cell categories.
+
 ### Entry 22 - Changes.md two-list rule clarified
 
 Date/time: 2026-06-18 14:05 BST (Europe/London)
