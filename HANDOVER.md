@@ -7,9 +7,9 @@ Last updated: 2026-06-18 21:21 BST (Europe/London)
 - Repo: `acts-recruitment-challenge`
 - Branch: `main`
 - Remote: `https://github.com/md861/acts-recruitment-challenge.git`
-- Latest commit: `5957d7e Add configurable random walk policies`
+- Latest commit: `7bf9300 Complete behaviour movement and terrain rules`
 - Working protocol: do not commit or push unless the user explicitly asks, it is end-of-day, or it is a handover-to-new-agent prompt.
-- Current task status: Track A modelling work has been chosen. Terrain map handling, model metrics integration, frontend terrain visualization, agent creation/placement, agent behaviour profiles, movement strategy selection, configurable random walk policies, and terrain rule coverage have now been implemented. The remaining Step 5, Step 6, and Step 8 work has been completed locally but is not committed yet.
+- Current task status: Track A modelling work has been chosen. Terrain map handling, model metrics integration, frontend terrain visualization, agent creation/placement, agent behaviour profiles, movement strategy selection, configurable random walk policies, and terrain rule coverage have now been implemented and committed.
 
 ## Read First
 
@@ -45,7 +45,7 @@ PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh
 
 Last recorded pass: 2026-06-18 21:21 BST after completing the remaining Step 8 terrain rule work.
 
-Current local changes include behaviour-aware movement selection, movement penalty preference costs, terrain role-based restrictions, terrain traversal classification, Doxygen comments on new helpers, behaviour/movement/terrain tests, the previously requested protocol-doc updates, and related bookkeeping updates. The `artifacts/` directory is intentionally ignored and should stay untracked unless the user explicitly asks to publish an artifact.
+There are no tracked local changes after the latest push. The `artifacts/` directory is intentionally ignored and should stay untracked unless the user explicitly asks to publish an artifact.
 
 Untracked note: `Terrain maps/Terrain1_00.png` is present locally and has not been tracked or modified by Codex.
 
