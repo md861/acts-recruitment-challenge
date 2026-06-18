@@ -577,6 +577,38 @@ Verification:
 
 Codex ran `./scripts/test.sh` with the local Go and Node toolchains on `PATH`; the command completed successfully.
 
+### Entry 19 - Agent behaviour profile implementation
+
+Date: 2026-06-18
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+let's get on with step 6 then
+```
+
+Purpose:
+
+Continue the Track A modelling roadmap by implementing agent behaviour profiles after the agent creation and placement refactor.
+
+What was understood from the response:
+
+Step 6 means moving role-specific behaviour out of `PopulationModel` and into a dedicated, testable module while preserving deterministic seeded movement and the current API/frontend snapshot contract.
+
+Human input and judgement:
+
+The user selected the next roadmap step. Codex chose a minimal module boundary and kept the existing movement choices compatible with previous behaviour.
+
+What was accepted from AI:
+
+Codex added `population_model/behaviour.py`, wired `PopulationModel._next_movement` through default behaviour profiles, and added focused behaviour tests.
+
+Verification:
+
+`PYTHONPATH=model-python python3 -m unittest discover -s model-python/tests` passed with 18 tests.
+
 ### Entry 19 - Terrain map implementation and visualization
 
 Date: 2026-06-18

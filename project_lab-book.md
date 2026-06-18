@@ -916,3 +916,36 @@ Next steps:
 Verification:
 
 `./scripts/test.sh` passed with local Go and Node on `PATH`.
+
+### Entry 22 - Agent behaviour profiles implemented
+
+Date/time: 2026-06-18 20:04 BST (Europe/London)
+
+What happened:
+
+The user asked to continue with step 6 from the roadmap: agent behaviour profiles.
+
+Decision:
+
+Add a small `population_model/behaviour.py` module rather than expanding `PopulationModel`.
+
+Reasoning:
+
+Role-specific movement choices were still embedded inside the orchestration class. Moving them into behaviour profiles keeps the tick loop simple and creates a testable place to capture later intent, terrain preferences, and movement strategy selection.
+
+Implementation:
+
+- Added `BehaviourProfile` and `BehaviourProfileSet`.
+- Added default civilian, staff, and patrol profiles.
+- Kept seeded movement selection deterministic by passing the model's existing `random.Random` instance into the profile selector.
+- Updated `PopulationModel._next_movement` to delegate to the behaviour profiles.
+- Added unit tests for role-specific intent metadata, deterministic selection, default-role fallback, and invalid empty profiles.
+
+Verification:
+
+`PYTHONPATH=model-python python3 -m unittest discover -s model-python/tests` passed with 18 tests.
+
+Next steps:
+
+- Add a movement strategy module that filters candidate moves against terrain and returns movement decisions with status/reason metadata.
+- Add configurable random walk policies after the movement strategy module is in place.

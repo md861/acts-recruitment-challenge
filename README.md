@@ -215,10 +215,15 @@ Track A modelling work has been selected for this repository. The detailed imple
    - Kept placement terrain-aware: agents are not initialized outside the black enclosure or on blocked boundary/density-zero cells.
    - Added unit tests for deterministic creation and terrain-aware placement.
 
+11. Agent behaviour profiles added.
+   - Added a dedicated behaviour profile module.
+   - Moved role-specific candidate movement choices out of `PopulationModel`.
+   - Captured civilian, staff, and patrol intent metadata for later terrain-aware movement filtering.
+   - Added unit tests for profile intent, deterministic movement selection, default-role fallback, and invalid empty profiles.
+
 ### Active
 
 1. Continue the broader modularization.
-   - Add agent behaviour profiles.
    - Add movement strategy selection.
    - Add configurable random walk policies.
    - Keep reset determinism and API/frontend compatibility intact.

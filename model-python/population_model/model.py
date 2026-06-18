@@ -3,6 +3,10 @@ from collections import Counter
 from datetime import datetime, timezone
 
 from population_model.agents import AgentFactory
+from population_model.behaviour import (
+    DEFAULT_BEHAVIOUR_PROFILES,
+    BehaviourProfileSet,
+)
 from population_model.config import ModelConfig
 from population_model.metrics import TerrainMetrics
 from population_model.state import Agent, Heading, Position
@@ -23,6 +27,7 @@ class PopulationModel:
         self.width = self.terrain.width if self._uses_default_dimensions() else config.width
         self.height = self.terrain.height if self._uses_default_dimensions() else config.height
         self.metrics = TerrainMetrics()
+        self.behaviour_profiles: BehaviourProfileSet = DEFAULT_BEHAVIOUR_PROFILES
         self.tick = 0
         self.agents = self._create_agents()
 
@@ -99,13 +104,7 @@ class PopulationModel:
         ).create_agents(self._rng)
 
     def _next_movement(self, role: str) -> tuple[int, int]:
-        if role == "patrol":
-            choices = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-        elif role == "staff":
-            choices = [(0, 0), (1, 0), (0, 1), (-1, 0)]
-        else:
-            choices = [(-1, 0), (1, 0), (0, -1), (0, 1), (0, 0)]
-        return self._rng.choice(choices)
+        return self.behaviour_profiles.next_movement(role, self._rng)
 
     def _restricted_cells(self) -> list[tuple[int, int]]:
         mid_x = self.width // 2
