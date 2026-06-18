@@ -232,23 +232,44 @@ Track A modelling work has been selected for this repository. The detailed imple
    - Added unit tests for allowed moves, boundary blocks, enclosure blocks, restricted-cell permissions, gate congestion, penalty costs, and dimensions larger than the terrain map.
    - Added a model-level integration test proving movement-strategy block reasons update simulation metrics.
 
-14. Terrain module rule coverage completed.
-   - Added role-based restricted-cell traversal permissions.
-   - Added terrain-level traversal classification for allowed moves, boundaries, restricted breaches, and gate congestion.
-   - Movement strategy now consumes terrain traversal classification for restricted and gate decisions.
-   - Added unit tests for role-based restrictions and traversal classification.
-
 13. Configurable random walk policies added.
    - Added a dedicated random walk module.
    - Supports deterministic seeded choice, uniform policies, weighted policies, wait probability, and directional skew.
    - Behaviour profiles now select movement through random walk policies.
    - Added independent random-walk unit tests for determinism, weighting, waiting, skew, and invalid policies.
 
+14. Terrain module rule coverage completed.
+   - Added role-based restricted-cell traversal permissions.
+   - Added terrain-level traversal classification for allowed moves, boundaries, restricted breaches, and gate congestion.
+   - Movement strategy now consumes terrain traversal classification for restricted and gate decisions.
+   - Added unit tests for role-based restrictions and traversal classification.
+
+15. Metrics module completed.
+   - Expanded `TerrainMetrics` to publish cell density snapshots, congestion counts, congested cells, unresolved breaches, terrain penalty events, and per-agent time spent by cell type.
+   - Wired model initialization, reset, and tick progression to refresh density/congestion metrics.
+   - Added focused metrics unit tests and model-level snapshot assertions for the new metrics fields.
+
+16. Model orchestration refactored.
+   - Slimmed `PopulationModel.step()` to delegate tick progression, per-agent advancement, movement application, metric recording, and density updates to focused helpers.
+   - Consolidated initialization and reset runtime setup through one deterministic lifecycle path.
+   - Preserved snapshot shape, movement behaviour, reset determinism, and API/frontend compatibility.
+
+17. Module-level and model-level test coverage completed.
+   - Added focused configuration parsing tests for deterministic defaults, numeric environment values, comma-separated permission lists, and invalid-value fallbacks.
+   - Fixed float environment parsing for tick interval and Type 1 penalty multiplier settings.
+   - Added model integration tests proving restricted cells are respected by configured agent id and role.
+   - Added a snapshot compatibility integration test that preserves the expected API-facing shape while allowing additive fields.
+
+18. Frontend terrain visualization completed.
+   - Replaced raw terrain-image display with a canvas renderer that reads the snapshot-provided terrain asset and applies the same color/stripe pattern language as the generated GIF.
+   - Kept agents visible above the patterned terrain canvas.
+   - Added compact terrain metrics to the control panel.
+   - Made `./scripts/start.sh` render a terrain GIF preview by default before starting services.
+   - `SIM_GIF_TICKS` controls the preview length and defaults to `100`; `SIM_GENERATE_GIF=0` disables preview generation.
+
 ### Active
 
 1. Continue the broader modularization.
-   - Refine frontend terrain visualization.
-   - Surface terrain metrics in the control panel.
    - Keep reset determinism and API/frontend compatibility intact.
 
 ### Next
@@ -262,11 +283,6 @@ Track A modelling work has been selected for this repository. The detailed imple
 
 These are known issues that are intentionally left for later work.
 
-1. Browser terrain visualization does not yet match the generated GIF.
-   - The GIF renderer now shows a legend panel and stripe/pattern fills for terrain cell categories.
-   - The browser visualizer at `http://localhost:5173/` still renders the terrain mostly from the raw PNG image and does not yet apply the same canvas-style patterned rendering.
-   - Suggested fix: replace or augment the browser terrain view with a canvas renderer that mirrors `scripts/render-terrain-gif.py`.
-
-2. Individual cell edges are not yet visible.
+1. Individual cell edges are not yet visible.
    - The current terrain map is large, so drawing every cell edge needs a careful zoom/canvas strategy.
    - This affects both the browser simulation view and generated GIF readability.

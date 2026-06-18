@@ -1,10 +1,21 @@
 #!/usr/bin/env bash
+## @file start.sh
+#  @brief Start the local model/API/frontend demo and generate a terrain GIF preview.
+#
+#  By default the script renders a deterministic 100-tick GIF before starting
+#  services. `SIM_GIF_TICKS` changes the frame count, `SIM_GIF_OUTPUT` changes
+#  the output path, and `SIM_GENERATE_GIF=0` disables preview generation.
+
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 RUN_DIR="$ROOT_DIR/.run"
 GO_CACHE_DIR="$RUN_DIR/go-build-cache"
 CLEANED_UP=0
+SIM_TERRAIN_MAP_PATH="${SIM_TERRAIN_MAP_PATH:-Terrain maps/Terrain1.png}"
+SIM_GENERATE_GIF="${SIM_GENERATE_GIF:-1}"
+SIM_GIF_TICKS="${SIM_GIF_TICKS:-100}"
+SIM_GIF_OUTPUT="${SIM_GIF_OUTPUT:-$ROOT_DIR/artifacts/terrain1_first_${SIM_GIF_TICKS}_ticks.gif}"
 
 mkdir -p "$RUN_DIR"
 
@@ -135,6 +146,17 @@ require_command python3
 require_command go
 require_command npm
 
+if [ "$SIM_GENERATE_GIF" != "0" ]; then
+  echo "Rendering terrain GIF preview (${SIM_GIF_TICKS} ticks)..."
+  (
+    cd "$ROOT_DIR"
+    SIM_TERRAIN_MAP_PATH="$SIM_TERRAIN_MAP_PATH" \
+      SIM_GIF_TICKS="$SIM_GIF_TICKS" \
+      SIM_GIF_OUTPUT="$SIM_GIF_OUTPUT" \
+      python3 scripts/render-terrain-gif.py --ticks "$SIM_GIF_TICKS" --output "$SIM_GIF_OUTPUT"
+  )
+fi
+
 check_port_free "Python model" 8001
 check_port_free "Go API" 18080
 check_port_free "React frontend" 5173
@@ -142,7 +164,7 @@ check_port_free "React frontend" 5173
 echo "Starting Python model..."
 (
   cd "$ROOT_DIR/model-python"
-  exec env SIM_TERRAIN_MAP_PATH="${SIM_TERRAIN_MAP_PATH:-Terrain maps/Terrain1.png}" python3 main.py >"$RUN_DIR/model.log" 2>&1
+  exec env SIM_TERRAIN_MAP_PATH="$SIM_TERRAIN_MAP_PATH" python3 main.py >"$RUN_DIR/model.log" 2>&1
 ) &
 echo $! > "$RUN_DIR/model.pid"
 wait_for_url "Python model" "http://127.0.0.1:8001/health"

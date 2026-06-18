@@ -27,7 +27,16 @@ class PopulationModelTests(unittest.TestCase):
         model.step(5)
         model.reset()
 
-        self.assertEqual(first["agents"], model.snapshot()["agents"])
+        reset_snapshot = model.snapshot()
+        self.assertEqual(first["agents"], reset_snapshot["agents"])
+        self.assertEqual(reset_snapshot["simulation"]["tick"], 0)
+        self.assertEqual(
+            sum(
+                cell["count"]
+                for cell in reset_snapshot["simulation"]["metrics"]["cell_density"]
+            ),
+            reset_snapshot["simulation"]["agent_count"],
+        )
 
     def test_snapshot_contains_terrain_map_metadata_and_metrics(self):
         model = PopulationModel(ModelConfig(width=8, height=6, agent_count=6, seed=3))
@@ -43,7 +52,14 @@ class PopulationModelTests(unittest.TestCase):
             snapshot["terrain"]["map"]["summary"]["counts_by_type"]["normal"],
             854869,
         )
-        self.assertIn("time_spent_by_agent_id", snapshot["simulation"]["metrics"])
+        metrics = snapshot["simulation"]["metrics"]
+        self.assertIn("time_spent_by_agent_id", metrics)
+        self.assertIn("cell_density", metrics)
+        self.assertIn("congested_cells", metrics)
+        self.assertEqual(
+            sum(cell["count"] for cell in metrics["cell_density"]),
+            snapshot["simulation"]["agent_count"],
+        )
 
     def test_model_records_movement_strategy_block_reasons(self):
         model = PopulationModel(
@@ -62,6 +78,70 @@ class PopulationModelTests(unittest.TestCase):
         self.assertGreater(
             snapshot["simulation"]["metrics"]["blocked_boundary_attempts"],
             0,
+        )
+
+    def test_restricted_cells_are_respected_by_configured_id_and_role(self):
+        config = ModelConfig(
+            width=1213,
+            height=839,
+            agent_count=3,
+            seed=3,
+            restricted_cell_agent_ids=("agent-allowed",),
+            restricted_cell_roles=("patrol",),
+        )
+        model = PopulationModel(config)
+        restricted_source, restricted_target, restricted_move = self._movement_into(
+            model.terrain, CellType.RESTRICTED
+        )
+        model.agents = [
+            self._agent("agent-blocked", "civilian", restricted_source),
+            self._agent("agent-allowed", "civilian", restricted_source),
+            self._agent("agent-patrol", "patrol", restricted_source),
+        ]
+        model._next_movement = lambda role: restricted_move
+
+        model.step()
+        snapshot = model.snapshot()
+        positions_by_id = {
+            agent["id"]: (agent["position"]["x"], agent["position"]["y"])
+            for agent in snapshot["agents"]
+        }
+        statuses_by_id = {
+            agent["id"]: agent["status"] for agent in snapshot["agents"]
+        }
+
+        self.assertEqual(positions_by_id["agent-blocked"], restricted_source)
+        self.assertEqual(statuses_by_id["agent-blocked"], "blocked")
+        self.assertEqual(positions_by_id["agent-allowed"], restricted_target)
+        self.assertEqual(positions_by_id["agent-patrol"], restricted_target)
+        self.assertEqual(snapshot["simulation"]["metrics"]["breach_detected"], 1)
+        self.assertEqual(snapshot["simulation"]["metrics"]["breach_handled"], 1)
+        self.assertEqual(snapshot["simulation"]["metrics"]["unresolved_breaches"], 0)
+
+    def test_snapshot_preserves_api_compatible_shape_with_additive_fields(self):
+        model = PopulationModel(ModelConfig(width=8, height=6, agent_count=2, seed=5))
+
+        snapshot = model.snapshot()
+
+        self.assertEqual(set(snapshot), {"simulation", "terrain", "agents"})
+        self.assertTrue(
+            {
+                "tick",
+                "status",
+                "width",
+                "height",
+                "agent_count",
+                "seed",
+                "updated_at",
+            }
+            <= set(snapshot["simulation"])
+        )
+        self.assertIn("metrics", snapshot["simulation"])
+        self.assertTrue({"restricted_cells", "note"} <= set(snapshot["terrain"]))
+        self.assertIn("map", snapshot["terrain"])
+        self.assertTrue(
+            {"id", "role", "status", "position", "heading"}
+            <= set(snapshot["agents"][0])
         )
 
     def test_terrain_map_integration_records_metrics_over_ticks(self):
@@ -119,6 +199,8 @@ class PopulationModelTests(unittest.TestCase):
         self.assertEqual(metrics["breach_detected"], metrics["breach_handled"])
         self.assertGreater(metrics["blocked_boundary_attempts"], 0)
         self.assertGreater(metrics["gate_congestion_events"], 0)
+        self.assertGreater(metrics["congestion_count"], 0)
+        self.assertGreater(len(metrics["congested_cells"]), 0)
         self.assertGreater(metrics["exit_events"], 0)
         self.assertGreater(metrics["penalty_cell_traversals"], 0)
         self.assertGreater(

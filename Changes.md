@@ -19,20 +19,22 @@
 15. `model-python/tests/test_movement.py` - Unit tests for movement strategy decisions, terrain block reasons, and penalty preference costs.
 16. `model-python/tests/test_random_walk.py` - Unit tests for deterministic and configurable random walk policies.
 17. `frontend-react/public/terrain/Terrain1.png` - Frontend-served copy of the terrain map image.
-18. `scripts/render-terrain-gif.py` - Standard-library renderer for the first 100 terrain-backed simulation ticks with legend and patterned cell fills.
+18. `scripts/render-terrain-gif.py` - Standard-library renderer for configurable terrain-backed simulation preview GIFs with legend, patterned cell fills, environment defaults, and Doxygen-compatible comments.
+19. `model-python/tests/test_metrics.py` - Unit tests for density snapshots, congested cells, breach accounting, event counters, and per-agent cell-type time metrics.
+20. `model-python/tests/test_config.py` - Unit tests for runtime configuration defaults, environment parsing, permission lists, and invalid-value fallbacks.
 
 ## Files Modified
 
 1. `.gitignore` - Ignored Windows `Zone.Identifier` metadata, local `.tools/` install artifacts, and generated `artifacts/`.
-2. `scripts/*.sh` - Restored executable permissions and made `start.sh` default to `Terrain maps/Terrain1.png`.
+2. `scripts/*.sh` - Restored executable permissions, made `start.sh` default to `Terrain maps/Terrain1.png`, and made startup generate a configurable terrain GIF preview by default.
 3. `README.md` - Added a GitHub-visible roadmap and unfixed issues list.
 4. `api-go/internal/contracts/contracts.go` - Passed additive terrain map metadata, simulation metrics, and agent behaviour profile metadata through the API contract.
-5. `frontend-react/src/App.tsx` - Passed terrain map metadata into the lattice visualizer.
-6. `frontend-react/src/api/simulation.ts` - Added frontend types for terrain map metadata, optional metrics, and optional agent behaviour profile metadata.
-7. `frontend-react/src/components/ControlPanel.tsx` - Expanded the legend for terrain map cell types.
-8. `frontend-react/src/components/LatticeView.tsx` - Added terrain image rendering with agent overlays.
-9. `frontend-react/src/styles.css` - Styled the terrain map viewport, overlays, and expanded legend swatches.
-10. `model-python/population_model/config.py` - Added terrain map, permission, restricted-role, gate, exit, and penalty configuration fields plus a Doxygen-compatible file header.
-11. `model-python/population_model/model.py` - Integrated terrain map metadata, behaviour-aware movement selection, terrain-aware movement strategy decisions, map-enclosure checks, and metrics into the model snapshot; added a Doxygen-compatible file header.
+5. `frontend-react/src/App.tsx` - Passed terrain map metadata and compact terrain metrics into the frontend views.
+6. `frontend-react/src/api/simulation.ts` - Added frontend types for terrain map metadata, typed metrics, and optional agent behaviour profile metadata.
+7. `frontend-react/src/components/ControlPanel.tsx` - Expanded the legend for terrain map cell types and surfaced compact terrain metrics.
+8. `frontend-react/src/components/LatticeView.tsx` - Added patterned terrain canvas rendering with agent overlays and Doxygen-compatible comments.
+9. `frontend-react/src/styles.css` - Styled the terrain map viewport, canvas, overlays, metrics, and expanded legend swatches.
+10. `model-python/population_model/config.py` - Added terrain map, permission, restricted-role, gate, exit, and penalty configuration fields, fixed float environment parsing, and kept a Doxygen-compatible file header.
+11. `model-python/population_model/model.py` - Integrated terrain map metadata, behaviour-aware movement selection, terrain-aware movement strategy decisions, map-enclosure checks, metrics, and refactored orchestration helpers into the model snapshot; added a Doxygen-compatible file header.
 12. `model-python/population_model/state.py` - Added additive agent behaviour profile metadata and a Doxygen-compatible file header for shared domain state types.
-13. `model-python/tests/test_model.py` - Added model-level terrain snapshot, agent behaviour profile metadata, movement strategy, and 100-tick metrics integration tests.
+13. `model-python/tests/test_model.py` - Added model-level terrain snapshot, agent behaviour profile metadata, movement strategy, restricted role/id, snapshot compatibility, and 100-tick metrics integration tests.

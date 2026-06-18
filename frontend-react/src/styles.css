@@ -95,11 +95,10 @@ button:hover {
   overflow: hidden;
 }
 
-.terrainImage {
+.terrainCanvas {
   width: 100%;
   height: 100%;
   display: block;
-  object-fit: fill;
   image-rendering: pixelated;
 }
 
@@ -192,6 +191,33 @@ button:hover {
 
 .metric strong {
   font-size: 24px;
+}
+
+.metricGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 14px 0 16px;
+}
+
+.metricGrid div {
+  min-width: 0;
+  padding: 8px;
+  border: 1px solid #e1e6e2;
+  border-radius: 6px;
+  background: #f8faf7;
+}
+
+.metricGrid span {
+  display: block;
+  color: #536057;
+  font-size: 12px;
+}
+
+.metricGrid strong {
+  display: block;
+  margin-top: 2px;
+  font-size: 18px;
 }
 
 .buttonRow {

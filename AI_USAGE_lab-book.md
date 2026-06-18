@@ -1073,3 +1073,156 @@ Verification:
 
 - `PYTHONPATH=model-python python3 -m unittest discover -s model-python/tests` passed with 42 tests.
 - `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh` passed.
+
+### Entry 39 - Step 9 metrics module work
+
+Date/time: 2026-06-18 21:33 BST (Europe/London)
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+so the next step now is step 9 correct? if so, let us keep moving
+```
+
+Purpose:
+
+Confirm that main blueprint Step 9, `Add a metrics module`, was the next unfinished item and continue implementation.
+
+What was understood / accepted:
+
+Codex expanded `TerrainMetrics` with cell density snapshots, congestion counts, congested cells, unresolved breach accounting, event counters, and per-agent time spent by terrain cell type. Codex wired model initialization/reset/tick progression to refresh density metrics, carried breach handling metadata through movement decisions, and added focused metrics unit tests plus snapshot-level model assertions.
+
+Human input and judgement:
+
+The user confirmed the next step from the main blueprint and asked Codex to proceed.
+
+Verification:
+
+- `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests` passed with 45 tests.
+- `./scripts/test.sh` passed across Python, Go, and frontend typecheck.
+
+### Entry 40 - Step 10 model orchestration refactor
+
+Date/time: 2026-06-18 21:41 BST (Europe/London)
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+good. keep moving
+```
+
+Purpose:
+
+Continue from the main blueprint after Step 9 and complete Step 10, `Refactor model orchestration`.
+
+What was understood / accepted:
+
+Codex refactored `PopulationModel` so initialization/reset share a deterministic runtime setup path and `step()` delegates tick progression, per-agent advancement, movement application, metric recording, and density updates to focused helpers. Snapshot shape and movement behaviour were preserved.
+
+Human input and judgement:
+
+The user approved continuing to the next unfinished main-blueprint item.
+
+Verification:
+
+- `PYTHONPATH="$PWD/model-python" python3 -m unittest model-python/tests/test_model.py` passed with 5 tests.
+- `./scripts/test.sh` passed across Python, Go, and frontend typecheck.
+
+### Entry 41 - Steps 13 and 14 test coverage
+
+Date/time: 2026-06-18 21:46 BST (Europe/London)
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+ok get on with steps 13 and 14 and then report back
+```
+
+Purpose:
+
+Complete main blueprint Step 13, `Add module-level unit tests`, and Step 14, `Add model-level integration tests`.
+
+What was understood / accepted:
+
+Codex reviewed the existing test inventory, added focused configuration parsing unit tests, fixed a discovered float environment parsing bug, and added model integration tests for configured restricted-cell access by agent id and role plus API-compatible snapshot shape.
+
+Human input and judgement:
+
+The user directed Codex to proceed with both test-focused blueprint steps and report back once complete.
+
+Verification:
+
+- `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests` passed with 51 tests.
+- `./scripts/test.sh` passed across Python, Go, and frontend typecheck.
+
+### Entry 42 - Step 15 frontend terrain visualization
+
+Date/time: 2026-06-18 21:56 BST (Europe/London)
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+ok good. get on with the tasks for this step. also make sure that by default we always create a 100 tick gif whenever we run the simulation. The number of ticks is configurable but default is 100. Add doxygen compatible comments for this step as well.
+```
+
+Purpose:
+
+Complete main blueprint Step 15, `Add frontend terrain visualization`, and make terrain GIF preview generation part of the default simulation startup flow.
+
+What was understood / accepted:
+
+Codex replaced the raw terrain image view with a browser canvas that reads the snapshot-provided terrain asset and applies the GIF-style terrain color/stripe markings, kept agents overlaid on top, added compact terrain metrics to the control panel, made GIF tick count/output configurable with a 100-tick default, and added Doxygen-compatible comments to the touched frontend and script files.
+
+Human input and judgement:
+
+The user requested that GIF generation become a default part of running the simulation while keeping the tick count configurable.
+
+Verification:
+
+- `SIM_GIF_TICKS=2 python3 scripts/render-terrain-gif.py --ticks 2 --output artifacts/test_step15_preview.gif` generated a smoke-test GIF.
+- `npm --prefix frontend-react run test` passed.
+- `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests` passed with 51 tests.
+- `bash -n scripts/start.sh scripts/test.sh` passed.
+- `./scripts/test.sh` passed across Python, Go, and frontend typecheck.
+
+### Entry 43 - Step 15 issue fixes and commit request
+
+Date/time: 2026-06-18 22:04 BST (Europe/London)
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+good. commit and push.
+one issue detected - the blue cell has mixed coloring style in the frontend, i.e. it has both solid and striped cells. please fix the issue.
+anothe issue detected - the sample giff generated is only 2 steps long while expected is 100 ticks. please review and fix.
+report after finishing
+```
+
+Purpose:
+
+Fix the reported Step 15 visualization/GIF issues, then commit and push the completed work.
+
+What was understood / accepted:
+
+Codex fixed the frontend Type 1 blue terrain stripe calculation by using positive modulo semantics that match the Python GIF renderer. Codex also regenerated the default GIF artifact and verified it contains 100 frames.
+
+Human input and judgement:
+
+The user identified the visual inconsistency and clarified that the generated sample GIF should be 100 ticks by default.
+
+Verification:
+
+- `python3 scripts/render-terrain-gif.py` regenerated `artifacts/terrain1_first_100_ticks.gif`.
+- Frame check reported `frames=100`.
+- `npm --prefix frontend-react run test` passed.
+- `./scripts/test.sh` passed across Python, Go, and frontend typecheck.

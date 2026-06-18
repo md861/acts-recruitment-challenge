@@ -1,3 +1,7 @@
+/** @file simulation.ts
+ *  @brief Frontend API types and helpers for model snapshots.
+ */
+
 export type Position = {
   x: number;
   y: number;
@@ -28,6 +32,20 @@ export type TerrainMap = {
   };
 };
 
+export type SimulationMetrics = {
+  breach_detected?: number;
+  breach_handled?: number;
+  blocked_boundary_attempts?: number;
+  gate_congestion_events?: number;
+  exit_events?: number;
+  penalty_cell_traversals?: number;
+  unresolved_breaches?: number;
+  congestion_count?: number;
+  congested_cells?: Array<{ x: number; y: number; count: number }>;
+  cell_density?: Array<{ x: number; y: number; count: number }>;
+  time_spent_by_agent_id?: Record<string, Record<string, number>>;
+};
+
 export type Snapshot = {
   source: string;
   received_at: string;
@@ -39,7 +57,7 @@ export type Snapshot = {
     agent_count: number;
     seed: number;
     updated_at: string;
-    metrics?: Record<string, unknown>;
+    metrics?: SimulationMetrics;
   };
   terrain: {
     restricted_cells: Position[];

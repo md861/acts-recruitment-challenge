@@ -1,6 +1,13 @@
+/** @file ControlPanel.tsx
+ *  @brief Simulation controls, status, terrain legend, and compact metrics.
+ */
+
+import type { SimulationMetrics } from "../api/simulation";
+
 type Props = {
   tick: number;
   agentCount: number;
+  metrics?: SimulationMetrics;
   isPolling: boolean;
   error: string | null;
   warnings: string[];
@@ -12,6 +19,7 @@ type Props = {
 export function ControlPanel({
   tick,
   agentCount,
+  metrics,
   isPolling,
   error,
   warnings,
@@ -28,6 +36,24 @@ export function ControlPanel({
       <div className="metric">
         <span>Agents</span>
         <strong>{agentCount}</strong>
+      </div>
+      <div className="metricGrid" aria-label="Terrain metrics">
+        <div>
+          <span>Congested</span>
+          <strong>{metrics?.congestion_count ?? 0}</strong>
+        </div>
+        <div>
+          <span>Breaches</span>
+          <strong>{metrics?.breach_detected ?? 0}</strong>
+        </div>
+        <div>
+          <span>Gate blocks</span>
+          <strong>{metrics?.gate_congestion_events ?? 0}</strong>
+        </div>
+        <div>
+          <span>Penalty</span>
+          <strong>{metrics?.penalty_cell_traversals ?? 0}</strong>
+        </div>
       </div>
       <div className="buttonRow">
         <button type="button" onClick={onTogglePolling}>

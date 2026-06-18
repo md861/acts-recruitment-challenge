@@ -78,6 +78,7 @@ export function App() {
       <ControlPanel
         tick={snapshot?.simulation.tick ?? 0}
         agentCount={snapshot?.agents.length ?? 0}
+        metrics={snapshot?.simulation.metrics}
         isPolling={isPolling}
         error={error}
         warnings={snapshot?.warnings ?? []}

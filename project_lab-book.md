@@ -1198,3 +1198,159 @@ Verification:
 
 - `PYTHONPATH=model-python python3 -m unittest discover -s model-python/tests` passed with 42 tests.
 - `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh` passed.
+
+### Entry 32 - Step 9 metrics module completed
+
+Date/time: 2026-06-18 21:33 BST (Europe/London)
+
+What happened:
+
+The user confirmed that the next unfinished main-blueprint item was Step 9, `Add a metrics module`, and asked to continue.
+
+Decision:
+
+Complete the metrics module by adding the remaining blueprint observations directly to `TerrainMetrics`, while keeping policy decisions in movement/terrain modules.
+
+Reasoning:
+
+Metrics should be a reusable accumulator rather than hidden orchestration logic. The model can report density snapshots and movement outcomes, and the metrics module can derive serializable cell density, congestion, and breach summaries from those inputs.
+
+Implementation:
+
+- Added latest cell-density snapshots to `TerrainMetrics`.
+- Added congestion count and congested-cell summaries.
+- Added unresolved breach accounting.
+- Preserved handled breach, boundary block, gate congestion, exit, penalty traversal, and per-agent cell-type time metrics.
+- Carried breach-handling metadata through `MovementDecision`.
+- Refreshed model metrics on initialization, reset, and after each tick.
+- Added focused `test_metrics.py` unit coverage.
+- Added model-level assertions that public snapshots expose density and congestion metrics.
+
+Verification:
+
+- `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests` passed with 45 tests.
+- `./scripts/test.sh` passed across Python, Go, and frontend typecheck.
+
+### Entry 33 - Step 10 model orchestration refactored
+
+Date/time: 2026-06-18 21:41 BST (Europe/London)
+
+What happened:
+
+The user asked to keep moving after Step 9, making main blueprint Step 10, `Refactor model orchestration`, the next active task.
+
+Decision:
+
+Refactor `PopulationModel` without changing public snapshots or movement behaviour.
+
+Reasoning:
+
+`PopulationModel` already delegated terrain, agent creation, behaviour selection, movement decisions, and metrics to collaborators, but the tick loop still mixed multiple responsibilities inline. Splitting the loop into small lifecycle and per-agent helpers makes the orchestration layer easier to read and keeps policy decisions outside the top-level loop.
+
+Implementation:
+
+- Consolidated initialization and reset runtime setup in `_reset_runtime_state`.
+- Slimmed `step()` so it delegates each tick to `_advance_tick`.
+- Split per-agent work into `_advance_agent`, `_apply_movement_decision`, and `_apply_allowed_movement`.
+- Moved allowed/blocked movement metric recording into focused helpers.
+- Moved density publication and density mutation into focused helpers.
+- Removed an unused terrain-enclosure helper from `PopulationModel`.
+- Added a reset regression assertion proving density metrics are refreshed with the rebuilt runtime state.
+
+Verification:
+
+- `PYTHONPATH="$PWD/model-python" python3 -m unittest model-python/tests/test_model.py` passed with 5 tests.
+- `./scripts/test.sh` passed across Python, Go, and frontend typecheck.
+
+### Entry 34 - Steps 13 and 14 test coverage completed
+
+Date/time: 2026-06-18 21:46 BST (Europe/London)
+
+What happened:
+
+The user asked to complete main blueprint Steps 13 and 14 and report back.
+
+Decision:
+
+Close the remaining module-level and model-level test gaps without expanding the production feature surface.
+
+Reasoning:
+
+Most module-level tests already existed after the modularization work, but configuration parsing had no focused coverage. Model-level integration also needed explicit checks for role/id restricted-cell behaviour and snapshot compatibility.
+
+Implementation:
+
+- Added `test_config.py` for deterministic defaults, numeric environment parsing, comma-separated permission lists, empty-list fallbacks, and invalid-number fallbacks.
+- Fixed `_env_float` so configured float environment values are parsed instead of becoming `None`.
+- Added a model integration test proving restricted cells block ordinary agents but allow configured agent ids and configured roles.
+- Added a snapshot compatibility integration test for expected top-level and nested fields with additive metrics/terrain metadata.
+- Kept existing module-level tests for agents, behaviour, movement, random walk, terrain, and metrics intact.
+
+Verification:
+
+- `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests` passed with 51 tests.
+- `./scripts/test.sh` passed across Python, Go, and frontend typecheck.
+
+### Entry 35 - Step 15 frontend terrain visualization completed
+
+Date/time: 2026-06-18 21:56 BST (Europe/London)
+
+What happened:
+
+The user asked to complete main blueprint Step 15 and additionally requested that running the simulation creates a 100-tick GIF by default, with the tick count configurable.
+
+Decision:
+
+Finish the browser visualization by mirroring the generated GIF pattern language in a canvas renderer, surface compact terrain metrics, and make startup generate the deterministic preview GIF by default.
+
+Reasoning:
+
+The previous frontend displayed the raw PNG as a backdrop, which did not match the patterned GIF artifact. A canvas renderer can use the snapshot-provided terrain asset path and summary dimensions to classify map pixels client-side and apply the same stripe/color language without expanding the snapshot payload.
+
+Implementation:
+
+- Replaced raw terrain image display with a patterned terrain canvas in `LatticeView`.
+- Kept agents overlaid above the terrain canvas.
+- Added Doxygen-compatible comments to the frontend terrain/API/control surfaces touched by this step.
+- Added typed terrain metrics to the frontend API types.
+- Surfaced compact congestion, breach, gate-block, and penalty metrics in `ControlPanel`.
+- Made `scripts/render-terrain-gif.py` accept `--ticks`, `--output`, `SIM_GIF_TICKS`, and `SIM_GIF_OUTPUT`, defaulting to 100 ticks.
+- Made `scripts/start.sh` generate the terrain GIF preview by default before starting services; `SIM_GENERATE_GIF=0` disables it.
+- Added Doxygen-compatible comments to the GIF/startup scripts.
+
+Verification:
+
+- `SIM_GIF_TICKS=2 python3 scripts/render-terrain-gif.py --ticks 2 --output artifacts/test_step15_preview.gif` generated a smoke-test GIF.
+- `npm --prefix frontend-react run test` passed.
+- `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests` passed with 51 tests.
+- `bash -n scripts/start.sh scripts/test.sh` passed.
+- `./scripts/test.sh` passed across Python, Go, and frontend typecheck.
+
+### Entry 36 - Step 15 issue fixes before commit
+
+Date/time: 2026-06-18 22:04 BST (Europe/London)
+
+What happened:
+
+The user asked to commit and push, but first reported two Step 15 issues: blue Type 1 terrain cells looked inconsistently solid/striped in the frontend, and the sample GIF appeared to be only 2 ticks long instead of the expected 100.
+
+Decision:
+
+Fix the frontend Type 1 stripe calculation and regenerate the default GIF artifact before committing.
+
+Reasoning:
+
+JavaScript keeps negative remainders negative, unlike Python. The Type 1 diagonal stripe calculation used `(x - y) % 10`, so parts of the blue terrain rendered with inconsistent stripe density compared with the GIF renderer. The 2-tick GIF was only a smoke-test artifact; the default renderer/startup path should produce `terrain1_first_100_ticks.gif`.
+
+Implementation:
+
+- Added a positive modulo helper for Type 1 frontend stripe rendering.
+- Regenerated `artifacts/terrain1_first_100_ticks.gif` with the default GIF renderer.
+- Verified the regenerated GIF contains 100 frame-control blocks.
+
+Verification:
+
+- `python3 scripts/render-terrain-gif.py` regenerated the default GIF.
+- Frame check reported `frames=100`.
+- `npm --prefix frontend-react run test` passed.
+- `./scripts/test.sh` passed across Python, Go, and frontend typecheck.

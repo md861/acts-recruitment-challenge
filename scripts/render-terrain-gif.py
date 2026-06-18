@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+## @file render-terrain-gif.py
+#  @brief Render a configurable terrain-backed simulation preview GIF.
+#
+#  Generates a deterministic review artifact from the same terrain map and
+#  model defaults used by the live simulation. `SIM_GIF_TICKS` or `--ticks`
+#  controls the frame count; the default remains 100 ticks.
+
 """Render the first terrain-map simulation ticks to a GIF.
 
 The script uses only the Python standard library. It mirrors the frontend
@@ -8,6 +15,8 @@ without depending on a browser, ffmpeg, or ImageMagick.
 
 from __future__ import annotations
 
+import argparse
+import os
 import sys
 from pathlib import Path
 
@@ -22,7 +31,7 @@ from population_model.terrain import _read_png_rgb
 MAP_SIZE = (640, 443)
 LEGEND_WIDTH = 220
 OUTPUT_SIZE = (MAP_SIZE[0] + LEGEND_WIDTH, MAP_SIZE[1])
-TICKS = 100
+DEFAULT_TICKS = 100
 FRAME_DELAY_CENTISECONDS = 6
 
 NORMAL = 0
@@ -131,17 +140,18 @@ FONT = {
 
 
 def main() -> None:
-    output = ROOT / "artifacts" / "terrain1_first_100_ticks.gif"
+    args = parse_args()
+    output = args.output
     output.parent.mkdir(parents=True, exist_ok=True)
 
-    config = ModelConfig()
+    config = ModelConfig.from_env()
     model = PopulationModel(config)
     terrain_path = ROOT / config.terrain_map_path
     terrain_width, terrain_height, terrain_pixels = _read_png_rgb(terrain_path)
     base_frame = render_base_frame(terrain_width, terrain_height, terrain_pixels)
 
     frames = []
-    for tick in range(1, TICKS + 1):
+    for tick in range(1, args.ticks + 1):
         model.step()
         frames.append(
             draw_frame(base_frame, model, terrain_width, terrain_height, tick)
@@ -149,6 +159,49 @@ def main() -> None:
 
     write_gif(output, OUTPUT_SIZE[0], OUTPUT_SIZE[1], frames)
     print(output)
+
+
+def parse_args() -> argparse.Namespace:
+    ## @brief Parse configurable GIF tick count and output path.
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--ticks",
+        type=_positive_int,
+        default=_env_positive_int("SIM_GIF_TICKS", DEFAULT_TICKS),
+        help="Number of simulation ticks to render. Defaults to 100.",
+    )
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=None,
+        help="Output GIF path.",
+    )
+    args = parser.parse_args()
+    if args.output is None:
+        args.output = Path(
+            os.getenv(
+                "SIM_GIF_OUTPUT",
+                str(ROOT / "artifacts" / f"terrain1_first_{args.ticks}_ticks.gif"),
+            )
+        )
+    return args
+
+
+def _env_positive_int(name: str, default: int) -> int:
+    raw = os.getenv(name)
+    if raw is None:
+        return default
+    try:
+        return _positive_int(raw)
+    except argparse.ArgumentTypeError:
+        return default
+
+
+def _positive_int(raw: str) -> int:
+    value = int(raw)
+    if value < 1:
+        raise argparse.ArgumentTypeError("value must be greater than zero")
+    return value
 
 
 def render_base_frame(

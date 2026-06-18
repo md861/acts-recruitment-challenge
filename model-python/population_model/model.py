@@ -24,66 +24,24 @@ from population_model.terrain import CellType, load_terrain_map
 class PopulationModel:
     """A deliberately simple population model.
 
-    The model is intentionally naive: agents perform a random walk on a bounded
-    lattice and do not yet use intent, routes, congestion, or terrain costs.
+    The model coordinates deterministic agent creation, terrain-aware movement,
+    behaviour profile selection, metric accumulation, and public snapshots.
     """
 
     def __init__(self, config: ModelConfig):
         self.config = config
-        self._rng = random.Random(config.seed)
         self.terrain = load_terrain_map(config)
         self.width = self.terrain.width if self._uses_default_dimensions() else config.width
         self.height = self.terrain.height if self._uses_default_dimensions() else config.height
-        self.metrics = TerrainMetrics()
         self.behaviour_profiles: BehaviourProfileSet = DEFAULT_BEHAVIOUR_PROFILES
-        self.movement_strategy = self._create_movement_strategy()
-        self.behaviour_selector = self._create_behaviour_selector()
-        self.tick = 0
-        self.agents = self._create_agents()
+        self._reset_runtime_state()
 
     def reset(self) -> None:
-        self._rng = random.Random(self.config.seed)
-        self.metrics = TerrainMetrics()
-        self.movement_strategy = self._create_movement_strategy()
-        self.behaviour_selector = self._create_behaviour_selector()
-        self.tick = 0
-        self.agents = self._create_agents()
+        self._reset_runtime_state()
 
     def step(self, ticks: int = 1) -> None:
         for _ in range(max(1, ticks)):
-            self.tick += 1
-            density = self._agent_density()
-            for agent in self.agents:
-                current_key = (agent.position.x, agent.position.y)
-                decision = self._select_movement(agent, density)
-                dx, dy = decision.move
-                target_key = (decision.target_x, decision.target_y)
-
-                agent.heading = Heading(dx=dx, dy=dy)
-                if decision.allowed:
-                    agent.position.x = decision.target_x
-                    agent.position.y = decision.target_y
-                    if decision.cell_type in (
-                        CellType.TYPE_1_PENALTY,
-                        CellType.TYPE_2_PENALTY,
-                    ):
-                        self.metrics.record_penalty_traversal()
-                    if self.terrain.is_exit_cell(
-                        decision.target_x, decision.target_y, agent.id
-                    ):
-                        self.metrics.record_exit()
-                    agent.status = "waiting" if dx == 0 and dy == 0 else "moving"
-                else:
-                    self._record_blocked_movement(decision)
-                    agent.status = "blocked"
-
-                self.metrics.record_cell_time(
-                    agent.id, self._terrain_cell_type(agent.position.x, agent.position.y)
-                )
-                density[current_key] = max(0, density.get(current_key, 0) - 1)
-                density[(agent.position.x, agent.position.y)] = (
-                    density.get((agent.position.x, agent.position.y), 0) + 1
-                )
+            self._advance_tick()
 
     def snapshot(self) -> dict:
         return {
@@ -106,6 +64,47 @@ class PopulationModel:
             },
             "agents": [agent.to_dict() for agent in self.agents],
         }
+
+    def _reset_runtime_state(self) -> None:
+        self._rng = random.Random(self.config.seed)
+        self.metrics = TerrainMetrics()
+        self.movement_strategy = self._create_movement_strategy()
+        self.behaviour_selector = self._create_behaviour_selector()
+        self.tick = 0
+        self.agents = self._create_agents()
+        self._record_density_snapshot()
+
+    def _advance_tick(self) -> None:
+        self.tick += 1
+        density = self._agent_density()
+        for agent in self.agents:
+            self._advance_agent(agent, density)
+        self._record_density_snapshot(density)
+
+    def _advance_agent(self, agent: Agent, density: Counter) -> None:
+        current_key = self._agent_position_key(agent)
+        decision = self._select_movement(agent, density)
+        self._apply_movement_decision(agent, decision)
+        self._record_agent_cell_time(agent)
+        self._update_density(density, current_key, self._agent_position_key(agent))
+
+    def _apply_movement_decision(
+        self, agent: Agent, decision: MovementDecision
+    ) -> None:
+        agent.heading = Heading(dx=decision.move[0], dy=decision.move[1])
+        if decision.allowed:
+            self._apply_allowed_movement(agent, decision)
+        else:
+            self._record_blocked_movement(decision)
+            agent.status = "blocked"
+
+    def _apply_allowed_movement(
+        self, agent: Agent, decision: MovementDecision
+    ) -> None:
+        agent.position.x = decision.target_x
+        agent.position.y = decision.target_y
+        self._record_allowed_movement(decision, agent.id)
+        agent.status = "waiting" if decision.move == (0, 0) else "moving"
 
     def _create_agents(self) -> list[Agent]:
         return AgentFactory(
@@ -181,9 +180,40 @@ class PopulationModel:
         if decision.reason in ("outside_enclosure", "boundary"):
             self.metrics.record_boundary_block()
         elif decision.reason == "restricted":
-            self.metrics.record_restricted_breach(handled=True)
+            self.metrics.record_restricted_breach(handled=decision.breach_handled)
         elif decision.reason == "gate_congestion":
             self.metrics.record_gate_congestion()
+
+    def _record_allowed_movement(
+        self, decision: MovementDecision, agent_id: str
+    ) -> None:
+        if decision.cell_type in (
+            CellType.TYPE_1_PENALTY,
+            CellType.TYPE_2_PENALTY,
+        ):
+            self.metrics.record_penalty_traversal()
+        if self.terrain.is_exit_cell(decision.target_x, decision.target_y, agent_id):
+            self.metrics.record_exit()
+
+    def _record_agent_cell_time(self, agent: Agent) -> None:
+        self.metrics.record_cell_time(
+            agent.id, self._terrain_cell_type(agent.position.x, agent.position.y)
+        )
+
+    def _record_density_snapshot(self, density: Counter | None = None) -> None:
+        self.metrics.record_density(density or self._agent_density())
+
+    def _update_density(
+        self,
+        density: Counter,
+        previous_key: tuple[int, int],
+        current_key: tuple[int, int],
+    ) -> None:
+        density[previous_key] = max(0, density.get(previous_key, 0) - 1)
+        density[current_key] = density.get(current_key, 0) + 1
+
+    def _agent_position_key(self, agent: Agent) -> tuple[int, int]:
+        return (agent.position.x, agent.position.y)
 
     def _restricted_cells(self) -> list[tuple[int, int]]:
         mid_x = self.width // 2
@@ -209,9 +239,6 @@ class PopulationModel:
             and self.config.width == ModelConfig.width
             and self.config.height == ModelConfig.height
         )
-
-    def _uses_terrain_enclosure(self) -> bool:
-        return self.width == self.terrain.width and self.height == self.terrain.height
 
     @staticmethod
     def _clamp(value: int, minimum: int, maximum: int) -> int:

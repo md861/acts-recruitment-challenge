@@ -59,6 +59,8 @@ class MovementDecision:
     cell_type: CellType
     preference_cost: float = 1.0
     penalty: TerrainPenalty | None = None
+    breach_detected: bool = False
+    breach_handled: bool = True
 
 
 @dataclass(frozen=True)
@@ -110,6 +112,8 @@ class MovementStrategy:
                     traversal.reason,
                     preference_cost,
                     penalty,
+                    breach_detected=traversal.breach_detected,
+                    breach_handled=traversal.breach_handled,
                 )
         if cell_type == CellType.GATE:
             traversal = self.terrain.classify_traversal(
@@ -150,6 +154,8 @@ class MovementStrategy:
         reason: str,
         preference_cost: float,
         penalty: TerrainPenalty | None,
+        breach_detected: bool = False,
+        breach_handled: bool = True,
     ) -> MovementDecision:
         return MovementDecision(
             move=move,
@@ -160,6 +166,8 @@ class MovementStrategy:
             cell_type=cell_type,
             preference_cost=preference_cost,
             penalty=penalty,
+            breach_detected=breach_detected,
+            breach_handled=breach_handled,
         )
 
     def _terrain_cell_type(self, x: int, y: int) -> CellType:

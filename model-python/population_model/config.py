@@ -22,6 +22,10 @@ def _env_float(name: str, default: float) -> float:
     raw = os.getenv(name)
     if raw is None:
         return default
+    try:
+        return float(raw)
+    except ValueError:
+        return default
 
 
 def _env_csv(name: str, default: tuple[str, ...]) -> tuple[str, ...]:
@@ -30,10 +34,6 @@ def _env_csv(name: str, default: tuple[str, ...]) -> tuple[str, ...]:
         return default
     values = tuple(value.strip() for value in raw.split(",") if value.strip())
     return values or default
-    try:
-        return float(raw)
-    except ValueError:
-        return default
 
 
 @dataclass(frozen=True)

@@ -1,15 +1,15 @@
 # Agent Handover
 
-Last updated: 2026-06-18 21:21 BST (Europe/London)
+Last updated: 2026-06-18 22:04 BST (Europe/London)
 
 ## Current State
 
 - Repo: `acts-recruitment-challenge`
 - Branch: `main`
 - Remote: `https://github.com/md861/acts-recruitment-challenge.git`
-- Latest commit: `7bf9300 Complete behaviour movement and terrain rules`
+- Latest committed work: `Complete metrics tests and terrain visualization` (use `git log -1 --oneline` for the exact hash).
 - Working protocol: do not commit or push unless the user explicitly asks, it is end-of-day, or it is a handover-to-new-agent prompt.
-- Current task status: Track A modelling work has been chosen. Terrain map handling, model metrics integration, frontend terrain visualization, agent creation/placement, agent behaviour profiles, movement strategy selection, configurable random walk policies, and terrain rule coverage have now been implemented and committed.
+- Current task status: Track A modelling work has been chosen. Main blueprint Steps 1-15 are implemented. Step 16, final documentation/bookkeeping, is the remaining main-blueprint item.
 
 ## Read First
 
@@ -43,7 +43,16 @@ Most recent baseline checks passed with:
 PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh
 ```
 
-Last recorded pass: 2026-06-18 21:21 BST after completing the remaining Step 8 terrain rule work.
+Last recorded pass: 2026-06-18 22:04 BST after completing Step 15 frontend terrain visualization and issue fixes.
+
+Additional Step 15 verification:
+
+```bash
+python3 scripts/render-terrain-gif.py
+python3 -c "from pathlib import Path; p=Path('artifacts/terrain1_first_100_ticks.gif'); data=p.read_bytes(); print(data.count(bytes([0x21,0xf9,0x04])))"
+```
+
+The regenerated default GIF reported `100` frame-control blocks.
 
 There are no tracked local changes after the latest push. The `artifacts/` directory is intentionally ignored and should stay untracked unless the user explicitly asks to publish an artifact.
 
@@ -57,17 +66,17 @@ Untracked note: `Terrain maps/Terrain1_00.png` is present locally and has not be
 
 ## Suggested Next Action
 
-Continue from the main Track A blueprint after completing Step 8:
+Continue from the main Track A blueprint after completing Step 15:
 
-1. Reassess the next unfinished main-blueprint task by checking `MODEL_MODULARIZATION_BLUEPRINT.md` `Implementation Tasks`.
-2. The next likely unfinished item is Step 9, metrics: explicit cell-density, congested-cell, and unresolved-breach metrics are still incomplete.
-3. Prepare final solution notes and AI usage summary when implementation scope is complete.
+1. Complete Step 16 documentation and bookkeeping.
+2. Prepare final `SOLUTION_NOTES.md`.
+3. Prepare final `AI_USAGE.md`.
+4. Run final full verification and package/submission checks if requested.
 
 Generated local artifact: `artifacts/terrain1_first_100_ticks.gif`.
 
-Known GIF/visualization issues to revisit:
+Known visualization issue to revisit:
 
-- Browser terrain visualization at `http://localhost:5173/` does not yet match the generated GIF's legend panel and patterned terrain fills.
 - Individual cell edges are not yet visible in the browser simulation view or generated GIF.
 
 Latest terrain semantics:
@@ -81,6 +90,9 @@ The README now mirrors this at a higher level using Completed, Active, and Next 
 Runtime note:
 
 - `scripts/start.sh` defaults `SIM_TERRAIN_MAP_PATH` to `Terrain maps/Terrain1.png`.
+- `scripts/start.sh` generates `artifacts/terrain1_first_100_ticks.gif` by default before starting services.
+- Set `SIM_GIF_TICKS` to change the preview length; default is `100`.
+- Set `SIM_GENERATE_GIF=0` to skip preview generation.
 - Generated artifacts remain local and ignored by git.
 
 ## Handover Routine
