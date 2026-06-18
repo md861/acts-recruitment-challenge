@@ -227,17 +227,25 @@ Track A modelling work has been selected for this repository. The detailed imple
    - Added unit tests for allowed moves, boundary blocks, enclosure blocks, restricted-cell permissions, gate congestion, and dimensions larger than the terrain map.
    - Added a model-level integration test proving movement-strategy block reasons update simulation metrics.
 
+13. Configurable random walk policies added.
+   - Added a dedicated random walk module.
+   - Supports deterministic seeded choice, uniform policies, weighted policies, wait probability, and directional skew.
+   - Behaviour profiles now select movement through random walk policies.
+   - Added independent random-walk unit tests for determinism, weighting, waiting, skew, and invalid policies.
+
 ### Active
 
 1. Continue the broader modularization.
-   - Add configurable random walk policies.
+   - Refine frontend terrain visualization.
+   - Surface terrain metrics in the control panel.
    - Keep reset determinism and API/frontend compatibility intact.
 
 ### Next
 
-1. Refine frontend terrain visualization.
-   - Make individual cell edges visible in the simulation view.
-   - Surface terrain metrics in the control panel.
+1. Final documentation and full verification.
+   - Prepare final solution notes.
+   - Prepare final AI usage summary.
+   - Run the full test script before submission.
 
 ## Unfixed Issues
 

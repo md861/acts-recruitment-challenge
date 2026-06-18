@@ -860,3 +860,60 @@ Verification:
 
 - `PYTHONPATH=model-python python3 -m unittest discover -s model-python/tests` passed with 25 tests.
 - `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh` passed.
+
+### Entry 32 - Configurable random walk policies
+
+Date/time: 2026-06-18 20:31 BST (Europe/London)
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+ok good. let's get on with the next step
+```
+
+Purpose:
+
+Continue the Track A blueprint after movement strategy selection by implementing configurable random walk policies.
+
+What was understood / accepted:
+
+Codex added `population_model/random_walk.py`, introduced `RandomWalkPolicy`, and wired behaviour profiles through random walk policies rather than direct random choice. The implementation supports deterministic seeded choice, uniform policies, weighted policies, wait probability, and directional skew.
+
+Human input and judgement:
+
+The user approved continuing to the next blueprint item after the movement strategy slice.
+
+Verification:
+
+- `PYTHONPATH=model-python python3 -m unittest discover -s model-python/tests` passed with 32 tests.
+- `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh` passed.
+
+### Entry 33 - Doxygen-compatible module headers
+
+Date/time: 2026-06-18 20:31 BST (Europe/London)
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+Looking at the summary of coverage added for the random_walk that you have listed above, I feel like it would have been a great idea to create a doxygen compatible comment header at the beginning of each such module that we have added (and modified) so that we can compile them into a doxygen created documentation as an added readability to the code. Can we do that? is it possible to add this now and maintain/update as we go forward? if yes, then, for now just add the header for the modules and report back to me.
+```
+
+Purpose:
+
+Add documentation headers that can later feed Doxygen-generated documentation and establish a maintenance convention for future module edits.
+
+What was understood / accepted:
+
+Codex added concise Doxygen-compatible file headers to the Python population model modules using `## @file` and `@brief` comments, and added the convention to the handover development protocol.
+
+Human input and judgement:
+
+The user identified a documentation quality improvement tied to the modules being added during the Track A work.
+
+Verification:
+
+`PYTHONPATH=model-python python3 -m unittest discover -s model-python/tests` passed with 32 tests.

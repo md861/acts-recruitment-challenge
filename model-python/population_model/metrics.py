@@ -1,3 +1,9 @@
+## @file metrics.py
+#  @brief Terrain-aware simulation metric accumulation.
+#
+#  Tracks movement blocks, breach handling, gate congestion, exits, penalty
+#  traversals, and per-agent time spent by terrain cell type.
+
 from collections import defaultdict
 from dataclasses import dataclass, field
 

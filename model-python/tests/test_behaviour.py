@@ -6,6 +6,7 @@ from population_model.behaviour import (
     BehaviourProfile,
     BehaviourProfileSet,
 )
+from population_model.random_walk import RandomWalkPolicy
 from population_model.terrain import CellType
 
 
@@ -42,7 +43,7 @@ class BehaviourProfileTests(unittest.TestCase):
             profiles={
                 "civilian": BehaviourProfile(
                     role="civilian",
-                    candidate_moves=((0, 0),),
+                    random_walk=RandomWalkPolicy.uniform(((0, 0),)),
                 )
             }
         )
@@ -53,7 +54,10 @@ class BehaviourProfileTests(unittest.TestCase):
         )
 
     def test_empty_profile_is_rejected_when_selected(self):
-        profile = BehaviourProfile(role="broken", candidate_moves=())
+        profile = BehaviourProfile(
+            role="broken",
+            random_walk=RandomWalkPolicy.uniform(()),
+        )
 
         with self.assertRaises(ValueError):
             profile.choose_next_move(random.Random(1))

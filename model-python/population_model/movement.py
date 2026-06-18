@@ -1,3 +1,9 @@
+## @file movement.py
+#  @brief Terrain-aware movement decision strategy.
+#
+#  Evaluates proposed moves against terrain enclosure, boundary, restricted
+#  cell, and gate-density rules and returns structured decision metadata.
+
 from dataclasses import dataclass
 from typing import Protocol
 

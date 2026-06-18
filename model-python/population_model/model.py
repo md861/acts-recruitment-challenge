@@ -1,3 +1,9 @@
+## @file model.py
+#  @brief Population model orchestration and snapshot construction.
+#
+#  Coordinates configuration, terrain, agent creation, behaviour, movement,
+#  metrics, tick progression, reset behaviour, and public snapshots.
+
 import random
 from collections import Counter
 from datetime import datetime, timezone

@@ -1,3 +1,9 @@
+## @file config.py
+#  @brief Runtime configuration for the population model service.
+#
+#  Defines deterministic defaults and environment parsing for dimensions,
+#  terrain maps, permissions, capacity, exits, and penalty settings.
+
 import os
 from dataclasses import dataclass
 

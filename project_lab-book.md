@@ -1002,3 +1002,53 @@ Verification:
 
 - `PYTHONPATH=model-python python3 -m unittest discover -s model-python/tests` passed with 25 tests.
 - `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh` passed.
+
+### Entry 25 - Configurable random walk policies implemented
+
+Date/time: 2026-06-18 20:31 BST (Europe/London)
+
+What happened:
+
+The user asked to continue with the next Track A blueprint step after movement strategy selection.
+
+Decision:
+
+Add a dedicated `population_model/random_walk.py` module and wire behaviour profiles through random walk policy objects.
+
+Reasoning:
+
+Random walk selection should be independently testable and configurable before adding more sophisticated terrain preference filtering. Keeping policy selection separate from behaviour profiles lets roles choose different movement policies without embedding random choice details in the model orchestration loop.
+
+Implementation:
+
+- Added `RandomWalkPolicy` with deterministic seeded selection.
+- Added uniform and weighted policy constructors.
+- Added wait probability support for policies without an explicit wait move.
+- Added directional skew support through a multiplier for a chosen move.
+- Updated behaviour profiles to use random walk policies.
+- Added independent random-walk unit tests covering determinism, weighting, wait probability, skew, and invalid policy validation.
+
+Verification:
+
+- `PYTHONPATH=model-python python3 -m unittest discover -s model-python/tests` passed with 32 tests.
+- `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh` passed.
+
+### Entry 26 - Doxygen-compatible module headers added
+
+Date/time: 2026-06-18 20:31 BST (Europe/London)
+
+What happened:
+
+The user suggested adding Doxygen-compatible comment headers to the Python modules that have been added or modified, so generated documentation can be produced later.
+
+Decision:
+
+Add concise `## @file` and `@brief` headers to the population model modules and record a protocol to maintain these headers as modules evolve.
+
+Reasoning:
+
+The headers improve readability now and make a future Doxygen documentation pass easier without changing runtime behaviour.
+
+Verification:
+
+`PYTHONPATH=model-python python3 -m unittest discover -s model-python/tests` passed with 32 tests.

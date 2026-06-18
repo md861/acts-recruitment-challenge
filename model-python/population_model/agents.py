@@ -1,3 +1,9 @@
+## @file agents.py
+#  @brief Agent creation and terrain-aware initial placement helpers.
+#
+#  Provides deterministic role assignment and start-position selection for
+#  population model agents.
+
 import random
 from dataclasses import dataclass
 from typing import Protocol

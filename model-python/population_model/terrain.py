@@ -1,3 +1,10 @@
+## @file terrain.py
+#  @brief PNG-backed terrain map parsing and cell rule queries.
+#
+#  Converts terrain map pixels into symbolic cell types, validates map
+#  enclosure semantics, and exposes traversal, capacity, exit, and penalty
+#  queries for simulation modules.
+
 import struct
 import zlib
 from collections import Counter

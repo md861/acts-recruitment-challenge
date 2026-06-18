@@ -1,3 +1,9 @@
+## @file state.py
+#  @brief Shared domain state types for the population model.
+#
+#  Defines serializable position, heading, and agent records used across model
+#  modules and public snapshots.
+
 from dataclasses import dataclass
 
 
@@ -35,4 +41,3 @@ class Agent:
             "position": self.position.to_dict(),
             "heading": self.heading.to_dict(),
         }
-
