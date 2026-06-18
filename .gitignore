@@ -1,5 +1,4 @@
 .run/
-dist/
 frontend-react/dist/
 frontend-react/node_modules/
 node_modules/
