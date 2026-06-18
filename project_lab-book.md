@@ -489,3 +489,32 @@ The blueprint captures module boundaries, suggested implementation order, testin
 Next steps:
 
 - Commit and push the blueprint and bookkeeping updates, as explicitly requested by the user.
+
+### Entry 18 - Terrain map input folder and legend recorded
+
+Date/time: 2026-06-18 13:44 BST (Europe/London)
+
+What happened:
+
+The user clarified that the project now has a `Terrain maps/` folder containing PNG terrain-map inputs and provided the color legend for different cell types.
+
+Asset noted:
+
+- `Terrain maps/Terrain1.png` - PNG terrain map image.
+
+Terrain legend:
+
+- Black: hard boundary cells that can never contain agents, regardless of id; treat as reflective hard Dirichlet-style boundaries.
+- Red: restricted cells that only configurable allowed agent ids may enter.
+- Orange: configurable maximum-density cells, used as gate-like passage cells in examples.
+- Green: removal or exit cells where configurable agent ids are taken out of the active simulation.
+- Blue: Type 1 penalty cells with configurable directional movement effects.
+- Pink: Type 2 penalty cells with preset movement reduction in all directions.
+
+Decision:
+
+Record the terrain-map convention in `MODEL_MODULARIZATION_BLUEPRINT.md` and track the PNG asset in git.
+
+Reasoning:
+
+The terrain image and legend are now part of the intended model input contract, so future implementation should parse the image into symbolic cell properties rather than hard-coding the current four restricted cells.

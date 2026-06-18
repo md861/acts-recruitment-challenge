@@ -51,6 +51,7 @@ The work should preserve the existing API/frontend snapshot contract unless new 
      - fixed density or capacity cells;
      - traversal penalties;
      - breach/trespass classification.
+   - Support terrain maps from PNG inputs in `Terrain maps/`.
 
 8. Add a metrics module.
    - Add `population_model/metrics.py`.
@@ -114,3 +115,48 @@ The work should preserve the existing API/frontend snapshot contract unless new 
 - Make deterministic behaviour easy to test.
 - Avoid frontend or Go API changes unless Python snapshot additions require them.
 - Do not address the deferred Vite/esbuild audit item as part of this modelling track unless time remains after the main work.
+
+## Terrain Map Inputs
+
+Terrain map images live in the tracked `Terrain maps/` folder. Each PNG should represent a terrain layout whose cell colors are converted into simulation cell properties by the terrain module.
+
+The current terrain map asset is:
+
+- `Terrain maps/Terrain1.png` - Example terrain map image, currently 1213 x 839 RGBA.
+
+The terrain parser should use the following color legend:
+
+1. Black cells are hard boundaries.
+   - These cells can never contain agents, regardless of agent id.
+   - Treat them as reflective hard Dirichlet-style boundaries: agents should not enter them, and attempted movement into them should be blocked or reflected by the movement routine.
+
+2. Red cells are restricted cells.
+   - Only specific agent ids may enter these cells.
+   - The allowed ids must be configurable simulation parameters.
+   - Unauthorized attempts should be represented as breach or trespass events.
+
+3. Orange cells are maximum-density cells.
+   - These cells have a configurable maximum agent density or capacity.
+   - For example scenarios, treat them as gates through which agents can pass only when capacity allows.
+   - Attempts to enter over-capacity gate cells should be blocked, delayed, or counted as congestion depending on the movement policy.
+
+4. Green cells are removal or exit cells.
+   - Agents with configurable ids are taken out of the simulation when they enter these cells.
+   - Example use: plane-terminal boarding gates where selected passengers leave the active lattice after boarding.
+
+5. Blue cells apply Type 1 traversal penalties.
+   - The penalty is configurable.
+   - Example penalties include decreasing or increasing movement likelihood in a specific direction.
+   - The terrain module should expose the penalty, while movement/random-walk policies decide how to apply it.
+
+6. Pink cells apply Type 2 traversal penalties.
+   - The penalty is preset rather than scenario-configurable.
+   - The default behaviour is to decrease movement in all directions.
+   - This should be modelled separately from Type 1 penalties so tests can verify both behaviours.
+
+Implementation notes:
+
+- The terrain parser should map colors to symbolic cell types rather than scattering RGB checks throughout the model.
+- Color matching should tolerate exact palette colors first; any tolerance or anti-aliasing support should be explicit and tested.
+- Configuration should control agent-id permissions, capacities, and Type 1 penalty details.
+- Metrics should record blocked boundary attempts, restricted-cell breaches, handled breaches, congestion at orange gate cells, exits through green cells, and penalty-cell traversals.

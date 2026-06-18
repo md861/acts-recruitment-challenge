@@ -6,6 +6,7 @@
 - `project_lab-book.md` - Running project history with decisions, changes, problems, and next steps.
 - `HANDOVER.md` - Concise agent-facing state and handover routine.
 - `MODEL_MODULARIZATION_BLUEPRINT.md` - Main Track A implementation blueprint for future agents.
+- `Terrain maps/Terrain1.png` - Example PNG terrain map input asset for future terrain parsing.
 
 ## Files Modified
 
@@ -20,3 +21,7 @@
 - `AI_USAGE_lab-book.md` - Recorded the blueprint creation, commit, and push request.
 - `project_lab-book.md` - Recorded the blueprint file decision and publishing next step.
 - `Changes.md` - Added the blueprint document to the compact change summary.
+- `MODEL_MODULARIZATION_BLUEPRINT.md` - Documented the tracked terrain-map folder and PNG color legend.
+- `AI_USAGE_lab-book.md` - Recorded the terrain-map legend prompt and asset-tracking request.
+- `project_lab-book.md` - Recorded the terrain-map input convention and implementation implications.
+- `Changes.md` - Added the tracked terrain map asset and terrain legend documentation updates.

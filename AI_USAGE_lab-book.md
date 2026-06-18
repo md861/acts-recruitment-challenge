@@ -470,3 +470,43 @@ Codex created `MODEL_MODULARIZATION_BLUEPRINT.md` from the agreed task breakdown
 Verification:
 
 Pending: commit and push will be checked with `git status` and `git log`.
+
+### Entry 13 - Terrain map legend and asset tracking
+
+Date: 2026-06-18
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+also add the fact that now we have a folder Terrain maps that should contain a png file of what the terrain should look like with specifics of different cell types. the legend being
+1) Black == boundaries or cells that can never have any agents regardless of their ids. Think of it as a hard dirichlet condition that is reflective
+2) Red == Restricted cells i.e. only specid agent ids are allowed in these cells. these ids are configurable as a parameter in the simulation
+3) Orange == Cells with a maximum agent density configured as a parameter in the simulation. For our examples, these cells should be treated as a "gate" through which agents can pass through. 
+4) Green == Cells where agents with a given (configurable ids) are taken out of the simulation. These could be used for example as exit gates at a plane terminal through which passengers can board the plane
+5) Blue == cells with Type 1 penalty for agents traversing it. penalty would be configurable, such as decreased/increased movement in a specific direction. 
+6) Pink == cells with Type 2 penalty for agents traversing it. penalty would be preset, i.e. always decreases movement in all directions. 
+
+update these things in relevant books and commit and push
+```
+
+Purpose:
+
+Record the terrain-map asset folder and its color legend as part of the modelling blueprint, then publish the tracked PNG and documentation changes.
+
+What was understood from the response:
+
+The user wants `Terrain maps/` to be a tracked project input folder containing PNG terrain layouts. The terrain module should eventually parse the PNG color legend into cell semantics.
+
+Human input and judgement:
+
+The user supplied the cell-type legend and explicitly asked for commit and push.
+
+What was accepted from AI:
+
+Codex documented the legend in `MODEL_MODULARIZATION_BLUEPRINT.md`, recorded the decision in bookkeeping docs, and prepared to track `Terrain maps/Terrain1.png`.
+
+Verification:
+
+Codex confirmed `Terrain maps/Terrain1.png` is a PNG image before committing.
