@@ -969,3 +969,36 @@ The prompts were present, but duplicated/out-of-order entry numbers made the log
 Verification:
 
 Codex checked the reordered entry list and confirmed that step 5, step 6, the step 6 commit/push, and the chronology repair entries are now easy to find.
+
+### Entry 24 - Movement strategy module implemented
+
+Date/time: 2026-06-18 20:22 BST (Europe/London)
+
+What happened:
+
+The user asked to keep moving after the roadmap showed movement strategy selection as the next active Track A item.
+
+Decision:
+
+Add `population_model/movement.py` with a `MovementStrategy` and `MovementDecision` instead of keeping terrain-entry checks inside `PopulationModel`.
+
+Reasoning:
+
+The model orchestration loop should ask for a movement decision and then apply state/metrics updates. Keeping allow/block decisions in a module makes movement filtering testable independently and prepares the next random-walk-policy slice.
+
+Implementation:
+
+- Added movement decisions with target coordinates, allowed/blocked status, reason metadata, and terrain cell type.
+- Moved boundary, enclosure, restricted-cell, and gate-congestion entry checks into `MovementStrategy`.
+- Kept metrics recording in `PopulationModel`, driven by movement decision reasons.
+- Added focused unit tests for the movement strategy.
+- Added a model-level integration test proving blocked movement reasons update metrics through the orchestration loop.
+
+Protocol update:
+
+The user clarified that every new module should have relevant unit tests and, where appropriate, integration tests. This was added to the handover development protocol.
+
+Verification:
+
+- `PYTHONPATH=model-python python3 -m unittest discover -s model-python/tests` passed with 25 tests.
+- `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh` passed.

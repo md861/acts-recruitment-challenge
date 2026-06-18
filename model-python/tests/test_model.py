@@ -44,6 +44,25 @@ class PopulationModelTests(unittest.TestCase):
         )
         self.assertIn("time_spent_by_agent_id", snapshot["simulation"]["metrics"])
 
+    def test_model_records_movement_strategy_block_reasons(self):
+        model = PopulationModel(
+            ModelConfig(width=1213, height=839, agent_count=1, seed=3)
+        )
+        boundary_source, _boundary_target, boundary_move = self._movement_into(
+            model.terrain, CellType.BOUNDARY
+        )
+        model.agents = [self._agent("agent-boundary", "boundary", boundary_source)]
+        model._next_movement = lambda role: boundary_move
+
+        model.step()
+        snapshot = model.snapshot()
+
+        self.assertEqual(snapshot["agents"][0]["status"], "blocked")
+        self.assertGreater(
+            snapshot["simulation"]["metrics"]["blocked_boundary_attempts"],
+            0,
+        )
+
     def test_terrain_map_integration_records_metrics_over_ticks(self):
         config = ModelConfig(
             width=1213,

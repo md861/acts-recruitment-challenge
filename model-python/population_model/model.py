@@ -9,6 +9,7 @@ from population_model.behaviour import (
 )
 from population_model.config import ModelConfig
 from population_model.metrics import TerrainMetrics
+from population_model.movement import MovementDecision, MovementStrategy
 from population_model.state import Agent, Heading, Position
 from population_model.terrain import CellType, load_terrain_map
 
@@ -28,12 +29,14 @@ class PopulationModel:
         self.height = self.terrain.height if self._uses_default_dimensions() else config.height
         self.metrics = TerrainMetrics()
         self.behaviour_profiles: BehaviourProfileSet = DEFAULT_BEHAVIOUR_PROFILES
+        self.movement_strategy = self._create_movement_strategy()
         self.tick = 0
         self.agents = self._create_agents()
 
     def reset(self) -> None:
         self._rng = random.Random(self.config.seed)
         self.metrics = TerrainMetrics()
+        self.movement_strategy = self._create_movement_strategy()
         self.tick = 0
         self.agents = self._create_agents()
 
@@ -43,25 +46,26 @@ class PopulationModel:
             density = self._agent_density()
             for agent in self.agents:
                 dx, dy = self._next_movement(agent.role)
-                target_x = self._clamp(agent.position.x + dx, 0, self.width - 1)
-                target_y = self._clamp(agent.position.y + dy, 0, self.height - 1)
                 current_key = (agent.position.x, agent.position.y)
-                target_key = (target_x, target_y)
-                target_density = density.get(target_key, 0)
-                if target_key == current_key:
-                    target_density = max(0, target_density - 1)
+                decision = self._movement_decision(agent, (dx, dy), density)
+                target_key = (decision.target_x, decision.target_y)
 
                 agent.heading = Heading(dx=dx, dy=dy)
-                if self._can_enter(agent, target_x, target_y, target_density):
-                    agent.position.x = target_x
-                    agent.position.y = target_y
-                    cell_type = self._terrain_cell_type(target_x, target_y)
-                    if cell_type in (CellType.TYPE_1_PENALTY, CellType.TYPE_2_PENALTY):
+                if decision.allowed:
+                    agent.position.x = decision.target_x
+                    agent.position.y = decision.target_y
+                    if decision.cell_type in (
+                        CellType.TYPE_1_PENALTY,
+                        CellType.TYPE_2_PENALTY,
+                    ):
                         self.metrics.record_penalty_traversal()
-                    if self.terrain.is_exit_cell(target_x, target_y, agent.id):
+                    if self.terrain.is_exit_cell(
+                        decision.target_x, decision.target_y, agent.id
+                    ):
                         self.metrics.record_exit()
                     agent.status = "waiting" if dx == 0 and dy == 0 else "moving"
                 else:
+                    self._record_blocked_movement(decision)
                     agent.status = "blocked"
 
                 self.metrics.record_cell_time(
@@ -103,8 +107,37 @@ class PopulationModel:
             restricted_cells=set(self._restricted_cells()),
         ).create_agents(self._rng)
 
+    def _create_movement_strategy(self) -> MovementStrategy:
+        return MovementStrategy(
+            terrain=self.terrain,
+            width=self.width,
+            height=self.height,
+        )
+
     def _next_movement(self, role: str) -> tuple[int, int]:
         return self.behaviour_profiles.next_movement(role, self._rng)
+
+    def _movement_decision(
+        self, agent: Agent, move: tuple[int, int], density: Counter
+    ) -> MovementDecision:
+        target_x = self._clamp(agent.position.x + move[0], 0, self.width - 1)
+        target_y = self._clamp(agent.position.y + move[1], 0, self.height - 1)
+        target_key = (target_x, target_y)
+        current_key = (agent.position.x, agent.position.y)
+        target_density = density.get(target_key, 0)
+        if target_key == current_key:
+            target_density = max(0, target_density - 1)
+        return self.movement_strategy.decide(
+            agent, move, current_density=target_density
+        )
+
+    def _record_blocked_movement(self, decision: MovementDecision) -> None:
+        if decision.reason in ("outside_enclosure", "boundary"):
+            self.metrics.record_boundary_block()
+        elif decision.reason == "restricted":
+            self.metrics.record_restricted_breach(handled=True)
+        elif decision.reason == "gate_congestion":
+            self.metrics.record_gate_congestion()
 
     def _restricted_cells(self) -> list[tuple[int, int]]:
         mid_x = self.width // 2
@@ -115,30 +148,6 @@ class PopulationModel:
             (mid_x - 1, mid_y),
             (mid_x, mid_y),
         ]
-
-    def _can_enter(
-        self, agent: Agent, target_x: int, target_y: int, target_density: int
-    ) -> bool:
-        cell_type = self._terrain_cell_type(target_x, target_y)
-        if self._uses_terrain_enclosure() and not self.terrain.is_inside_simulation_area(target_x, target_y):
-            self.metrics.record_boundary_block()
-            return False
-        if cell_type in (CellType.BOUNDARY, CellType.DENSITY_ZERO):
-            self.metrics.record_boundary_block()
-            return False
-        if cell_type == CellType.RESTRICTED:
-            allowed = self.terrain.is_traversable(target_x, target_y, agent.id)
-            if not allowed:
-                self.metrics.record_restricted_breach(handled=True)
-            return allowed
-        if cell_type == CellType.GATE:
-            allowed = self.terrain.is_traversable(
-                target_x, target_y, agent.id, current_density=target_density
-            )
-            if not allowed:
-                self.metrics.record_gate_congestion()
-            return allowed
-        return True
 
     def _terrain_cell_type(self, x: int, y: int) -> CellType:
         if x >= self.terrain.width or y >= self.terrain.height:

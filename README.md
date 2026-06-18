@@ -221,10 +221,15 @@ Track A modelling work has been selected for this repository. The detailed imple
    - Captured civilian, staff, and patrol intent metadata for later terrain-aware movement filtering.
    - Added unit tests for profile intent, deterministic movement selection, default-role fallback, and invalid empty profiles.
 
+12. Movement strategy selection added.
+   - Added a dedicated movement strategy module.
+   - Moved terrain-entry decisions and blocked-movement reason metadata out of `PopulationModel`.
+   - Added unit tests for allowed moves, boundary blocks, enclosure blocks, restricted-cell permissions, gate congestion, and dimensions larger than the terrain map.
+   - Added a model-level integration test proving movement-strategy block reasons update simulation metrics.
+
 ### Active
 
 1. Continue the broader modularization.
-   - Add movement strategy selection.
    - Add configurable random walk policies.
    - Keep reset determinism and API/frontend compatibility intact.
 

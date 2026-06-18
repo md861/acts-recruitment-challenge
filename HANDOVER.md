@@ -1,15 +1,15 @@
 # Agent Handover
 
-Last updated: 2026-06-18 20:04 BST (Europe/London)
+Last updated: 2026-06-18 20:22 BST (Europe/London)
 
 ## Current State
 
 - Repo: `acts-recruitment-challenge`
 - Branch: `main`
 - Remote: `https://github.com/md861/acts-recruitment-challenge.git`
-- Latest commit: `bef3fee Refactor agent creation and placement`
+- Latest commit: `c6d12bf Repair AI usage lab book chronology`
 - Working protocol: do not commit or push unless the user explicitly asks, it is end-of-day, or it is a handover-to-new-agent prompt.
-- Current task status: Track A modelling work has been chosen. Terrain map handling, model metrics integration, frontend terrain visualization, agent creation/placement, and agent behaviour profiles have now been implemented locally. The behaviour-profile slice is not committed yet.
+- Current task status: Track A modelling work has been chosen. Terrain map handling, model metrics integration, frontend terrain visualization, agent creation/placement, agent behaviour profiles, and movement strategy selection have now been implemented locally. The movement-strategy slice is not committed yet.
 
 ## Read First
 
@@ -43,9 +43,9 @@ Most recent baseline checks passed with:
 PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh
 ```
 
-Last recorded pass: 2026-06-18 20:04 BST after the behaviour-profile slice.
+Last recorded pass: 2026-06-18 20:22 BST after the movement-strategy slice.
 
-Current local changes include `population_model/behaviour.py`, behaviour profile tests, a small `PopulationModel` wiring change, and related bookkeeping updates. The `artifacts/` directory is intentionally ignored and should stay untracked unless the user explicitly asks to publish an artifact.
+Current local changes include `population_model/movement.py`, movement strategy tests, a model-level movement integration test, a `PopulationModel` movement wiring change, and related bookkeeping updates. The `artifacts/` directory is intentionally ignored and should stay untracked unless the user explicitly asks to publish an artifact.
 
 Untracked note: `Terrain maps/Terrain1_00.png` is present locally and has not been tracked or modified by Codex.
 
@@ -57,12 +57,11 @@ Untracked note: `Terrain maps/Terrain1_00.png` is present locally and has not be
 
 ## Suggested Next Action
 
-Continue the broader Track A modularization after the behaviour-profile slice:
+Continue the broader Track A modularization after the movement-strategy slice:
 
-1. Add movement strategy selection.
-2. Add configurable random walk policies.
-3. Refine frontend terrain rendering with stripe-line markings for special cells and terrain metrics in the control panel.
-4. Make individual cell edges visible in the browser simulation view and generated GIF.
+1. Add configurable random walk policies.
+2. Refine frontend terrain rendering with stripe-line markings for special cells and terrain metrics in the control panel.
+3. Make individual cell edges visible in the browser simulation view and generated GIF.
 
 Generated local artifact: `artifacts/terrain1_first_100_ticks.gif`.
 
@@ -89,6 +88,7 @@ Runtime note:
 When asked to prepare for handover:
 
 - Before any commit/push or handover prep, update the relevant bookkeeping docs and check them for stale state, especially `HANDOVER.md`, `README.md`, `project_lab-book.md`, `AI_USAGE_lab-book.md`, and `Changes.md`.
+- When adding a new module, add focused unit tests for that module and, if it affects orchestration or cross-module behaviour, add/update integration tests that prove the module is used correctly.
 - Update this file with current branch, commit, verification status, known risks, and next suggested action.
 - Add a timestamped entry to `project_lab-book.md`.
 - Update `Changes.md` if files were created or modified.

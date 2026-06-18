@@ -825,3 +825,38 @@ The user identified the transparency issue and requested a maintainable timestam
 Verification:
 
 Codex checked the entry list with `grep -n '^### Entry' AI_USAGE_lab-book.md`, reviewed the step 5 and step 6 entries in place, and checked the documentation-only diff/status.
+
+### Entry 31 - Movement strategy module and test protocol
+
+Date/time: 2026-06-18 20:22 BST (Europe/London)
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+good. lets keep moving
+```
+
+Follow-up prompt:
+
+```text
+make sure you are creating relevant unit and integration tests for each new module added. This should be part of the development protocol.
+```
+
+Purpose:
+
+Continue the roadmap by implementing movement strategy selection and record the expectation that new modules need focused tests.
+
+What was understood / accepted:
+
+Codex added `population_model/movement.py`, moved terrain-aware allow/block movement decisions out of `PopulationModel`, added movement decision reason metadata, added focused unit tests for the movement module, and added a model-level integration test proving movement-strategy block reasons update metrics.
+
+Human input and judgement:
+
+The user clarified a development protocol: every new module should have relevant unit tests and, when it touches orchestration or cross-module behaviour, integration coverage as well.
+
+Verification:
+
+- `PYTHONPATH=model-python python3 -m unittest discover -s model-python/tests` passed with 25 tests.
+- `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh` passed.
