@@ -1226,3 +1226,42 @@ Verification:
 - Frame check reported `frames=100`.
 - `npm --prefix frontend-react run test` passed.
 - `./scripts/test.sh` passed across Python, Go, and frontend typecheck.
+
+### Entry 44 - Simulation analysis plots and 500-tick defaults
+
+Date/time: 2026-06-18 22:21 BST (Europe/London)
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+now that we have a decent working repo, i want to create simulation analysis plots, heatmaps etc that I would need for my report. Here is a list of metrics I want in the analysis: terrain overlay heatmaps, role-specific metrics, congestion plots, exit curves, and deterministic replay evidence
+
+Check what metrics we already have. implement the remaining ones. And then create a module to plot that has these metrics in one place. Then make sure this plot is created for every instance we run start.sh. Make the default tick count for the gif and for these analysis plots to be 500. Complete these tasks and report
+```
+
+Follow-up prompt:
+
+```text
+add a doxygen compatible comment next to these new implemented metrics as well please
+```
+
+Purpose:
+
+Add report-ready simulation analysis metrics and artifacts, update artifact defaults to 500 ticks, and document the new metric fields.
+
+What was understood / accepted:
+
+Codex added cumulative terrain heatmap and role-specific metrics, implemented a dependency-free analysis module and CLI report renderer, wired default analysis generation into `start.sh`, updated GIF defaults to 500 ticks, and added Doxygen-compatible comments next to the new metrics.
+
+Human input and judgement:
+
+The user specified the required analysis outputs and requested explicit Doxygen-compatible comments for newly implemented metrics.
+
+Verification:
+
+- `python3 scripts/render-terrain-gif.py` generated `artifacts/terrain1_first_500_ticks.gif`.
+- GIF frame check reported `frames=500`.
+- `python3 scripts/render-analysis-plots.py` generated `artifacts/simulation_analysis_500_ticks.html`.
+- `./scripts/test.sh` passed with 53 Python tests, Go tests, and frontend typecheck.

@@ -2,9 +2,9 @@
 ## @file start.sh
 #  @brief Start the local model/API/frontend demo and generate a terrain GIF preview.
 #
-#  By default the script renders a deterministic 100-tick GIF before starting
-#  services. `SIM_GIF_TICKS` changes the frame count, `SIM_GIF_OUTPUT` changes
-#  the output path, and `SIM_GENERATE_GIF=0` disables preview generation.
+#  By default the script renders deterministic 500-tick GIF and analysis report
+#  artifacts before starting services. `SIM_GIF_TICKS` and `SIM_ANALYSIS_TICKS`
+#  change their simulation windows.
 
 set -euo pipefail
 
@@ -14,8 +14,11 @@ GO_CACHE_DIR="$RUN_DIR/go-build-cache"
 CLEANED_UP=0
 SIM_TERRAIN_MAP_PATH="${SIM_TERRAIN_MAP_PATH:-Terrain maps/Terrain1.png}"
 SIM_GENERATE_GIF="${SIM_GENERATE_GIF:-1}"
-SIM_GIF_TICKS="${SIM_GIF_TICKS:-100}"
+SIM_GIF_TICKS="${SIM_GIF_TICKS:-500}"
 SIM_GIF_OUTPUT="${SIM_GIF_OUTPUT:-$ROOT_DIR/artifacts/terrain1_first_${SIM_GIF_TICKS}_ticks.gif}"
+SIM_GENERATE_ANALYSIS="${SIM_GENERATE_ANALYSIS:-1}"
+SIM_ANALYSIS_TICKS="${SIM_ANALYSIS_TICKS:-500}"
+SIM_ANALYSIS_OUTPUT="${SIM_ANALYSIS_OUTPUT:-$ROOT_DIR/artifacts/simulation_analysis_${SIM_ANALYSIS_TICKS}_ticks.html}"
 
 mkdir -p "$RUN_DIR"
 
@@ -154,6 +157,17 @@ if [ "$SIM_GENERATE_GIF" != "0" ]; then
       SIM_GIF_TICKS="$SIM_GIF_TICKS" \
       SIM_GIF_OUTPUT="$SIM_GIF_OUTPUT" \
       python3 scripts/render-terrain-gif.py --ticks "$SIM_GIF_TICKS" --output "$SIM_GIF_OUTPUT"
+  )
+fi
+
+if [ "$SIM_GENERATE_ANALYSIS" != "0" ]; then
+  echo "Rendering simulation analysis report (${SIM_ANALYSIS_TICKS} ticks)..."
+  (
+    cd "$ROOT_DIR"
+    SIM_TERRAIN_MAP_PATH="$SIM_TERRAIN_MAP_PATH" \
+      SIM_ANALYSIS_TICKS="$SIM_ANALYSIS_TICKS" \
+      SIM_ANALYSIS_OUTPUT="$SIM_ANALYSIS_OUTPUT" \
+      python3 scripts/render-analysis-plots.py --ticks "$SIM_ANALYSIS_TICKS" --output "$SIM_ANALYSIS_OUTPUT"
   )
 fi
 

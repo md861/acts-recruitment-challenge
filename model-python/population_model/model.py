@@ -197,7 +197,9 @@ class PopulationModel:
 
     def _record_agent_cell_time(self, agent: Agent) -> None:
         self.metrics.record_cell_time(
-            agent.id, self._terrain_cell_type(agent.position.x, agent.position.y)
+            agent.id,
+            self._terrain_cell_type(agent.position.x, agent.position.y),
+            role=agent.role,
         )
 
     def _record_density_snapshot(self, density: Counter | None = None) -> None:

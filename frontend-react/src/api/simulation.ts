@@ -43,7 +43,9 @@ export type SimulationMetrics = {
   congestion_count?: number;
   congested_cells?: Array<{ x: number; y: number; count: number }>;
   cell_density?: Array<{ x: number; y: number; count: number }>;
+  cumulative_cell_visits?: Array<{ x: number; y: number; count: number }>;
   time_spent_by_agent_id?: Record<string, Record<string, number>>;
+  time_spent_by_role?: Record<string, Record<string, number>>;
 };
 
 export type Snapshot = {

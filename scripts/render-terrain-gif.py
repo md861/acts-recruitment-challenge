@@ -4,7 +4,7 @@
 #
 #  Generates a deterministic review artifact from the same terrain map and
 #  model defaults used by the live simulation. `SIM_GIF_TICKS` or `--ticks`
-#  controls the frame count; the default remains 100 ticks.
+#  controls the frame count; the default is 500 ticks.
 
 """Render the first terrain-map simulation ticks to a GIF.
 
@@ -31,7 +31,7 @@ from population_model.terrain import _read_png_rgb
 MAP_SIZE = (640, 443)
 LEGEND_WIDTH = 220
 OUTPUT_SIZE = (MAP_SIZE[0] + LEGEND_WIDTH, MAP_SIZE[1])
-DEFAULT_TICKS = 100
+DEFAULT_TICKS = 500
 FRAME_DELAY_CENTISECONDS = 6
 
 NORMAL = 0
@@ -168,7 +168,7 @@ def parse_args() -> argparse.Namespace:
         "--ticks",
         type=_positive_int,
         default=_env_positive_int("SIM_GIF_TICKS", DEFAULT_TICKS),
-        help="Number of simulation ticks to render. Defaults to 100.",
+        help="Number of simulation ticks to render. Defaults to 500.",
     )
     parser.add_argument(
         "--output",

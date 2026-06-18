@@ -34,6 +34,14 @@ class TerrainMetricsTests(unittest.TestCase):
                 {"x": 4, "y": 5, "count": 2},
             ],
         )
+        self.assertEqual(
+            payload["cumulative_cell_visits"],
+            [
+                {"x": 1, "y": 1, "count": 3},
+                {"x": 2, "y": 3, "count": 1},
+                {"x": 4, "y": 5, "count": 2},
+            ],
+        )
         self.assertEqual(payload["congestion_count"], 2)
         self.assertEqual(
             payload["congested_cells"],
@@ -61,9 +69,9 @@ class TerrainMetricsTests(unittest.TestCase):
         metrics.record_gate_congestion()
         metrics.record_exit()
         metrics.record_penalty_traversal()
-        metrics.record_cell_time("agent-001", CellType.NORMAL)
-        metrics.record_cell_time("agent-001", CellType.TYPE_1_PENALTY)
-        metrics.record_cell_time("agent-001", CellType.TYPE_1_PENALTY)
+        metrics.record_cell_time("agent-001", CellType.NORMAL, role="civilian")
+        metrics.record_cell_time("agent-001", CellType.TYPE_1_PENALTY, role="civilian")
+        metrics.record_cell_time("agent-001", CellType.TYPE_1_PENALTY, role="civilian")
 
         payload = metrics.to_dict()
         self.assertEqual(payload["blocked_boundary_attempts"], 1)
@@ -72,6 +80,10 @@ class TerrainMetricsTests(unittest.TestCase):
         self.assertEqual(payload["penalty_cell_traversals"], 1)
         self.assertEqual(
             payload["time_spent_by_agent_id"]["agent-001"],
+            {"normal": 1, "type_1_penalty": 2},
+        )
+        self.assertEqual(
+            payload["time_spent_by_role"]["civilian"],
             {"normal": 1, "type_1_penalty": 2},
         )
 

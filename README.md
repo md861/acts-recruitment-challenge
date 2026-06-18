@@ -265,7 +265,13 @@ Track A modelling work has been selected for this repository. The detailed imple
    - Kept agents visible above the patterned terrain canvas.
    - Added compact terrain metrics to the control panel.
    - Made `./scripts/start.sh` render a terrain GIF preview by default before starting services.
-   - `SIM_GIF_TICKS` controls the preview length and defaults to `100`; `SIM_GENERATE_GIF=0` disables preview generation.
+   - `SIM_GIF_TICKS` controls the preview length and defaults to `500`; `SIM_GENERATE_GIF=0` disables preview generation.
+
+19. Simulation analysis plots added.
+   - Added cumulative terrain heatmap metrics and role-specific terrain time metrics.
+   - Added a dependency-free HTML analysis report with terrain overlay heatmaps, role-specific summaries, congestion curves, exit curves, breach/penalty curves, and deterministic replay evidence.
+   - Made `./scripts/start.sh` render the analysis report by default before starting services.
+   - `SIM_ANALYSIS_TICKS` controls the report window and defaults to `500`; `SIM_GENERATE_ANALYSIS=0` disables report generation.
 
 ### Active
 

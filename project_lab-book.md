@@ -1354,3 +1354,37 @@ Verification:
 - Frame check reported `frames=100`.
 - `npm --prefix frontend-react run test` passed.
 - `./scripts/test.sh` passed across Python, Go, and frontend typecheck.
+
+### Entry 37 - Simulation analysis plots and 500-tick artifacts
+
+Date/time: 2026-06-18 22:21 BST (Europe/London)
+
+What happened:
+
+The user requested report-ready simulation analysis plots: terrain overlay heatmaps, role-specific metrics, congestion plots, exit curves, and deterministic replay evidence. The user also asked that both GIF and analysis plot defaults use 500 ticks and be generated whenever `start.sh` runs.
+
+Decision:
+
+Add cumulative analysis metrics to the model metrics layer, then create a dedicated dependency-free analysis/report renderer for report artifacts.
+
+Reasoning:
+
+Live snapshots already exposed current density, congestion, exits, breaches, penalties, and per-agent terrain time. Report generation needs longitudinal metrics and plots, so a separate analysis module can run deterministic windows and render one artifact without adding plotting dependencies or bloating every live snapshot.
+
+Implementation:
+
+- Added cumulative cell visits for terrain heatmaps.
+- Added role-specific terrain cell-time metrics.
+- Added `population_model/analysis.py` for analysis collection, replay hashing, and HTML plot rendering.
+- Added `scripts/render-analysis-plots.py`.
+- Added analysis tests for metric collection, replay evidence, and report HTML generation.
+- Updated frontend metric types for cumulative heatmap and role metrics.
+- Changed default GIF tick count to 500.
+- Added default 500-tick analysis report generation to `scripts/start.sh`.
+
+Verification:
+
+- `python3 scripts/render-terrain-gif.py` generated `artifacts/terrain1_first_500_ticks.gif`.
+- GIF frame check reported `frames=500`.
+- `python3 scripts/render-analysis-plots.py` generated `artifacts/simulation_analysis_500_ticks.html`.
+- `./scripts/test.sh` passed with 53 Python tests, Go tests, and frontend typecheck.

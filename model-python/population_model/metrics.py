@@ -1,9 +1,9 @@
 ## @file metrics.py
 #  @brief Terrain-aware simulation metric accumulation.
 #
-#  Tracks cell density, congested cells, movement blocks, breach handling, gate
-#  congestion, exits, penalty traversals, and per-agent time spent by terrain
-#  cell type.
+#  Tracks cell density, cumulative cell visits, congested cells, movement
+#  blocks, breach handling, gate congestion, exits, penalty traversals,
+#  role-specific time, and per-agent time spent by terrain cell type.
 
 from collections import defaultdict
 from dataclasses import dataclass, field
@@ -26,10 +26,16 @@ class TerrainMetrics:
     gate_congestion_events: int = 0
     exit_events: int = 0
     penalty_cell_traversals: int = 0
+    ## @brief Latest per-cell occupancy snapshot, used for live density plots.
     cell_density: dict[CellKey, int] = field(default_factory=dict)
+    ## @brief Cumulative per-cell occupancy visits, used for terrain heatmaps.
+    cumulative_cell_visits: dict[CellKey, int] = field(default_factory=dict)
     congestion_count: int = 0
     congested_cells: list[dict[str, int]] = field(default_factory=list)
+    ## @brief Per-agent terrain cell-type time totals for replay/report evidence.
     time_spent_by_agent_id: dict[str, dict[str, int]] = field(default_factory=dict)
+    ## @brief Role-specific terrain cell-type time totals for report plots.
+    time_spent_by_role: dict[str, dict[str, int]] = field(default_factory=dict)
 
     @property
     def unresolved_breaches(self) -> int:
@@ -42,6 +48,10 @@ class TerrainMetrics:
         self.cell_density = {
             key: count for key, count in sorted(density.items()) if count > 0
         }
+        for key, count in self.cell_density.items():
+            self.cumulative_cell_visits[key] = (
+                self.cumulative_cell_visits.get(key, 0) + count
+            )
         self.congested_cells = [
             {"x": x, "y": y, "count": count}
             for (x, y), count in self.cell_density.items()
@@ -49,11 +59,16 @@ class TerrainMetrics:
         ]
         self.congestion_count = len(self.congested_cells)
 
-    def record_cell_time(self, agent_id: str, cell_type: CellType) -> None:
+    def record_cell_time(
+        self, agent_id: str, cell_type: CellType, role: str | None = None
+    ) -> None:
         agent_times = self.time_spent_by_agent_id.setdefault(
             agent_id, defaultdict(int)
         )
         agent_times[cell_type.value] += 1
+        if role is not None:
+            role_times = self.time_spent_by_role.setdefault(role, defaultdict(int))
+            role_times[cell_type.value] += 1
 
     def record_restricted_breach(self, handled: bool = True) -> None:
         self.breach_detected += 1
@@ -85,10 +100,18 @@ class TerrainMetrics:
                 {"x": x, "y": y, "count": count}
                 for (x, y), count in sorted(self.cell_density.items())
             ],
+            "cumulative_cell_visits": [
+                {"x": x, "y": y, "count": count}
+                for (x, y), count in sorted(self.cumulative_cell_visits.items())
+            ],
             "congestion_count": self.congestion_count,
             "congested_cells": list(self.congested_cells),
             "time_spent_by_agent_id": {
                 agent_id: dict(cell_times)
                 for agent_id, cell_times in self.time_spent_by_agent_id.items()
+            },
+            "time_spent_by_role": {
+                role: dict(cell_times)
+                for role, cell_times in self.time_spent_by_role.items()
             },
         }
