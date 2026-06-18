@@ -25,10 +25,12 @@
 21. `model-python/population_model/analysis.py` - Dependency-free simulation analysis collection and HTML report plotting for heatmaps, role metrics, congestion, exits, and deterministic replay evidence.
 22. `model-python/tests/test_analysis.py` - Unit tests for analysis metric aggregation, replay evidence, and report HTML generation.
 23. `scripts/render-analysis-plots.py` - CLI renderer for configurable simulation analysis HTML reports.
+24. `docs/doxygen/Doxyfile` - Standard Doxygen configuration for source documentation generation.
+25. `docs/doxygen/README.md` - Local instructions for rebuilding Doxygen HTML documentation.
 
 ## Files Modified
 
-1. `.gitignore` - Ignored Windows `Zone.Identifier` metadata, local `.tools/` install artifacts, and generated `artifacts/`.
+1. `.gitignore` - Ignored Windows `Zone.Identifier` metadata, local `.tools/` install artifacts, generated `artifacts/`, and generated Doxygen build output.
 2. `scripts/*.sh` - Restored executable permissions, made `start.sh` default to `Terrain maps/Terrain1.png`, and made startup generate configurable terrain GIF and analysis-report artifacts by default.
 3. `README.md` - Added a GitHub-visible roadmap and unfixed issues list.
 4. `api-go/internal/contracts/contracts.go` - Passed additive terrain map metadata, simulation metrics, and agent behaviour profile metadata through the API contract.

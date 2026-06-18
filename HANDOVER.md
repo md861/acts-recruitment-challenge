@@ -1,15 +1,15 @@
 # Agent Handover
 
-Last updated: 2026-06-18 22:30 BST (Europe/London)
+Last updated: 2026-06-18 22:49 BST (Europe/London)
 
 ## Current State
 
 - Repo: `acts-recruitment-challenge`
 - Branch: `main`
 - Remote: `https://github.com/md861/acts-recruitment-challenge.git`
-- Latest committed work after this push: `Add simulation analysis reports` (use `git log -1 --oneline` for the exact hash).
+- Latest committed work after this push: `Add Doxygen documentation config` (use `git log -1 --oneline` for the exact hash).
 - Working protocol: do not commit or push unless the user explicitly asks, it is end-of-day, or it is a handover-to-new-agent prompt.
-- Current task status: Track A modelling work has been chosen. Main blueprint Steps 1-15 are implemented. Additional report-analysis artifacts have been added for terrain heatmaps, role metrics, congestion plots, exit curves, and deterministic replay evidence. Step 16, final documentation/bookkeeping, is the remaining main-blueprint item.
+- Current task status: Track A modelling work has been chosen. Main blueprint Steps 1-15 are implemented. Additional report-analysis artifacts have been added for terrain heatmaps, role metrics, congestion plots, exit curves, and deterministic replay evidence. Doxygen docs config exists under `docs/doxygen/`. Step 16, final documentation/bookkeeping, is the remaining main-blueprint item.
 
 ## Read First
 
@@ -85,6 +85,13 @@ Generated local artifacts:
 
 - `artifacts/terrain1_first_500_ticks.gif`
 - `artifacts/simulation_analysis_500_ticks.html`
+
+Doxygen note:
+
+- Config: `docs/doxygen/Doxyfile`
+- Rebuild command: `doxygen docs/doxygen/Doxyfile`
+- Output: `docs/doxygen/build/html/index.html`
+- Current environment blocker: `doxygen` is not installed, and passwordless `sudo` is unavailable. The config is tracked, but HTML docs were not generated in this session.
 
 Known visualization issue to revisit:
 

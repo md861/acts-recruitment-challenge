@@ -1265,3 +1265,33 @@ Verification:
 - GIF frame check reported `frames=500`.
 - `python3 scripts/render-analysis-plots.py` generated `artifacts/simulation_analysis_500_ticks.html`.
 - `./scripts/test.sh` passed with 53 Python tests, Go tests, and frontend typecheck.
+
+### Entry 45 - Doxygen documentation setup
+
+Date/time: 2026-06-18 22:49 BST (Europe/London)
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+create a dir for doxygen documentation. compile the documentation with standard doxygen cofig and commit and push
+```
+
+Purpose:
+
+Add a Doxygen documentation directory and standard configuration for compiling source documentation.
+
+What was understood / accepted:
+
+Codex added `docs/doxygen/Doxyfile`, `docs/doxygen/README.md`, and ignored `docs/doxygen/build/`. The config targets Python model sources/tests, scripts, frontend source, Go internal contracts, README, and the modularization blueprint.
+
+Human input and judgement:
+
+The user explicitly requested documentation setup, compilation, commit, and push.
+
+Verification / limitation:
+
+- `doxygen docs/doxygen/Doxyfile` was attempted but failed because `doxygen` is not installed.
+- Installing Doxygen was blocked because passwordless `sudo` is unavailable in the WSL environment.
+- `git diff --check` passed.

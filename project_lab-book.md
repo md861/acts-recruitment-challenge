@@ -1388,3 +1388,39 @@ Verification:
 - GIF frame check reported `frames=500`.
 - `python3 scripts/render-analysis-plots.py` generated `artifacts/simulation_analysis_500_ticks.html`.
 - `./scripts/test.sh` passed with 53 Python tests, Go tests, and frontend typecheck.
+
+### Entry 38 - Doxygen documentation setup
+
+Date/time: 2026-06-18 22:49 BST (Europe/London)
+
+What happened:
+
+The user requested a directory for Doxygen documentation, compilation with a standard Doxygen config, and a commit/push.
+
+Decision:
+
+Add a reproducible Doxygen documentation setup under `docs/doxygen/` and ignore generated build output.
+
+Reasoning:
+
+The repository now contains Doxygen-compatible comments across model modules and recent frontend/script surfaces. A tracked config lets future agents or maintainers regenerate docs consistently without committing generated HTML churn.
+
+Implementation:
+
+- Added `docs/doxygen/Doxyfile`.
+- Added `docs/doxygen/README.md`.
+- Configured Doxygen input across Python model sources/tests, scripts, frontend source, Go internal contracts, README, and blueprint.
+- Set generated output to `docs/doxygen/build/html`.
+- Added `docs/doxygen/build/` to `.gitignore`.
+
+Problems or observations:
+
+- `doxygen` is not installed in the WSL environment.
+- Passwordless `sudo` is not available, so Codex could not install Doxygen through `apt`.
+- Non-sudo `apt-get install doxygen` failed because package installation requires root.
+
+Verification:
+
+- `doxygen docs/doxygen/Doxyfile` was attempted and failed with `doxygen: command not found`.
+- `sudo -n true` reported that a password is required.
+- `git diff --check` passed.
