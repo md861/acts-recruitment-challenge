@@ -375,3 +375,98 @@ Codex updated the handover file and running logs to capture the current branch, 
 Verification:
 
 Codex checked `git status`, latest commit, branch, remote, and reran the baseline project checks before committing.
+
+### Entry 10 - Model modularisation scoping
+
+Date: 2026-06-18
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+Ok so, I want to:
+1) modularize the code so that it becomes easier to implement unit tests and integration tests
+2) I want to have a separate module for a) agent creation that also deals with agent behaviour, b) next movement routine that allows us to select from a range of different possibilities that are easy to implement and focus on and can be used by other modules/routines such as agent behaviour, c) random walk routine that can be used to model different kinds of random walks (i.e. seeded/deterministic, probability distribution, skewness, etc) d) Terrain handler that gives a bunch of different properties of cell (e.g. cells with fixed density, cells that can't be traversed i.e. restricted cells (based on agent's id), cells with penalty (depending on agent's id) for stresspassing, e) simulation metrics such as congestion, breach detected vs handled, cell density, etc 
+read the above requirements and tell me if you can manage this. Along with and estimate on time required to do this. Make sure relevant prompts are documented in relevant book-keeping docs as expected. Thanks
+```
+
+Purpose:
+
+Assess whether a Track A modelling refactor is manageable and estimate the time required before starting implementation.
+
+What was understood from the response:
+
+The user wants a modular Python model architecture that separates agent creation/behaviour, movement selection, random walk policies, terrain/cell rules, and simulation metrics, while making future unit and integration tests easier to write.
+
+Human input and judgement:
+
+The user provided the desired module boundaries and asked for feasibility and timing rather than immediate code changes.
+
+What was accepted from AI:
+
+Pending: Codex is inspecting the current model and tests before providing an estimate.
+
+Verification:
+
+Codex read the current Python model modules and existing Python tests before answering.
+
+### Entry 11 - Full modularisation scope selected
+
+Date: 2026-06-18
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+ok good. let us go forward with the full version of every idea listed. Give me a breakdown of your tasks, essentially and enumerated list focusing on what we are modularizing
+```
+
+Purpose:
+
+Confirm that the modelling track should proceed with the full requested modularisation scope, and ask Codex to break the work into clear tasks before implementation.
+
+What was understood from the response:
+
+The user wants to proceed with the broader Track A implementation: separated modules for agents, movement, random walks, terrain, and metrics, plus tests that exercise those boundaries.
+
+Human input and judgement:
+
+The user chose the larger implementation scope after reviewing the estimate.
+
+What was accepted from AI:
+
+Pending: Codex will provide an enumerated implementation breakdown before source changes begin.
+
+### Entry 12 - Blueprint document request
+
+Date: 2026-06-18
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+ok good, can you save this as the main blueprint for what we want to implement in this project so that you and other ai agents can refer to in the future? make that file (perhaps an md file) tracked and visible in github. Make relevant entries in the lab books, and commit and push
+```
+
+Purpose:
+
+Turn the modularisation breakdown into a tracked project blueprint and publish it to the GitHub repository.
+
+What was understood from the response:
+
+The user wants a durable Markdown file that future AI agents can treat as the implementation reference for the Track A modelling refactor.
+
+Human input and judgement:
+
+The user explicitly asked for the file to be tracked, committed, and pushed.
+
+What was accepted from AI:
+
+Codex created `MODEL_MODULARIZATION_BLUEPRINT.md` from the agreed task breakdown and updated the bookkeeping docs.
+
+Verification:
+
+Pending: commit and push will be checked with `git status` and `git log`.

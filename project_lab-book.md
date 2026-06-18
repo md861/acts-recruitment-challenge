@@ -417,3 +417,75 @@ Next steps:
 Verification:
 
 `./scripts/test.sh` passed with local Go and Node on `PATH`.
+
+### Entry 15 - Model modularisation request scoped
+
+Date/time: 2026-06-18 13:22 BST (Europe/London)
+
+What happened:
+
+The user proposed a Track A-style modelling refactor to make the Python model easier to unit test and integration test.
+
+Requested module boundaries:
+
+- Agent creation and agent behaviour.
+- Movement selection routines that can support multiple movement strategies.
+- Random walk routines with deterministic seeding, probability distributions, and skewed movement options.
+- Terrain handling for cell properties such as fixed density, restricted traversal by agent id, and trespass penalties.
+- Simulation metrics such as congestion, breach detection/handling, and cell density.
+
+Decision:
+
+Do not implement yet. First assess feasibility and provide a time estimate, as requested.
+
+Current assessment:
+
+The existing model is compact and concentrated in `model-python/population_model/model.py`, so this is manageable. The main risk is scope control: the architecture can support the requested concepts, but only a focused first implementation should be completed for the take-home challenge.
+
+Next steps:
+
+- Provide the user with a realistic estimate for a narrow, testable modular refactor.
+- If approved, implement the refactor in small slices and expand tests around the new module boundaries.
+
+### Entry 16 - Full model modularisation scope selected
+
+Date/time: 2026-06-18 13:26 BST (Europe/London)
+
+What happened:
+
+The user chose to proceed with the full version of the requested Track A modelling modularisation and asked for an enumerated task breakdown focused on what will be modularized.
+
+Decision:
+
+Prepare a structured implementation plan before changing source code.
+
+Planned focus:
+
+- Separate domain state from orchestration.
+- Introduce dedicated modules for agent creation/behaviour, movement strategy selection, random walk policy, terrain rules, and simulation metrics.
+- Preserve the existing snapshot contract unless a documented additive metrics field is introduced.
+- Add tests around each module boundary and the integrated model tick loop.
+
+### Entry 17 - Model modularization blueprint created
+
+Date/time: 2026-06-18 13:36 BST (Europe/London)
+
+What happened:
+
+The user asked for the modularisation breakdown to be saved as the main blueprint for the project so Codex and future AI agents can refer to it.
+
+Decision:
+
+Create a tracked root-level Markdown file named `MODEL_MODULARIZATION_BLUEPRINT.md`.
+
+Reasoning:
+
+A dedicated blueprint is easier for future agents to find than reconstructing the plan from chat history or lab-book entries. It also makes the chosen Track A scope visible in GitHub.
+
+Implementation note:
+
+The blueprint captures module boundaries, suggested implementation order, testing expectations, snapshot compatibility guardrails, and documentation responsibilities.
+
+Next steps:
+
+- Commit and push the blueprint and bookkeeping updates, as explicitly requested by the user.
