@@ -1052,3 +1052,53 @@ The headers improve readability now and make a future Doxygen documentation pass
 Verification:
 
 `PYTHONPATH=model-python python3 -m unittest discover -s model-python/tests` passed with 32 tests.
+
+### Entry 27 - Changes.md overlap check added to protocol
+
+Date/time: 2026-06-18 20:43 BST (Europe/London)
+
+What happened:
+
+The user asked to make the `Changes.md` no-overlap sanity check part of the future development protocol.
+
+Decision:
+
+Add an explicit handover protocol rule requiring future agents to check that no filename appears in both `Files Created` and `Files Modified` after updating `Changes.md`.
+
+Reasoning:
+
+This preserves the user's intended two-list audit format and prevents created files from being repeated as modified files.
+
+Verification:
+
+Codex had just checked `Changes.md` and confirmed `NO_OVERLAP`, with 18 created entries and 13 modified entries.
+
+### Entry 28 - Remaining Step 4 agent creation work completed
+
+Date/time: 2026-06-18 20:55 BST (Europe/London)
+
+What happened:
+
+The user asked to complete the remaining work for main blueprint Step 4, `Add an agent creation module`.
+
+Decision:
+
+Finish Step 4 by making behaviour profile lookup part of `AgentFactory`, exposing the selected behaviour profile identity additively on agents, and adding placement coverage across allowed non-black terrain cell types.
+
+Reasoning:
+
+The factory already handled deterministic creation, role assignment, and terrain-aware placement. The missing pieces were the behaviour-profile lookup responsibility and a stronger test that placement can seed agents across the relevant terrain categories used by the selected map semantics.
+
+Implementation:
+
+- Added optional `behaviour_profile` metadata to `Agent`.
+- Updated `AgentFactory` to accept a `BehaviourProfileSet` and record the profile identity for each created agent.
+- Passed model behaviour profiles into `AgentFactory`.
+- Passed `behaviour_profile` through the Go API contract and frontend snapshot type.
+- Added agent factory tests for configured behaviour profile lookup and placement across normal, restricted, gate, exit, Type 1 penalty, and Type 2 penalty cells.
+- Added a model-level assertion that snapshots include the additive behaviour profile field.
+
+Verification:
+
+- `PYTHONPATH=model-python python3 -m unittest discover -s model-python/tests` passed with 34 tests.
+- `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh` passed.

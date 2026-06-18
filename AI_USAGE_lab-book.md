@@ -917,3 +917,60 @@ The user identified a documentation quality improvement tied to the modules bein
 Verification:
 
 `PYTHONPATH=model-python python3 -m unittest discover -s model-python/tests` passed with 32 tests.
+
+### Entry 34 - Changes.md overlap protocol
+
+Date/time: 2026-06-18 20:43 BST (Europe/London)
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+good. put this sanity check as part of protocol docs for future. then tell me what is next
+```
+
+Purpose:
+
+Record the `Changes.md` no-overlap sanity check as a future protocol and identify the next roadmap item.
+
+What was understood / accepted:
+
+Codex added a handover protocol rule requiring future agents to check that no filename appears in both the created and modified lists after updating `Changes.md`.
+
+Human input and judgement:
+
+The user wants the classification rule to be mechanically maintained, not just remembered conversationally.
+
+Verification:
+
+Before adding the protocol rule, Codex confirmed `Changes.md` had `NO_OVERLAP`, with 18 created entries and 13 modified entries.
+
+### Entry 35 - Remaining Step 4 agent creation work
+
+Date/time: 2026-06-18 20:55 BST (Europe/London)
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+ok let's get on with the remaining tasks for this step.
+```
+
+Purpose:
+
+Complete the unfinished parts of main blueprint Step 4, `Add an agent creation module`.
+
+What was understood / accepted:
+
+Codex completed behaviour profile lookup inside `AgentFactory`, added optional `behaviour_profile` metadata to agents, passed that metadata through the model snapshot, Go API contract, and frontend type, and added tests for configured profile lookup plus placement across allowed non-black terrain cell types.
+
+Human input and judgement:
+
+The user asked to finish the first unfinished main-blueprint step after explicitly clarifying that future `what's next` answers should refer to the main blueprint task list.
+
+Verification:
+
+- `PYTHONPATH=model-python python3 -m unittest discover -s model-python/tests` passed with 34 tests.
+- `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh` passed.

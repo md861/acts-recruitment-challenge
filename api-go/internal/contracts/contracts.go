@@ -11,11 +11,12 @@ type Heading struct {
 }
 
 type Agent struct {
-	ID       string   `json:"id"`
-	Role     string   `json:"role"`
-	Status   string   `json:"status"`
-	Position Position `json:"position"`
-	Heading  Heading  `json:"heading"`
+	ID               string   `json:"id"`
+	Role             string   `json:"role"`
+	Status           string   `json:"status"`
+	Position         Position `json:"position"`
+	Heading          Heading  `json:"heading"`
+	BehaviourProfile string   `json:"behaviour_profile,omitempty"`
 }
 
 type Simulation struct {

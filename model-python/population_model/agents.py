@@ -8,6 +8,7 @@ import random
 from dataclasses import dataclass
 from typing import Protocol
 
+from population_model.behaviour import DEFAULT_BEHAVIOUR_PROFILES, BehaviourProfileSet
 from population_model.config import ModelConfig
 from population_model.state import Agent, Heading, Position
 from population_model.terrain import CellType
@@ -32,6 +33,7 @@ class AgentFactory:
     height: int
     restricted_cells: set[tuple[int, int]]
     roles: tuple[str, ...] = ("civilian", "staff", "patrol")
+    behaviour_profiles: BehaviourProfileSet = DEFAULT_BEHAVIOUR_PROFILES
 
     def create_agents(self, rng: random.Random) -> list[Agent]:
         agents: list[Agent] = []
@@ -39,6 +41,7 @@ class AgentFactory:
 
         for index in range(self.config.agent_count):
             role = self.roles[index % len(self.roles)]
+            behaviour_profile = self.behaviour_profiles.for_role(role)
             position = self.random_free_position(rng, occupied)
             occupied.add((position.x, position.y))
             agents.append(
@@ -48,6 +51,7 @@ class AgentFactory:
                     status="waiting",
                     position=position,
                     heading=Heading(dx=0, dy=0),
+                    behaviour_profile=behaviour_profile.role,
                 )
             )
 

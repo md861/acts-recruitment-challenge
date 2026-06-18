@@ -14,6 +14,7 @@ class PopulationModelTests(unittest.TestCase):
         snapshot = model.snapshot()
 
         self.assertEqual(snapshot["simulation"]["agent_count"], 6)
+        self.assertIn("behaviour_profile", snapshot["agents"][0])
         for agent in snapshot["agents"]:
             self.assertGreaterEqual(agent["position"]["x"], 0)
             self.assertLess(agent["position"]["x"], 8)

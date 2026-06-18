@@ -211,9 +211,10 @@ Track A modelling work has been selected for this repository. The detailed imple
 
 10. Agent creation and terrain-aware placement refactored.
    - Added a dedicated agent creation module.
-   - Moved deterministic role assignment and initial placement out of `PopulationModel`.
+   - Moved deterministic role assignment, behaviour profile lookup, and initial placement out of `PopulationModel`.
    - Kept placement terrain-aware: agents are not initialized outside the black enclosure or on blocked boundary/density-zero cells.
-   - Added unit tests for deterministic creation and terrain-aware placement.
+   - Added unit tests for deterministic creation, behaviour profile lookup, terrain-aware placement, and seeded placement across allowed non-black terrain cell types.
+   - Exposed agent behaviour profile identity as an additive snapshot/API/frontend field.
 
 11. Agent behaviour profiles added.
    - Added a dedicated behaviour profile module.

@@ -111,6 +111,7 @@ class PopulationModel:
             width=self.width,
             height=self.height,
             restricted_cells=set(self._restricted_cells()),
+            behaviour_profiles=self.behaviour_profiles,
         ).create_agents(self._rng)
 
     def _create_movement_strategy(self) -> MovementStrategy:

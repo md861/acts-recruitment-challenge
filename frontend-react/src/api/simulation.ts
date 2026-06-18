@@ -14,6 +14,7 @@ export type Agent = {
   status: string;
   position: Position;
   heading: Heading;
+  behaviour_profile?: string;
 };
 
 export type TerrainMap = {

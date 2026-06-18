@@ -2,7 +2,9 @@ import random
 import unittest
 
 from population_model.agents import AgentFactory
+from population_model.behaviour import BehaviourProfile, BehaviourProfileSet
 from population_model.config import ModelConfig
+from population_model.random_walk import RandomWalkPolicy
 from population_model.state import Position
 from population_model.terrain import CellType
 
@@ -49,11 +51,44 @@ class AgentFactoryTests(unittest.TestCase):
             restricted_cells=set(),
         ).create_agents(random.Random(config.seed))
 
-        self.assertEqual([agent.to_dict() for agent in first], [agent.to_dict() for agent in second])
+        self.assertEqual(
+            [agent.to_dict() for agent in first],
+            [agent.to_dict() for agent in second],
+        )
         self.assertEqual(
             [agent.role for agent in first],
             ["civilian", "staff", "patrol", "civilian", "staff", "patrol"],
         )
+        self.assertEqual(
+            [agent.behaviour_profile for agent in first],
+            ["civilian", "staff", "patrol", "civilian", "staff", "patrol"],
+        )
+
+    def test_agent_creation_uses_configured_behaviour_profile_lookup(self):
+        config = ModelConfig(width=3, height=3, agent_count=1, seed=1)
+        terrain = StubTerrain(width=3, height=3)
+        behaviour_profiles = BehaviourProfileSet(
+            profiles={
+                "visitor": BehaviourProfile(
+                    role="guest-profile",
+                    random_walk=RandomWalkPolicy.uniform(((0, 0),)),
+                )
+            },
+            default_role="visitor",
+        )
+
+        agents = AgentFactory(
+            config=config,
+            terrain=terrain,
+            width=3,
+            height=3,
+            restricted_cells=set(),
+            roles=("visitor",),
+            behaviour_profiles=behaviour_profiles,
+        ).create_agents(random.Random(config.seed))
+
+        self.assertEqual(agents[0].role, "visitor")
+        self.assertEqual(agents[0].behaviour_profile, "guest-profile")
 
     def test_placement_avoids_blocked_cells_and_outside_black_enclosure(self):
         terrain = StubTerrain(
@@ -93,6 +128,49 @@ class AgentFactoryTests(unittest.TestCase):
         )
 
         self.assertFalse(factory.is_available(Position(x=0, y=0), occupied=set()))
+
+    def test_placement_can_seed_agents_across_allowed_non_black_cell_types(self):
+        cells = {
+            (0, 0): CellType.NORMAL,
+            (1, 0): CellType.RESTRICTED,
+            (2, 0): CellType.GATE,
+            (0, 1): CellType.EXIT,
+            (1, 1): CellType.TYPE_1_PENALTY,
+            (2, 1): CellType.TYPE_2_PENALTY,
+            (0, 2): CellType.BOUNDARY,
+            (1, 2): CellType.DENSITY_ZERO,
+        }
+        terrain = StubTerrain(
+            width=3,
+            height=3,
+            cells=cells,
+            inside_cells=set(cells),
+        )
+        config = ModelConfig(width=3, height=3, agent_count=6, seed=2)
+
+        agents = AgentFactory(
+            config=config,
+            terrain=terrain,
+            width=3,
+            height=3,
+            restricted_cells=set(),
+        ).create_agents(random.Random(config.seed))
+        placed_cell_types = {
+            terrain.cell_type_at(agent.position.x, agent.position.y)
+            for agent in agents
+        }
+
+        self.assertEqual(
+            placed_cell_types,
+            {
+                CellType.NORMAL,
+                CellType.RESTRICTED,
+                CellType.GATE,
+                CellType.EXIT,
+                CellType.TYPE_1_PENALTY,
+                CellType.TYPE_2_PENALTY,
+            },
+        )
 
 
 if __name__ == "__main__":

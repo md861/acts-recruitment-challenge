@@ -1,15 +1,15 @@
 # Agent Handover
 
-Last updated: 2026-06-18 20:31 BST (Europe/London)
+Last updated: 2026-06-18 20:55 BST (Europe/London)
 
 ## Current State
 
 - Repo: `acts-recruitment-challenge`
 - Branch: `main`
 - Remote: `https://github.com/md861/acts-recruitment-challenge.git`
-- Latest commit: `cfe7427 Add movement strategy selection`
+- Latest commit: `5957d7e Add configurable random walk policies`
 - Working protocol: do not commit or push unless the user explicitly asks, it is end-of-day, or it is a handover-to-new-agent prompt.
-- Current task status: Track A modelling work has been chosen. Terrain map handling, model metrics integration, frontend terrain visualization, agent creation/placement, agent behaviour profiles, movement strategy selection, and configurable random walk policies have now been implemented locally. The random-walk slice is not committed yet.
+- Current task status: Track A modelling work has been chosen. Terrain map handling, model metrics integration, frontend terrain visualization, agent creation/placement, agent behaviour profiles, movement strategy selection, and configurable random walk policies have now been implemented. The remaining Step 4 agent creation work has been completed locally but is not committed yet.
 
 ## Read First
 
@@ -43,9 +43,9 @@ Most recent baseline checks passed with:
 PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh
 ```
 
-Last recorded pass: 2026-06-18 20:31 BST after the random-walk slice.
+Last recorded pass: 2026-06-18 20:55 BST after completing the remaining Step 4 agent creation work.
 
-Current local changes include `population_model/random_walk.py`, random walk tests, behaviour-profile random-walk wiring, and related bookkeeping updates. The `artifacts/` directory is intentionally ignored and should stay untracked unless the user explicitly asks to publish an artifact.
+Current local changes include agent behaviour profile lookup in `AgentFactory`, additive agent `behaviour_profile` snapshot/API/frontend metadata, extra agent factory tests, the previously requested protocol-doc updates, and related bookkeeping updates. The `artifacts/` directory is intentionally ignored and should stay untracked unless the user explicitly asks to publish an artifact.
 
 Untracked note: `Terrain maps/Terrain1_00.png` is present locally and has not been tracked or modified by Codex.
 
@@ -57,10 +57,10 @@ Untracked note: `Terrain maps/Terrain1_00.png` is present locally and has not be
 
 ## Suggested Next Action
 
-Continue the broader Track A modularization after the random-walk slice:
+Continue from the main Track A blueprint after completing Step 4:
 
-1. Refine frontend terrain rendering with stripe-line markings for special cells and terrain metrics in the control panel.
-2. Make individual cell edges visible in the browser simulation view and generated GIF.
+1. Reassess the next unfinished main-blueprint task by checking `MODEL_MODULARIZATION_BLUEPRINT.md` `Implementation Tasks`.
+2. The next likely unfinished item is Step 5, agent behaviour, specifically applying role-specific intent/preferences more fully in movement decisions.
 3. Prepare final solution notes and AI usage summary when implementation scope is complete.
 
 Generated local artifact: `artifacts/terrain1_first_100_ticks.gif`.
@@ -94,5 +94,6 @@ When asked to prepare for handover:
 - Add a timestamped entry to `project_lab-book.md`.
 - Update `Changes.md` if files were created or modified.
 - Keep `Changes.md` as a two-list audit: `Files Created` contains files created by this project, while `Files Modified` contains only files that existed in the base project and were later modified.
+- After updating `Changes.md`, sanity-check that no filename appears in both `Files Created` and `Files Modified`.
 - Keep `artifacts/` untracked unless the user explicitly asks to publish generated artifacts.
 - Commit and push only if the prompt is explicitly a handover-to-new-agent request or the user asks.
