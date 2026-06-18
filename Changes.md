@@ -17,7 +17,7 @@
 
 - `.gitignore` - Ignored Windows `Zone.Identifier` metadata, local `.tools/` install artifacts, and generated `artifacts/`.
 - `scripts/*.sh` - Restored executable permissions and made `start.sh` default to `Terrain maps/Terrain1.png`.
-- `README.md` - Added a GitHub-visible roadmap with completed, active, and next states.
+- `README.md` - Added a GitHub-visible roadmap and unfixed issues list.
 - `api-go/internal/contracts/contracts.go` - Passed additive terrain map metadata and simulation metrics through the API contract.
 - `frontend-react/src/App.tsx` - Passed terrain map metadata into the lattice visualizer.
 - `frontend-react/src/api/simulation.ts` - Added frontend types for terrain map metadata and optional metrics.

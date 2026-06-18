@@ -1,13 +1,13 @@
 # Agent Handover
 
-Last updated: 2026-06-18 14:57 BST (Europe/London)
+Last updated: 2026-06-18 15:04 BST (Europe/London)
 
 ## Current State
 
 - Repo: `acts-recruitment-challenge`
 - Branch: `main`
 - Remote: `https://github.com/md861/acts-recruitment-challenge.git`
-- Latest commit before this handover update: `79f9024 Prepare handover after changes cleanup`
+- Latest commit before this handover update: `3914336 Implement terrain map handler and visualization`
 - Working protocol: do not commit or push unless the user explicitly asks, it is end-of-day, or it is a handover-to-new-agent prompt.
 - Current task status: Track A modelling work has been chosen. The terrain map handler, model snapshot metadata, terrain metrics, terrain-map integration tests, frontend terrain map visualization path, Terrain1 startup default, and local 100-tick GIF renderer are implemented locally.
 
@@ -43,9 +43,9 @@ Most recent baseline checks passed with:
 PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh
 ```
 
-Last recorded pass: 2026-06-18 14:57 BST during this handover update.
+Last recorded pass: 2026-06-18 15:04 BST during this handover update.
 
-Current local changes include implementation code, frontend visualization updates, a local generated GIF artifact, and documentation updates for the terrain map handler/visualization slice. The `artifacts/` directory is intentionally ignored and should stay untracked unless the user explicitly asks to publish an artifact.
+Current local changes are documentation-only: README unfixed issue list plus handover/lab-book updates. The `artifacts/` directory is intentionally ignored and should stay untracked unless the user explicitly asks to publish an artifact.
 
 Untracked note: `Terrain maps/Terrain1_00.png` is present locally and has not been tracked or modified by Codex.
 
@@ -70,6 +70,7 @@ Generated local artifact: `artifacts/terrain1_first_100_ticks.gif`.
 
 Known GIF/visualization issues to revisit:
 
+- Browser terrain visualization at `http://localhost:5173/` does not yet match the generated GIF's legend panel and patterned terrain fills.
 - Individual cell edges are not yet visible in the browser simulation view or generated GIF.
 
 Latest terrain semantics:

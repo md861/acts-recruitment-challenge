@@ -613,6 +613,39 @@ Verification:
 - Python unit tests passed with `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests`.
 - Full checks passed with `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh`.
 
+### Entry 20 - README unfixed issues list
+
+Date: 2026-06-18
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+ok for now keep it as an unfixed issue. I would like to maintain a list of these unfixed issues in the readme for github please? commit and push and prepare for handover
+```
+
+Purpose:
+
+Record the browser visualizer parity gap as a known unfixed issue in the GitHub README and prepare handover.
+
+What was understood from the response:
+
+The user wants the web visualizer/GIF mismatch documented rather than fixed immediately.
+
+Human input and judgement:
+
+The user chose to defer the browser rendering parity fix.
+
+What was accepted from AI:
+
+Codex added an `Unfixed Issues` section to `README.md` and refreshed handover/bookkeeping docs.
+
+Verification:
+
+- Python unit tests passed with `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests`.
+- Full checks passed with `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh`.
+
 ### Entry 19 - Terrain map handler implementation
 
 Date: 2026-06-18

@@ -457,6 +457,33 @@ Next steps:
 - Commit and push the implementation and documentation updates.
 - Continue broader modularization: agent creation/behaviour, movement strategy selection, and configurable random walk policies.
 
+### Entry 23 - README unfixed issues list added
+
+Date/time: 2026-06-18 15:04 BST (Europe/London)
+
+What happened:
+
+The user liked the generated GIF but noted that the browser visualizer at `http://localhost:5173/` does not yet reflect the same legend and patterned terrain rendering.
+
+Decision:
+
+Keep browser/GIF visual parity as an unfixed issue for now and maintain a dedicated `Unfixed Issues` section in `README.md`.
+
+Issues recorded:
+
+- Browser terrain visualization does not yet match the generated GIF's legend panel and patterned fills.
+- Individual cell edges are not yet visible in the simulation view.
+
+Next steps:
+
+- Commit and push the documentation update.
+- Prepare handover.
+
+Verification:
+
+- Python unit tests passed: `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests`.
+- Full checks passed: `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh`.
+
 ### Entry 24 - Terrain map handler first slice implemented
 
 Date/time: 2026-06-18 14:12 BST (Europe/London)

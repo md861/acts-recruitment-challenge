@@ -222,3 +222,16 @@ Track A modelling work has been selected for this repository. The detailed imple
 1. Refine frontend terrain visualization.
    - Make individual cell edges visible in the simulation view.
    - Surface terrain metrics in the control panel.
+
+## Unfixed Issues
+
+These are known issues that are intentionally left for later work.
+
+1. Browser terrain visualization does not yet match the generated GIF.
+   - The GIF renderer now shows a legend panel and stripe/pattern fills for terrain cell categories.
+   - The browser visualizer at `http://localhost:5173/` still renders the terrain mostly from the raw PNG image and does not yet apply the same canvas-style patterned rendering.
+   - Suggested fix: replace or augment the browser terrain view with a canvas renderer that mirrors `scripts/render-terrain-gif.py`.
+
+2. Individual cell edges are not yet visible.
+   - The current terrain map is large, so drawing every cell edge needs a careful zoom/canvas strategy.
+   - This affects both the browser simulation view and generated GIF readability.
