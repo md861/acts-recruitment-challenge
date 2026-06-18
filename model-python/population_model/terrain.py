@@ -2,8 +2,8 @@
 #  @brief PNG-backed terrain map parsing and cell rule queries.
 #
 #  Converts terrain map pixels into symbolic cell types, validates map
-#  enclosure semantics, and exposes traversal, capacity, exit, and penalty
-#  queries for simulation modules.
+#  enclosure semantics, and exposes traversal, capacity, breach, exit, and
+#  penalty queries for simulation modules.
 
 import struct
 import zlib
@@ -43,6 +43,7 @@ LEGEND = {cell_type.value: color for color, cell_type in PALETTE.items()}
 
 @dataclass(frozen=True)
 class TerrainPenalty:
+    ## @brief Movement penalty metadata attached to penalty cells.
     kind: str
     direction: str | None = None
     multiplier: float | None = None
@@ -58,10 +59,12 @@ class TerrainPenalty:
 
 @dataclass(frozen=True)
 class TerrainCell:
+    ## @brief Symbolic terrain cell definition and configured rule metadata.
     x: int
     y: int
     cell_type: CellType
     allowed_agent_ids: tuple[str, ...] = ()
+    allowed_roles: tuple[str, ...] = ()
     exit_agent_ids: tuple[str, ...] = ()
     max_density: int | None = None
     penalty: TerrainPenalty | None = None
@@ -74,6 +77,8 @@ class TerrainCell:
         }
         if self.allowed_agent_ids:
             payload["allowed_agent_ids"] = list(self.allowed_agent_ids)
+        if self.allowed_roles:
+            payload["allowed_roles"] = list(self.allowed_roles)
         if self.exit_agent_ids:
             payload["exit_agent_ids"] = list(self.exit_agent_ids)
         if self.max_density is not None:
@@ -84,7 +89,22 @@ class TerrainCell:
 
 
 @dataclass(frozen=True)
+class TerrainTraversal:
+    ## @brief Terrain-level classification of a traversal attempt.
+    #
+    #  Centralizes role/id permissions, boundary blocking, gate congestion, and
+    #  restricted-cell breach classification so movement and metrics can consume
+    #  the same reason metadata.
+    allowed: bool
+    reason: str
+    cell: TerrainCell
+    breach_detected: bool = False
+    breach_handled: bool = True
+
+
+@dataclass(frozen=True)
 class TerrainSummary:
+    ## @brief Aggregate terrain map dimensions, cell counts, and validation issues.
     width: int
     height: int
     counts_by_type: dict[CellType, int]
@@ -104,6 +124,7 @@ class TerrainSummary:
 
 @dataclass(frozen=True)
 class TerrainMap:
+    ## @brief Parsed terrain map and terrain-rule query API.
     width: int
     height: int
     cell_types: tuple[CellType, ...]
@@ -147,24 +168,62 @@ class TerrainMap:
             y=y,
             cell_type=cell_type,
             allowed_agent_ids=self._allowed_agent_ids(cell_type),
+            allowed_roles=self._allowed_roles(cell_type),
             exit_agent_ids=self._exit_agent_ids(cell_type),
             max_density=self._max_density(cell_type),
             penalty=self._penalty(cell_type),
         )
 
     def is_traversable(
-        self, x: int, y: int, agent_id: str, current_density: int = 0
+        self,
+        x: int,
+        y: int,
+        agent_id: str,
+        current_density: int = 0,
+        agent_role: str | None = None,
     ) -> bool:
+        return self.classify_traversal(
+            x,
+            y,
+            agent_id=agent_id,
+            current_density=current_density,
+            agent_role=agent_role,
+        ).allowed
+
+    def classify_traversal(
+        self,
+        x: int,
+        y: int,
+        agent_id: str,
+        current_density: int = 0,
+        agent_role: str | None = None,
+    ) -> TerrainTraversal:
+        ## @brief Classify one attempted terrain entry.
+        #
+        #  Restricted cells can permit either configured agent ids or configured
+        #  roles. Unauthorized restricted-cell attempts are classified as handled
+        #  breaches rather than generic blocked movement.
         cell = self.cell_at(x, y)
         if not self.is_inside_simulation_area(x, y):
-            return False
+            return TerrainTraversal(False, "outside_enclosure", cell)
         if cell.cell_type in (CellType.BOUNDARY, CellType.DENSITY_ZERO):
-            return False
+            return TerrainTraversal(False, "boundary", cell)
         if cell.cell_type == CellType.RESTRICTED:
-            return agent_id in cell.allowed_agent_ids
+            if agent_id in cell.allowed_agent_ids or (
+                agent_role is not None and agent_role in cell.allowed_roles
+            ):
+                return TerrainTraversal(True, "allowed", cell)
+            return TerrainTraversal(
+                False,
+                "restricted",
+                cell,
+                breach_detected=True,
+                breach_handled=True,
+            )
         if cell.cell_type == CellType.GATE and cell.max_density is not None:
-            return current_density < cell.max_density
-        return True
+            if current_density >= cell.max_density:
+                return TerrainTraversal(False, "gate_congestion", cell)
+        return TerrainTraversal(True, "allowed", cell)
 
     def is_exit_cell(self, x: int, y: int, agent_id: str) -> bool:
         cell = self.cell_at(x, y)
@@ -208,6 +267,11 @@ class TerrainMap:
     def _allowed_agent_ids(self, cell_type: CellType) -> tuple[str, ...]:
         if cell_type == CellType.RESTRICTED:
             return self.config.restricted_cell_agent_ids
+        return ()
+
+    def _allowed_roles(self, cell_type: CellType) -> tuple[str, ...]:
+        if cell_type == CellType.RESTRICTED:
+            return self.config.restricted_cell_roles
         return ()
 
     def _exit_agent_ids(self, cell_type: CellType) -> tuple[str, ...]:

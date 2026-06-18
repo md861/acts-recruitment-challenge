@@ -45,6 +45,7 @@ class ModelConfig:
     tick_interval_seconds: float = 0.75
     terrain_map_path: str = "Terrain maps/Terrain1.png"
     restricted_cell_agent_ids: tuple[str, ...] = ("agent-001", "agent-002")
+    restricted_cell_roles: tuple[str, ...] = ("patrol",)
     exit_cell_agent_ids: tuple[str, ...] = ("agent-001",)
     gate_max_density: int = 3
     type_1_penalty_direction: str = "east"
@@ -63,6 +64,9 @@ class ModelConfig:
             terrain_map_path=os.getenv("SIM_TERRAIN_MAP_PATH", cls.terrain_map_path),
             restricted_cell_agent_ids=_env_csv(
                 "SIM_RESTRICTED_CELL_AGENT_IDS", cls.restricted_cell_agent_ids
+            ),
+            restricted_cell_roles=_env_csv(
+                "SIM_RESTRICTED_CELL_ROLES", cls.restricted_cell_roles
             ),
             exit_cell_agent_ids=_env_csv(
                 "SIM_EXIT_CELL_AGENT_IDS", cls.exit_cell_agent_ids

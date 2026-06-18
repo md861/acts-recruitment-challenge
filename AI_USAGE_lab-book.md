@@ -974,3 +974,102 @@ Verification:
 
 - `PYTHONPATH=model-python python3 -m unittest discover -s model-python/tests` passed with 34 tests.
 - `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh` passed.
+
+### Entry 36 - Remaining Step 5 agent behaviour work
+
+Date/time: 2026-06-18 21:07 BST (Europe/London)
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+looks good. let's get on with it
+```
+
+Follow-up prompt:
+
+```text
+please add these description notes as doxygen comments as well. thanks
+```
+
+Purpose:
+
+Complete the unfinished parts of main blueprint Step 5 by making behaviour profiles actively influence movement and documenting the new selector behaviour.
+
+What was understood / accepted:
+
+Codex added `BehaviourMoveSelector`, wired `PopulationModel` to select movement through behaviour profiles and movement strategy, added Doxygen-style comments to the new behaviour/random-walk helpers, and added tests for civilian avoidance, staff waiting preference, patrol restricted-cell intent, and all-blocked fallback.
+
+Human input and judgement:
+
+The user approved the implementation plan and requested that the descriptive notes be preserved as Doxygen-compatible comments.
+
+Verification:
+
+- `PYTHONPATH=model-python python3 -m unittest discover -s model-python/tests` passed with 38 tests.
+- `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh` passed.
+
+### Entry 37 - Remaining Step 6 movement strategy work
+
+Date/time: 2026-06-18 21:13 BST (Europe/London)
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+perfect. let's keep moving
+```
+
+Purpose:
+
+Complete the unfinished parts of main blueprint Step 6 by applying terrain costs/preferences in movement decisions.
+
+What was understood / accepted:
+
+Codex added movement decision penalty metadata and preference costs, implemented Type 1 directional and Type 2 all-direction penalty costing, updated behaviour selection to prefer lower-cost allowed moves, and added focused movement/behaviour tests.
+
+Human input and judgement:
+
+The user asked to continue through the main blueprint's next unfinished step.
+
+Verification:
+
+- `PYTHONPATH=model-python python3 -m unittest discover -s model-python/tests` passed with 41 tests.
+- `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh` passed.
+
+### Entry 38 - Remaining Step 8 terrain module work
+
+Date/time: 2026-06-18 21:21 BST (Europe/London)
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+good what's next
+```
+
+Follow-up prompt:
+
+```text
+explain what you suggest for each remaining test. Then get on with the tasks and capture the suggestions in doxygen comments as before. Once done, commit and push and prep for handover. thanks
+```
+
+Purpose:
+
+Identify the next unfinished main-blueprint task and complete the remaining terrain-module work.
+
+What was understood / accepted:
+
+Codex identified Step 8 as the next unfinished main-blueprint task, proposed role-based restrictions, terrain traversal classification, terrain effect metadata, and focused tests, then implemented role/id restricted-cell rules, traversal classification, movement-strategy consumption of terrain classifications, and relevant terrain/movement/behaviour tests.
+
+Human input and judgement:
+
+The user asked for the proposed test/task breakdown before implementation and requested Doxygen comments for the design notes.
+
+Verification:
+
+- `PYTHONPATH=model-python python3 -m unittest discover -s model-python/tests` passed with 42 tests.
+- `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh` passed.

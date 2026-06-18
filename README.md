@@ -204,6 +204,8 @@ Track A modelling work has been selected for this repository. The detailed imple
    - Black cells define the outer simulation enclosure.
    - Brown cells represent density-zero reflective boundaries.
    - The terrain handler reports validation issues for special cell definitions outside the black outer boundary.
+   - Restricted cells support both configured agent ids and configured roles.
+   - Terrain traversal attempts are classified with structured allowed/blocked reasons for movement and metrics use.
 
 9. Terrain1 startup default set.
    - `scripts/start.sh` defaults `SIM_TERRAIN_MAP_PATH` to `Terrain maps/Terrain1.png`.
@@ -218,15 +220,23 @@ Track A modelling work has been selected for this repository. The detailed imple
 
 11. Agent behaviour profiles added.
    - Added a dedicated behaviour profile module.
-   - Moved role-specific candidate movement choices out of `PopulationModel`.
-   - Captured civilian, staff, and patrol intent metadata for later terrain-aware movement filtering.
-   - Added unit tests for profile intent, deterministic movement selection, default-role fallback, and invalid empty profiles.
+   - Moved role-specific candidate movement choices and behaviour-aware selection out of `PopulationModel`.
+   - Captured and applied civilian, staff, and patrol intent metadata during movement selection.
+   - Civilians avoid restricted/penalty cells when alternatives exist; staff prefer waiting/lower-cost moves; patrol agents may intentionally enter allowed restricted cells.
+   - Added unit tests for profile intent, deterministic movement selection, default-role fallback, invalid empty profiles, behaviour-aware filtering, and all-blocked fallback.
 
 12. Movement strategy selection added.
    - Added a dedicated movement strategy module.
-   - Moved terrain-entry decisions and blocked-movement reason metadata out of `PopulationModel`.
-   - Added unit tests for allowed moves, boundary blocks, enclosure blocks, restricted-cell permissions, gate congestion, and dimensions larger than the terrain map.
+   - Moved terrain-entry decisions, blocked-movement reason metadata, and terrain penalty preference costs out of `PopulationModel`.
+   - Added Type 1 and Type 2 penalty metadata to movement decisions so behaviour can prefer lower-cost allowed moves.
+   - Added unit tests for allowed moves, boundary blocks, enclosure blocks, restricted-cell permissions, gate congestion, penalty costs, and dimensions larger than the terrain map.
    - Added a model-level integration test proving movement-strategy block reasons update simulation metrics.
+
+14. Terrain module rule coverage completed.
+   - Added role-based restricted-cell traversal permissions.
+   - Added terrain-level traversal classification for allowed moves, boundaries, restricted breaches, and gate congestion.
+   - Movement strategy now consumes terrain traversal classification for restricted and gate decisions.
+   - Added unit tests for role-based restrictions and traversal classification.
 
 13. Configurable random walk policies added.
    - Added a dedicated random walk module.

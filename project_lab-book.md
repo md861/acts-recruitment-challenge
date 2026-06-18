@@ -1102,3 +1102,99 @@ Verification:
 
 - `PYTHONPATH=model-python python3 -m unittest discover -s model-python/tests` passed with 34 tests.
 - `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh` passed.
+
+### Entry 29 - Remaining Step 5 agent behaviour work completed
+
+Date/time: 2026-06-18 21:07 BST (Europe/London)
+
+What happened:
+
+The user approved the proposed plan for completing main blueprint Step 5, `Add an agent behaviour module`, and asked to proceed.
+
+Decision:
+
+Add a behaviour-aware movement selector that evaluates profile candidate moves through the movement strategy before selecting one.
+
+Reasoning:
+
+Behaviour profiles previously described role intent but did not actively influence movement choices. The selector makes that intent operational while keeping movement legality in `MovementStrategy` and preserving deterministic seeded selection.
+
+Implementation:
+
+- Added `BehaviourMoveSelector`.
+- Civilians avoid restricted and penalty cells when a normal allowed move is available.
+- Staff prefer waiting/lower-cost moves and avoid penalty cells when possible.
+- Patrol profiles can intentionally keep allowed restricted-cell moves.
+- Added deterministic fallback when every candidate move is blocked.
+- Wired `PopulationModel` through the behaviour selector while preserving the existing `_next_movement` override hook used by integration tests.
+- Added Doxygen-style descriptions to the new behaviour selector and random-walk helper methods.
+- Added unit tests covering civilian, staff, patrol, and all-blocked fallback behaviour.
+
+Verification:
+
+- `PYTHONPATH=model-python python3 -m unittest discover -s model-python/tests` passed with 38 tests.
+- `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh` passed.
+
+### Entry 30 - Remaining Step 6 movement strategy work completed
+
+Date/time: 2026-06-18 21:13 BST (Europe/London)
+
+What happened:
+
+The user asked to continue with the next unfinished main-blueprint step, Step 6 `Add a movement strategy module`.
+
+Decision:
+
+Finish Step 6 by making movement decisions carry terrain penalty metadata and preference costs, then letting behaviour-aware selection prefer lower-cost allowed moves.
+
+Reasoning:
+
+The movement module already handled legality and blocked reasons. The remaining blueprint gap was applying terrain costs/preferences, especially Type 1 and Type 2 penalty cells, before behaviour selection chooses a final move.
+
+Implementation:
+
+- Added `preference_cost` and optional `penalty` metadata to `MovementDecision`.
+- Added terrain penalty lookup to `MovementStrategy`.
+- Added Type 1 directional penalty costing.
+- Added Type 2 all-direction penalty costing.
+- Updated behaviour selection to prefer the lowest-cost allowed decisions after filtering avoided terrain.
+- Added Doxygen-style comments for the new movement decision/strategy helpers.
+- Added movement tests for Type 1 and Type 2 penalty costs.
+- Added behaviour tests proving lower-cost allowed moves are preferred.
+
+Verification:
+
+- `PYTHONPATH=model-python python3 -m unittest discover -s model-python/tests` passed with 41 tests.
+- `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh` passed.
+
+### Entry 31 - Remaining Step 8 terrain module work completed
+
+Date/time: 2026-06-18 21:21 BST (Europe/London)
+
+What happened:
+
+The user asked to continue from the main blueprint after Step 6. The next unfinished task was Step 8, `Add a terrain module`.
+
+Decision:
+
+Finish Step 8 by adding role-based restricted-cell permissions and terrain-level traversal classification.
+
+Reasoning:
+
+The terrain module already parsed maps and exposed terrain rules, but restricted cells only considered configured agent ids and callers inferred breach/congestion reasons from boolean traversal results. Terrain should own these cell-level rule classifications so movement and metrics use consistent reason metadata.
+
+Implementation:
+
+- Added `restricted_cell_roles` to `ModelConfig`.
+- Added `allowed_roles` to `TerrainCell`.
+- Added `TerrainTraversal` to classify traversal attempts.
+- Added `TerrainMap.classify_traversal`.
+- Kept `is_traversable` as a compatibility wrapper around `classify_traversal`.
+- Updated movement strategy to consume terrain traversal classification for restricted and gate decisions.
+- Added Doxygen-style comments describing the traversal classification behaviour.
+- Added terrain tests for role-based restricted access and traversal reasons.
+
+Verification:
+
+- `PYTHONPATH=model-python python3 -m unittest discover -s model-python/tests` passed with 42 tests.
+- `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh` passed.

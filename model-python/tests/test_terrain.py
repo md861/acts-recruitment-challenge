@@ -5,7 +5,7 @@ import zlib
 from pathlib import Path
 
 from population_model.config import ModelConfig
-from population_model.terrain import CellType, TerrainMap, load_terrain_map
+from population_model.terrain import CellType, TerrainMap, TerrainTraversal, load_terrain_map
 
 
 TERRAIN_PATH = Path("Terrain maps/Terrain1.png")
@@ -16,6 +16,7 @@ class TerrainMapTests(unittest.TestCase):
         self.config = ModelConfig(
             terrain_map_path=str(TERRAIN_PATH),
             restricted_cell_agent_ids=("agent-allowed",),
+            restricted_cell_roles=("patrol",),
             exit_cell_agent_ids=("agent-exit",),
             gate_max_density=2,
             type_1_penalty_direction="north",
@@ -48,6 +49,7 @@ class TerrainMapTests(unittest.TestCase):
 
         restricted = self.terrain.cell_at(*samples[CellType.RESTRICTED])
         self.assertEqual(restricted.allowed_agent_ids, ("agent-allowed",))
+        self.assertEqual(restricted.allowed_roles, ("patrol",))
 
         gate = self.terrain.cell_at(*samples[CellType.GATE])
         self.assertEqual(gate.max_density, 2)
@@ -84,6 +86,13 @@ class TerrainMapTests(unittest.TestCase):
         )
         self.assertTrue(
             self.terrain.is_traversable(
+                *samples[CellType.RESTRICTED],
+                agent_id="agent-patrol",
+                agent_role="patrol",
+            )
+        )
+        self.assertTrue(
+            self.terrain.is_traversable(
                 *samples[CellType.GATE], agent_id="any", current_density=1
             )
         )
@@ -98,6 +107,41 @@ class TerrainMapTests(unittest.TestCase):
         self.assertFalse(
             self.terrain.is_exit_cell(*samples[CellType.EXIT], agent_id="other")
         )
+
+    def test_traversal_classification_exposes_reasons_and_breaches(self):
+        samples = self._first_cell_by_type()
+
+        restricted_block = self.terrain.classify_traversal(
+            *samples[CellType.RESTRICTED],
+            agent_id="agent-blocked",
+            agent_role="civilian",
+        )
+        restricted_allowed = self.terrain.classify_traversal(
+            *samples[CellType.RESTRICTED],
+            agent_id="agent-patrol",
+            agent_role="patrol",
+        )
+        boundary = self.terrain.classify_traversal(
+            *samples[CellType.DENSITY_ZERO],
+            agent_id="any",
+        )
+        gate = self.terrain.classify_traversal(
+            *samples[CellType.GATE],
+            agent_id="any",
+            current_density=2,
+        )
+
+        self.assertIsInstance(restricted_block, TerrainTraversal)
+        self.assertFalse(restricted_block.allowed)
+        self.assertEqual(restricted_block.reason, "restricted")
+        self.assertTrue(restricted_block.breach_detected)
+        self.assertTrue(restricted_block.breach_handled)
+        self.assertTrue(restricted_allowed.allowed)
+        self.assertEqual(restricted_allowed.reason, "allowed")
+        self.assertFalse(boundary.allowed)
+        self.assertEqual(boundary.reason, "boundary")
+        self.assertFalse(gate.allowed)
+        self.assertEqual(gate.reason, "gate_congestion")
 
     def test_summary_serializes_for_future_snapshots(self):
         payload = self.terrain.to_dict()

@@ -1,6 +1,6 @@
 # Agent Handover
 
-Last updated: 2026-06-18 20:55 BST (Europe/London)
+Last updated: 2026-06-18 21:21 BST (Europe/London)
 
 ## Current State
 
@@ -9,7 +9,7 @@ Last updated: 2026-06-18 20:55 BST (Europe/London)
 - Remote: `https://github.com/md861/acts-recruitment-challenge.git`
 - Latest commit: `5957d7e Add configurable random walk policies`
 - Working protocol: do not commit or push unless the user explicitly asks, it is end-of-day, or it is a handover-to-new-agent prompt.
-- Current task status: Track A modelling work has been chosen. Terrain map handling, model metrics integration, frontend terrain visualization, agent creation/placement, agent behaviour profiles, movement strategy selection, and configurable random walk policies have now been implemented. The remaining Step 4 agent creation work has been completed locally but is not committed yet.
+- Current task status: Track A modelling work has been chosen. Terrain map handling, model metrics integration, frontend terrain visualization, agent creation/placement, agent behaviour profiles, movement strategy selection, configurable random walk policies, and terrain rule coverage have now been implemented. The remaining Step 5, Step 6, and Step 8 work has been completed locally but is not committed yet.
 
 ## Read First
 
@@ -43,9 +43,9 @@ Most recent baseline checks passed with:
 PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh
 ```
 
-Last recorded pass: 2026-06-18 20:55 BST after completing the remaining Step 4 agent creation work.
+Last recorded pass: 2026-06-18 21:21 BST after completing the remaining Step 8 terrain rule work.
 
-Current local changes include agent behaviour profile lookup in `AgentFactory`, additive agent `behaviour_profile` snapshot/API/frontend metadata, extra agent factory tests, the previously requested protocol-doc updates, and related bookkeeping updates. The `artifacts/` directory is intentionally ignored and should stay untracked unless the user explicitly asks to publish an artifact.
+Current local changes include behaviour-aware movement selection, movement penalty preference costs, terrain role-based restrictions, terrain traversal classification, Doxygen comments on new helpers, behaviour/movement/terrain tests, the previously requested protocol-doc updates, and related bookkeeping updates. The `artifacts/` directory is intentionally ignored and should stay untracked unless the user explicitly asks to publish an artifact.
 
 Untracked note: `Terrain maps/Terrain1_00.png` is present locally and has not been tracked or modified by Codex.
 
@@ -57,10 +57,10 @@ Untracked note: `Terrain maps/Terrain1_00.png` is present locally and has not be
 
 ## Suggested Next Action
 
-Continue from the main Track A blueprint after completing Step 4:
+Continue from the main Track A blueprint after completing Step 8:
 
 1. Reassess the next unfinished main-blueprint task by checking `MODEL_MODULARIZATION_BLUEPRINT.md` `Implementation Tasks`.
-2. The next likely unfinished item is Step 5, agent behaviour, specifically applying role-specific intent/preferences more fully in movement decisions.
+2. The next likely unfinished item is Step 9, metrics: explicit cell-density, congested-cell, and unresolved-breach metrics are still incomplete.
 3. Prepare final solution notes and AI usage summary when implementation scope is complete.
 
 Generated local artifact: `artifacts/terrain1_first_100_ticks.gif`.

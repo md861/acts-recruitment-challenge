@@ -10,6 +10,7 @@ from datetime import datetime, timezone
 
 from population_model.agents import AgentFactory
 from population_model.behaviour import (
+    BehaviourMoveSelector,
     DEFAULT_BEHAVIOUR_PROFILES,
     BehaviourProfileSet,
 )
@@ -36,6 +37,7 @@ class PopulationModel:
         self.metrics = TerrainMetrics()
         self.behaviour_profiles: BehaviourProfileSet = DEFAULT_BEHAVIOUR_PROFILES
         self.movement_strategy = self._create_movement_strategy()
+        self.behaviour_selector = self._create_behaviour_selector()
         self.tick = 0
         self.agents = self._create_agents()
 
@@ -43,6 +45,7 @@ class PopulationModel:
         self._rng = random.Random(self.config.seed)
         self.metrics = TerrainMetrics()
         self.movement_strategy = self._create_movement_strategy()
+        self.behaviour_selector = self._create_behaviour_selector()
         self.tick = 0
         self.agents = self._create_agents()
 
@@ -51,9 +54,9 @@ class PopulationModel:
             self.tick += 1
             density = self._agent_density()
             for agent in self.agents:
-                dx, dy = self._next_movement(agent.role)
                 current_key = (agent.position.x, agent.position.y)
-                decision = self._movement_decision(agent, (dx, dy), density)
+                decision = self._select_movement(agent, density)
+                dx, dy = decision.move
                 target_key = (decision.target_x, decision.target_y)
 
                 agent.heading = Heading(dx=dx, dy=dy)
@@ -121,8 +124,28 @@ class PopulationModel:
             height=self.height,
         )
 
+    def _create_behaviour_selector(self) -> BehaviourMoveSelector:
+        return BehaviourMoveSelector(
+            profiles=self.behaviour_profiles,
+            movement_strategy=self.movement_strategy,
+        )
+
     def _next_movement(self, role: str) -> tuple[int, int]:
         return self.behaviour_profiles.next_movement(role, self._rng)
+
+    def _select_movement(self, agent: Agent, density: Counter) -> MovementDecision:
+        overridden_next_movement = self.__dict__.get("_next_movement")
+        if overridden_next_movement is not None:
+            return self._movement_decision(
+                agent,
+                overridden_next_movement(agent.role),
+                density,
+            )
+        return self.behaviour_selector.select(
+            agent,
+            self._rng,
+            self._current_density_by_candidate_move(agent, density),
+        )
 
     def _movement_decision(
         self, agent: Agent, move: tuple[int, int], density: Counter
@@ -137,6 +160,22 @@ class PopulationModel:
         return self.movement_strategy.decide(
             agent, move, current_density=target_density
         )
+
+    def _current_density_by_candidate_move(
+        self, agent: Agent, density: Counter
+    ) -> dict[tuple[int, int], int]:
+        profile = self.behaviour_profiles.for_role(agent.role)
+        current_key = (agent.position.x, agent.position.y)
+        densities: dict[tuple[int, int], int] = {}
+        for move in profile.candidate_moves:
+            target_x = self._clamp(agent.position.x + move[0], 0, self.width - 1)
+            target_y = self._clamp(agent.position.y + move[1], 0, self.height - 1)
+            target_key = (target_x, target_y)
+            target_density = density.get(target_key, 0)
+            if target_key == current_key:
+                target_density = max(0, target_density - 1)
+            densities[move] = target_density
+        return densities
 
     def _record_blocked_movement(self, decision: MovementDecision) -> None:
         if decision.reason in ("outside_enclosure", "boundary"):

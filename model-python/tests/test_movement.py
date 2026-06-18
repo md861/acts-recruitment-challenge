@@ -2,14 +2,23 @@ import unittest
 
 from population_model.movement import MovementStrategy
 from population_model.state import Agent, Heading, Position
-from population_model.terrain import CellType
+from population_model.terrain import CellType, TerrainCell, TerrainPenalty, TerrainTraversal
 
 
 class StubTerrain:
-    def __init__(self, width=4, height=4, cells=None, inside_cells=None, gate_max=1):
+    def __init__(
+        self,
+        width=4,
+        height=4,
+        cells=None,
+        penalties=None,
+        inside_cells=None,
+        gate_max=1,
+    ):
         self.width = width
         self.height = height
         self.cells = cells or {}
+        self.penalties = penalties or {}
         self.inside_cells = inside_cells
         self.gate_max = gate_max
 
@@ -21,13 +30,38 @@ class StubTerrain:
             return True
         return (x, y) in self.inside_cells
 
-    def is_traversable(self, x, y, agent_id, current_density=0):
+    def is_traversable(self, x, y, agent_id, current_density=0, agent_role=None):
         cell_type = self.cell_type_at(x, y)
         if cell_type == CellType.RESTRICTED:
-            return agent_id == "agent-allowed"
+            return agent_id == "agent-allowed" or agent_role == "patrol"
         if cell_type == CellType.GATE:
             return current_density < self.gate_max
         return cell_type not in (CellType.BOUNDARY, CellType.DENSITY_ZERO)
+
+    def penalty_at(self, x, y):
+        return self.penalties.get((x, y))
+
+    def classify_traversal(
+        self, x, y, agent_id, current_density=0, agent_role=None
+    ):
+        cell_type = self.cell_type_at(x, y)
+        cell = TerrainCell(x=x, y=y, cell_type=cell_type)
+        if cell_type in (CellType.BOUNDARY, CellType.DENSITY_ZERO):
+            return TerrainTraversal(False, "boundary", cell)
+        if cell_type == CellType.RESTRICTED and not self.is_traversable(
+            x, y, agent_id, current_density, agent_role
+        ):
+            return TerrainTraversal(
+                False,
+                "restricted",
+                cell,
+                breach_detected=True,
+            )
+        if cell_type == CellType.GATE and not self.is_traversable(
+            x, y, agent_id, current_density, agent_role
+        ):
+            return TerrainTraversal(False, "gate_congestion", cell)
+        return TerrainTraversal(True, "allowed", cell)
 
 
 class MovementStrategyTests(unittest.TestCase):
@@ -116,6 +150,46 @@ class MovementStrategyTests(unittest.TestCase):
 
         self.assertTrue(decision.allowed)
         self.assertEqual(decision.cell_type, CellType.NORMAL)
+
+    def test_type_1_penalty_adds_directional_preference_cost(self):
+        strategy = MovementStrategy(
+            terrain=StubTerrain(
+                cells={(2, 1): CellType.TYPE_1_PENALTY},
+                penalties={
+                    (2, 1): TerrainPenalty(
+                        kind="type_1",
+                        direction="east",
+                        multiplier=0.5,
+                    )
+                },
+            ),
+            width=4,
+            height=4,
+        )
+
+        decision = strategy.decide(self._agent(position=(1, 1)), (1, 0))
+
+        self.assertTrue(decision.allowed)
+        self.assertEqual(decision.cell_type, CellType.TYPE_1_PENALTY)
+        self.assertEqual(decision.preference_cost, 2.0)
+        self.assertEqual(decision.penalty.kind, "type_1")
+
+    def test_type_2_penalty_adds_all_direction_preference_cost(self):
+        strategy = MovementStrategy(
+            terrain=StubTerrain(
+                cells={(1, 2): CellType.TYPE_2_PENALTY},
+                penalties={(1, 2): TerrainPenalty(kind="type_2", multiplier=0.5)},
+            ),
+            width=4,
+            height=4,
+        )
+
+        decision = strategy.decide(self._agent(position=(1, 1)), (0, 1))
+
+        self.assertTrue(decision.allowed)
+        self.assertEqual(decision.cell_type, CellType.TYPE_2_PENALTY)
+        self.assertEqual(decision.preference_cost, 2.0)
+        self.assertEqual(decision.penalty.kind, "type_2")
 
     def _agent(self, agent_id="agent-001", position=(1, 1)):
         return Agent(
