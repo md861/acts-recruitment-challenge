@@ -90,6 +90,7 @@ Runtime note:
 
 When asked to prepare for handover:
 
+- Before any commit/push or handover prep, update the relevant bookkeeping docs and check them for stale state, especially `HANDOVER.md`, `README.md`, `project_lab-book.md`, `AI_USAGE_lab-book.md`, and `Changes.md`.
 - Update this file with current branch, commit, verification status, known risks, and next suggested action.
 - Add a timestamped entry to `project_lab-book.md`.
 - Update `Changes.md` if files were created or modified.

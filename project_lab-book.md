@@ -484,6 +484,26 @@ Verification:
 - Python unit tests passed: `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests`.
 - Full checks passed: `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh`.
 
+### Entry 24 - Bookkeeping stale-state protocol clarified
+
+Date/time: 2026-06-18 15:08 BST (Europe/London)
+
+What happened:
+
+The user asked to make sure relevant bookkeeping docs are updated and checked for stale states before commit/push or handover prep.
+
+Decision:
+
+Add this as a development protocol in `HANDOVER.md`.
+
+Protocol:
+
+Before any commit/push or handover preparation, update the relevant bookkeeping docs and check them for stale state, especially `HANDOVER.md`, `README.md`, `project_lab-book.md`, `AI_USAGE_lab-book.md`, and `Changes.md`.
+
+Current next step from the blueprint:
+
+Continue broader Track A modularization by refactoring agent creation/placement and agent behaviour out of `population_model/model.py`.
+
 ### Entry 24 - Terrain map handler first slice implemented
 
 Date/time: 2026-06-18 14:12 BST (Europe/London)

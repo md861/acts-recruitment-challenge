@@ -646,6 +646,36 @@ Verification:
 - Python unit tests passed with `PYTHONPATH="$PWD/model-python" python3 -m unittest discover -s model-python/tests`.
 - Full checks passed with `PATH="$PWD/.tools/go/bin:$PWD/.tools/node/bin:$PATH" ./scripts/test.sh`.
 
+### Entry 21 - Bookkeeping stale-state protocol and next-step check
+
+Date: 2026-06-18
+
+Tool used: Codex
+
+Prompt / request:
+
+```text
+ok great. 
+1) make sure before we commit and push, or do a handover prep, we update relevant book-keeping docs, check for stale states in them. Add this as an entry under the dev protocol in handover doc. 
+2) read the blueprint and tell me what is next.
+```
+
+Purpose:
+
+Add a development protocol for bookkeeping freshness and identify the next implementation step from the blueprint.
+
+What was understood from the response:
+
+The user wants future agents to check bookkeeping docs for stale state before commit/push or handover, and wants the current next development step based on the blueprint.
+
+Human input and judgement:
+
+The user identified a recurring process risk around stale documentation.
+
+What was accepted from AI:
+
+Codex updated `HANDOVER.md` with the bookkeeping stale-state protocol and reread the blueprint/README roadmap before answering.
+
 ### Entry 19 - Terrain map handler implementation
 
 Date: 2026-06-18
